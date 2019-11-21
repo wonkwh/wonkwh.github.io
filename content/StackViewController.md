@@ -1,7 +1,7 @@
 +++
 title = "UIStackViewController"
 date = 2019-11-25
-category = "UIKit"
+category = "uikit"
 
 [taxonomies]
 tags = ["swift","uikit", "uistackview", "uiscrollview","child_viewcontroller"]

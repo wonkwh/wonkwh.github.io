@@ -1,7 +1,7 @@
 +++
 title = "StackViewControllable"
 date = 2019-11-18
-categories = ["UIKit"]
+categories = ["uikit"]
 
 [taxonomies]
 tags = ["swift","uikit", "uistackview", "uiscrollview","child_viewcontroller","protocol"]

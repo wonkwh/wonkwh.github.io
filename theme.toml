@@ -1,7 +1,7 @@
-name = "after-dark"
-description = "A robust, elegant dark theme"
+name = "kwanghyun's kb"
+description = "ios, macos, swift"
 license = "MIT"
-homepage = "https://github.com/getzola/after-dark"
+homepage = "https://wonkwh.github.io"
 min_version = "0.5.0"
 demo = "https://zola-after-dark.netlify.com"
 
@@ -9,7 +9,7 @@ demo = "https://zola-after-dark.netlify.com"
 
 
 [author]
-name = "Kwanghyun WOn"
+name = "Kwanghyun Won"
 homepage = "https://wonkwh.github.io"
 
 [original]
