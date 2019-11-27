@@ -1,6 +1,6 @@
 +++
 title = "UIStackViewController"
-date = 2019-11-25
+date = 2019-11-18
 category = "uikit"
 
 [taxonomies]
