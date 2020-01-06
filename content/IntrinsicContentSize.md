@@ -65,4 +65,4 @@ open class BadgeLabel: UILabel {
  ## 참조 
   - [apple doc](https://developer.apple.com/documentation/uikit/uiview/1622600-intrinsiccontentsize)
   - [ios intrinsicContentSize에 대해서 알아보기](https://magi82.github.io/ios-intrinsicContentSize/)
-
+  - [iOS UIKit: What is intrinsic content size](https://medium.com/@vialyx/import-uikit-what-is-intrinsic-content-size-20ae302f21f3)  
