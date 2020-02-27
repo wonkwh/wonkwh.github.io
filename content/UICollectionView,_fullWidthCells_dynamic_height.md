@@ -118,6 +118,7 @@ extension ListController: UICollectionViewDelegateFlowLayout {
 ```
  - `UICollectionViewDelegateFlowLayout`  의 sizeForItemAt method를 오버라이드하여 width를 full width로 설정하면 된다. 
  - 하지만 height를 위와 같이 80으로 고정하면 contents내용에 따라 동적으로 height를 구성하기 꽤 빡시다. 
+ ![no_dynamic_height](https://user-images.githubusercontent.com/911787/75467624-493c1c80-59cf-11ea-8c3e-8c472f142319.png)
 
 ### Solution
 - 참조 링크를 보면 꽤 다양한 방법들이 존재하나 가장 심플한 방법
@@ -169,6 +170,8 @@ extension ListController: UICollectionViewDelegateFlowLayout {
     }()
     ...
     ```
+    ![dynamic_height](https://user-images.githubusercontent.com/911787/75467646-50632a80-59cf-11ea-9023-5f233f0ce146.png)
+
 
 ### 참조
  - https://stackoverflow.com/questions/44187881/uicollectionview-full-width-cells-allow-autolayout-dynamic-height
