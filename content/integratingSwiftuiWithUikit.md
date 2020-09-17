@@ -1,6 +1,6 @@
 +++
 title = "integrating swiftui with uikit"
-date = 2020-9-14
+date = 2020-09-14
 category = "swiftui"
 
 [taxonomies]
