@@ -1,7 +1,7 @@
 +++
 title = "integrating swiftui with uikit"
 date = 2020-9-14
-category = "swift", "swiftui
+category = "swift", "swiftui"
 
 [taxonomies]
 tags = ["swift", "swiftui"]
