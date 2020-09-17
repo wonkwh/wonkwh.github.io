@@ -1,12 +1,14 @@
 +++
 title = "integrating swiftui with uikit"
 date = 2020-9-14
-category = "swift", "swiftui"
+category = "swiftui"
 
 [taxonomies]
-tags = ["swift", "swiftui"]
+tags = ["swift","uikit", "swiftui"]
 +++
 
+UIKit 에서 SwiftUI View 를 호출하는 방법
+<!-- more -->
 # integrating swiftui with uikit
 - [Link](https://www.avanderlee.com/swiftui/integrating-swiftui-with-uikit/)
 
