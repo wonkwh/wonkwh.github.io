@@ -1,7 +1,7 @@
 +++
-title = "swift composable architecture part_1"
+title = "integrating swiftui with uikit"
 date = 2020-9-14
-category = "swift"
+category = "swift", "swiftui
 
 [taxonomies]
 tags = ["swift", "swiftui"]
