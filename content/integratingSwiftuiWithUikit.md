@@ -99,6 +99,3 @@ func addSwiftUIView() {
     addSubSwiftUIView(swiftUIView, to: view)
 }
 ```
-
-----
-tags : #swiftui, #uikit
