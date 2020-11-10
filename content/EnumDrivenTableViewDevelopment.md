@@ -7,6 +7,10 @@ category = "uikit"
 tags = ["swift","uikit", "uicollectionview", "uitableview", "enum", "raywenderlich"]
 +++
 
+Swift State Enum 을 이용하여 tableview의 empty, pagination, error view를 처리하는 방법
+
+<!-- more -->
+
 # Enum-Driven TableView Development
 - [Link](https://www.raywenderlich.com/5542-enum-driven-tableview-development)
 - 위의 글을 참조하여 itunes search list에 적용한다. 
