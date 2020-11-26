@@ -1,5 +1,5 @@
 +++
-title = "UEnum-Driven TableView Development"
+title = "Enum-Driven TableView Development"
 date = 2020-11-09
 category = "uikit"
 
