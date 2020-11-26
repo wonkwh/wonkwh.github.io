@@ -12,7 +12,7 @@ SwiftUI에서 ViewModifier 를 이용하여 Custom View를 만드는 방법
 
 ## SwiftUI Custom View Modifiers 
 
-{{ youtube(id="7sosLx-wzBE&t") }}
+{{ youtube(id="7sosLx-wzBE") }}
 
 ### Create Custom Button
 - 아래와 같은 Custom button view를 생성하려면 
