@@ -1,6 +1,6 @@
 +++
 title = "SwiftUI Custom View Modifiers"
-date = 2020-11-51
+date = 2020-11-27
 category = "swiftui"
 
 [taxonomies]
