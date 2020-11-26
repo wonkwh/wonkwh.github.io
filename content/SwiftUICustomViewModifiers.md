@@ -4,8 +4,11 @@ date = 2020-11-51
 category = "swiftui"
 
 [taxonomies]
-tags = ["swiftui"]
+tags = ["swiftui", "swift"]
 +++
+
+SwiftUI에서 ViewModifier 를 이용하여 Custom View를 만드는 방법
+<!-- more -->
 
 # SwiftUI Custom View Modifiers 
 
