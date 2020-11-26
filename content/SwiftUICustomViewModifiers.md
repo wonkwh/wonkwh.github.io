@@ -10,11 +10,11 @@ tags = ["swiftui", "swift"]
 SwiftUI에서 ViewModifier 를 이용하여 Custom View를 만드는 방법
 <!-- more -->
 
-# SwiftUI Custom View Modifiers 
+## SwiftUI Custom View Modifiers 
 
 {{ youtube(id="7sosLx-wzBE&t") }}
 
-## Create Custom Button
+### Create Custom Button
 - 아래와 같은 Custom button view를 생성하려면 
 
 <img width="167" alt="viewModifier1" src="https://user-images.githubusercontent.com/911787/100363789-91f93280-3040-11eb-9390-1932129bd642.png">
@@ -43,7 +43,7 @@ struct CustomButton: View {
 }
 ```
 
-## Using Modifier
+### Using Modifier
 - 위와 동일한 결과를 아래와 같이 `ViewModifier` 를 통해서 구현할 수 있다.
 ```swift
 struct CustomModifierButton: View {
@@ -78,7 +78,7 @@ struct ButtonModifier: ViewModifier {
 
 ```
 
-## Using Modifier added state parameter
+### Using Modifier added state parameter
 <img width="268" alt="viewModifier2" src="https://user-images.githubusercontent.com/911787/100363802-97567d00-3040-11eb-84df-62714bbb086f.png">
 
 - 만약 각각 다른 background color를 가진 버튼에 style을 `ViewModifier` 로 구현하고 싶다면 
@@ -90,6 +90,7 @@ struct ButtonModifier: ViewModifier {
 ```
 - 추가로 fontSize같은 value도 `@State` 변수로 추가할 수 있다.
 - 전체 sample code
+
 ```swift
 struct ModifierStackView: View {
     var body: some View {
@@ -149,4 +150,3 @@ struct ButtonModifier: ViewModifier {
 }
 
 ```
-
