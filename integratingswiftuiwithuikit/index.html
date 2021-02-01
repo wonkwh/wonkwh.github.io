@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+      <!-- Enable responsiveness on mobile devices-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+      <title></title>
+
+      
+
+      
+          <link rel="stylesheet" href="https://wonkwh.github.io/site.css">
+      
+
+      
+      
+    </head>
+
+    <body class="hack dark main container">
+        
+
+<article itemscope itemtype="http://schema.org/BlogPosting">
+    <header>
+        <h1 itemprop="headline">integrating swiftui with uikit</h1>
+        <span class="muted">
+    <svg style="margin-bottom:-3px" class="i-clock" viewBox="0 0 32 32"
+         width="16" height="16" fill="none" stroke="currentcolor"
+         stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
+        <circle cx="16" cy="16" r="14"/>
+        <path d="M16 8 L16 16 20 20"/>
+    </svg>
+    <span>2 minute read</span>
+    <svg style="margin-bottom: -3px" class="i-edit" viewBox="0 0 32 32"
+         width="16" height="16" fill="none" stroke="currentcolor"
+         stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
+        <path d="M30 7 L25 2 5 22 3 29 10 27 Z M21 6 L26 11 Z M5 22 L10 27 Z"/>
+    </svg>
+
+    Published: 2020-09-14
+</span>
+    </header>
+    <div itemprop="articleBody">
+      <p>UIKit 에서 SwiftUI View 를 호출하는 방법</p>
+<span id="continue-reading"></span><h1 id="integrating-swiftui-with-uikit">integrating swiftui with uikit</h1>
+<ul>
+<li><a href="https://www.avanderlee.com/swiftui/integrating-swiftui-with-uikit/">Link</a></li>
+</ul>
+<h2 id="presenting-a-swiftui-view-in-a-uikit-view-controller">Presenting a SwiftUI view in a UIKit view controller</h2>
+<ul>
+<li>UIViewController에서 SwiftUI로 만들어진 View를 present하려면 <code>UIHostingController</code>를 이용하여 아래와 같이 사용하면 된다.</li>
+</ul>
+<pre style="background-color:#2b303b;">
+<code class="language-swift" data-lang="swift"><span style="color:#b48ead;">if</span><span style="color:#c0c5ce;"> #available(iOS </span><span style="color:#d08770;">13</span><span style="color:#c0c5ce;">.</span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">, *) {
+    presentSwiftUIView()
+} </span><span style="color:#b48ead;">else</span><span style="color:#c0c5ce;"> {
+    </span><span style="color:#65737e;">// Fallback on earlier versions
+</span><span style="color:#c0c5ce;">}
+
+</span><span style="color:#b48ead;">func </span><span style="color:#c0c5ce;">presentSwiftUIView() {
+    </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> swiftUIView = SwiftUIView()
+    </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> hostingController = UIHostingController(rootView: swiftUIView)
+    present(hostingController, animated: </span><span style="color:#b48ead;">true</span><span style="color:#c0c5ce;">, completion: </span><span style="color:#d08770;">nil</span><span style="color:#c0c5ce;">)
+}
+</span></code></pre><h2 id="adding-a-swiftui-view-to-a-uikit-view">Adding a SwiftUI view to a UIKit view</h2>
+<ul>
+<li>위와 유사하게 present하는것이 아니라 child view로 추가시키려면 아래와 같이 추가 </li>
+</ul>
+<pre style="background-color:#2b303b;">
+<code class="language-swift" data-lang="swift"><span style="color:#b48ead;">func </span><span style="color:#c0c5ce;">addSwiftUIView() {
+    </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> swiftUIView = SwiftUIView()
+    </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> hostingController = UIHostingController(rootView: swiftUIView)
+
+    </span><span style="color:#65737e;">/// Add as a child of the current view controller.
+</span><span style="color:#c0c5ce;">    addChild(hostingController)
+
+    </span><span style="color:#65737e;">/// Add the SwiftUI view to the view controller view hierarchy.
+</span><span style="color:#c0c5ce;">    view.addSubview(hostingController.view)
+
+    </span><span style="color:#65737e;">/// Setup the constraints to update the SwiftUI view boundaries.
+</span><span style="color:#c0c5ce;">    hostingController.view.translatesAutoresizingMaskIntoConstraints = </span><span style="color:#b48ead;">false
+    let</span><span style="color:#c0c5ce;"> constraints = [
+        hostingController.view.topAnchor.constraint(equalTo: view.topAnchor),
+        hostingController.view.leftAnchor.constraint(equalTo: view.leftAnchor),
+        view.bottomAnchor.constraint(equalTo: hostingController.view.bottomAnchor),
+        view.rightAnchor.constraint(equalTo: hostingController.view.rightAnchor)
+    ]
+
+    NSLayoutConstraint.activate(constraints)
+
+    </span><span style="color:#65737e;">/// Notify the hosting controller that it has been moved to the current view controller.
+</span><span style="color:#c0c5ce;">    hostingController.didMove(toParent: </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">)
+}
+</span></code></pre><h2 id="swiftui-viewreul-cugahaneun-uiviewcontroller-extension-guhyeon">swiftUI view를 추가하는  UIViewController Extension 구현</h2>
+<pre style="background-color:#2b303b;">
+<code class="language-swift" data-lang="swift"><span style="color:#b48ead;">extension</span><span style="color:#c0c5ce;"> UIViewController {
+
+    </span><span style="color:#65737e;">/// Add a SwiftUI `View` as a child of the input `UIView`.
+    /// - Parameters:
+    ///   - swiftUIView: The SwiftUI `View` to add as a child.
+    ///   - view: The `UIView` instance to which the view should be added.
+    </span><span style="color:#b48ead;">func </span><span style="color:#c0c5ce;">addSubSwiftUIView&lt;Content&gt;(_ swiftUIView: Content, to view: UIView) where Content : View {
+        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> hostingController = UIHostingController(rootView: swiftUIView)
+
+        </span><span style="color:#65737e;">/// Add as a child of the current view controller.
+</span><span style="color:#c0c5ce;">        addChild(hostingController)
+
+        </span><span style="color:#65737e;">/// Add the SwiftUI view to the view controller view hierarchy.
+</span><span style="color:#c0c5ce;">        view.addSubview(hostingController.view)
+
+        </span><span style="color:#65737e;">/// Setup the contraints to update the SwiftUI view boundaries.
+</span><span style="color:#c0c5ce;">        hostingController.view.translatesAutoresizingMaskIntoConstraints = </span><span style="color:#b48ead;">false
+        let</span><span style="color:#c0c5ce;"> constraints = [
+            hostingController.view.topAnchor.constraint(equalTo: view.topAnchor),
+            hostingController.view.leftAnchor.constraint(equalTo: view.leftAnchor),
+            view.bottomAnchor.constraint(equalTo: hostingController.view.bottomAnchor),
+            view.rightAnchor.constraint(equalTo: hostingController.view.rightAnchor)
+        ]
+
+        NSLayoutConstraint.activate(constraints)
+
+        </span><span style="color:#65737e;">/// Notify the hosting controller that it has been moved to the current view controller.
+</span><span style="color:#c0c5ce;">        hostingController.didMove(toParent: </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">)
+    }
+}
+</span></code></pre>
+<p>위와 같이 추가하고 <code>UIViewController</code> 에서 아래와 같이 사용하면 된다</p>
+<pre style="background-color:#2b303b;">
+<code class="language-swift" data-lang="swift"><span style="color:#b48ead;">func </span><span style="color:#c0c5ce;">addSwiftUIView() {
+    </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> swiftUIView = SwiftUIView()
+    addSubSwiftUIView(swiftUIView, to: view)
+}
+</span></code></pre>
+    </div>
+
+    
+        <footer>
+            <hr>
+            <p>
+                
+                    Published by Kwanghyun Won
+                
+                
+                
+                    and tagged
+                    
+                        <a href="https://wonkwh.github.io/tags/swift/">swift</a>
+                        
+                            
+                                
+                                    ,
+                                
+                            
+                        
+                    
+                        <a href="https://wonkwh.github.io/tags/uikit/">uikit</a>
+                        
+                            
+                                
+                                    and
+                                
+                            
+                        
+                    
+                        <a href="https://wonkwh.github.io/tags/swiftui/">swiftui</a>
+                        
+                            
+                        
+                    
+                
+            </p>
+        </footer>
+    
+</article>
+
+
+    </body>
+
+</html>

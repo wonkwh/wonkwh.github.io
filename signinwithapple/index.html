@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+      <!-- Enable responsiveness on mobile devices-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+      <title></title>
+
+      
+
+      
+          <link rel="stylesheet" href="https://wonkwh.github.io/site.css">
+      
+
+      
+      
+    </head>
+
+    <body class="hack dark main container">
+        
+
+<article itemscope itemtype="http://schema.org/BlogPosting">
+    <header>
+        <h1 itemprop="headline">Sign in with Apple</h1>
+        <span class="muted">
+    <svg style="margin-bottom:-3px" class="i-clock" viewBox="0 0 32 32"
+         width="16" height="16" fill="none" stroke="currentcolor"
+         stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
+        <circle cx="16" cy="16" r="14"/>
+        <path d="M16 8 L16 16 20 20"/>
+    </svg>
+    <span>2 minute read</span>
+    <svg style="margin-bottom: -3px" class="i-edit" viewBox="0 0 32 32"
+         width="16" height="16" fill="none" stroke="currentcolor"
+         stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
+        <path d="M30 7 L25 2 5 22 3 29 10 27 Z M21 6 L26 11 Z M5 22 L10 27 Z"/>
+    </svg>
+
+    Published: 2020-12-05
+</span>
+    </header>
+    <div itemprop="articleBody">
+      <p>Apple SignIn feature를 <code>DelegateProxy</code> 를 이용하여 Rx Extension 구현</p>
+<span id="continue-reading"></span><h2 id="rxswift-extension">rxswift extension</h2>
+<pre style="background-color:#2b303b;">
+<code class="language-swift" data-lang="swift"><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">import </span><span style="color:#c0c5ce;">AuthenticationServices
+</span><span style="color:#b48ead;">import </span><span style="color:#c0c5ce;">RxCocoa
+</span><span style="color:#b48ead;">import </span><span style="color:#c0c5ce;">RxSwift
+</span><span style="color:#b48ead;">import </span><span style="color:#c0c5ce;">UIKit
+
+</span><span style="color:#b48ead;">@available</span><span style="color:#c0c5ce;">(iOS </span><span style="color:#d08770;">13</span><span style="color:#c0c5ce;">.</span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">, *)
+</span><span style="color:#b48ead;">extension</span><span style="color:#c0c5ce;"> ASAuthorizationController: HasDelegate {
+    </span><span style="color:#b48ead;">public typealias</span><span style="color:#c0c5ce;"> Delegate = ASAuthorizationControllerDelegate
+}
+
+</span><span style="color:#b48ead;">@available</span><span style="color:#c0c5ce;">(iOS </span><span style="color:#d08770;">13</span><span style="color:#c0c5ce;">.</span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">, *)
+</span><span style="color:#b48ead;">class</span><span style="color:#c0c5ce;"> ASAuthorizationControllerProxy: DelegateProxy&lt;ASAuthorizationController, ASAuthorizationControllerDelegate&gt;,
+    DelegateProxyType,
+    ASAuthorizationControllerDelegate,
+ASAuthorizationControllerPresentationContextProviding {
+
+    </span><span style="color:#b48ead;">var</span><span style="color:#c0c5ce;"> presentationWindow: UIWindow = UIWindow()
+
+    </span><span style="color:#b48ead;">public init</span><span style="color:#c0c5ce;">(controller: ASAuthorizationController) {
+        </span><span style="color:#b48ead;">super</span><span style="color:#c0c5ce;">.</span><span style="color:#b48ead;">init</span><span style="color:#c0c5ce;">(parentObject: controller, delegateProxy: ASAuthorizationControllerProxy.</span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">)
+    }
+
+    </span><span style="color:#65737e;">// MARK: - DelegateProxyType
+    </span><span style="color:#b48ead;">public static func </span><span style="color:#c0c5ce;">registerKnownImplementations() {
+        register { ASAuthorizationControllerProxy(controller: $</span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">) }
+    }
+
+    </span><span style="color:#65737e;">// MARK: - Proxy Subject
+    </span><span style="color:#b48ead;">internal lazy var</span><span style="color:#c0c5ce;"> didComplete = PublishSubject&lt;ASAuthorization&gt;()
+
+    </span><span style="color:#65737e;">// MARK: - ASAuthorizationControllerDelegate
+    </span><span style="color:#b48ead;">func </span><span style="color:#c0c5ce;">authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        didComplete.onNext(authorization)
+        didComplete.onCompleted()
+    }
+
+    </span><span style="color:#b48ead;">func </span><span style="color:#c0c5ce;">authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        didComplete.onCompleted()
+    }
+
+    </span><span style="color:#65737e;">// MARK: - ASAuthorizationControllerPresentationContextProviding
+    </span><span style="color:#b48ead;">func </span><span style="color:#c0c5ce;">presentationAnchor(</span><span style="color:#b48ead;">for</span><span style="color:#c0c5ce;"> controller: ASAuthorizationController) -&gt; ASPresentationAnchor {
+        </span><span style="color:#b48ead;">return</span><span style="color:#c0c5ce;"> presentationWindow
+    }
+
+    </span><span style="color:#65737e;">// MARK: - Completed
+    </span><span style="color:#b48ead;">deinit</span><span style="color:#c0c5ce;"> {
+        </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.didComplete.onCompleted()
+    }
+}
+
+
+
+</span><span style="color:#b48ead;">@available</span><span style="color:#c0c5ce;">(iOS </span><span style="color:#d08770;">13</span><span style="color:#c0c5ce;">.</span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">, *)
+</span><span style="color:#b48ead;">extension</span><span style="color:#c0c5ce;"> Reactive </span><span style="color:#b48ead;">where</span><span style="color:#c0c5ce;"> Base: ASAuthorizationAppleIDProvider {
+    </span><span style="color:#b48ead;">public func </span><span style="color:#c0c5ce;">login(scope: [ASAuthorization.Scope]? = </span><span style="color:#d08770;">nil</span><span style="color:#c0c5ce;">) -&gt; Observable&lt;ASAuthorization&gt; {
+        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> request = base.createRequest()
+        request.requestedScopes = scope
+
+        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> controller = ASAuthorizationController(authorizationRequests: [request])
+
+        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> proxy = ASAuthorizationControllerProxy.proxy(</span><span style="color:#b48ead;">for</span><span style="color:#c0c5ce;">: controller)
+
+        controller.presentationContextProvider = proxy
+        controller.performRequests()
+
+        </span><span style="color:#b48ead;">return</span><span style="color:#c0c5ce;"> proxy.didComplete
+    }
+}
+
+</span><span style="color:#b48ead;">@available</span><span style="color:#c0c5ce;">(iOS </span><span style="color:#d08770;">13</span><span style="color:#c0c5ce;">.</span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">, *)
+</span><span style="color:#b48ead;">extension</span><span style="color:#c0c5ce;"> Reactive </span><span style="color:#b48ead;">where</span><span style="color:#c0c5ce;"> Base: ASAuthorizationAppleIDButton {
+    </span><span style="color:#b48ead;">public func </span><span style="color:#c0c5ce;">loginOnTap(scope: [ASAuthorization.Scope]? = </span><span style="color:#d08770;">nil</span><span style="color:#c0c5ce;">) -&gt; Observable&lt;ASAuthorization&gt; {
+        </span><span style="color:#b48ead;">return</span><span style="color:#c0c5ce;"> controlEvent(.touchUpInside)
+            .flatMap {
+                ASAuthorizationAppleIDProvider().rx.login(scope: scope)
+        }
+    }
+
+    </span><span style="color:#b48ead;">public func </span><span style="color:#c0c5ce;">login(scope: [ASAuthorization.Scope]? = </span><span style="color:#d08770;">nil</span><span style="color:#c0c5ce;">) -&gt; Observable&lt;ASAuthorization&gt; {
+        </span><span style="color:#b48ead;">return</span><span style="color:#c0c5ce;"> ASAuthorizationAppleIDProvider().rx.login(scope: scope)
+    }
+}
+</span></code></pre>
+<ul>
+<li>아래와 같이 사용</li>
+</ul>
+<pre style="background-color:#2b303b;">
+<code class="language-swift" data-lang="swift"><span style="color:#c0c5ce;"> </span><span style="color:#b48ead;">if</span><span style="color:#c0c5ce;"> #available(iOS </span><span style="color:#d08770;">13</span><span style="color:#c0c5ce;">.</span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">, *) {
+            appleSignInButton.rx
+                .loginOnTap(scope: [.fullName, .email])
+                .map { $</span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">.credential as? ASAuthorizationAppleIDCredential }
+                .filterNil()
+                .subscribe(onNext: { [</span><span style="color:#b48ead;">weak self</span><span style="color:#c0c5ce;">] credential </span><span style="color:#b48ead;">in
+                    guard let</span><span style="color:#c0c5ce;"> `</span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">` = </span><span style="color:#b48ead;">self else</span><span style="color:#c0c5ce;"> { </span><span style="color:#b48ead;">return</span><span style="color:#c0c5ce;"> }
+                    FireBaseAnalytics.shared.sendEvent(name: </span><span style="color:#a3be8c;">&quot;login&quot;</span><span style="color:#c0c5ce;">,
+                                                       params: [</span><span style="color:#a3be8c;">&quot;method&quot;</span><span style="color:#c0c5ce;">:</span><span style="color:#a3be8c;">&quot;apple&quot;</span><span style="color:#c0c5ce;">])
+
+                    CommonSignInRoutines.onTouchConnectWithApple(</span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">)
+                    AppleAuthenticationService.shared.signInPublisher.onNext(credential)
+
+                }, onError: { error </span><span style="color:#b48ead;">in
+</span><span style="color:#c0c5ce;">                    logger.error(</span><span style="color:#a3be8c;">&quot;#### error </span><span style="color:#c0c5ce;">\(error.localizedDescription)</span><span style="color:#a3be8c;">&quot;</span><span style="color:#c0c5ce;">, context: LogCategory.appleLogin)
+                }).disposed(by: </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.disposeBag)
+        }
+</span></code></pre><h2 id="resource">resource</h2>
+<ul>
+<li>https://sarunw.com/posts/sign-in-with-apple-1/</li>
+<li>https://medium.com/@twih1203/애플-로그인-구현하기-sign-in-with-apple-1-5db7606867</li>
+<li></li>
+</ul>
+
+    </div>
+
+    
+        <footer>
+            <hr>
+            <p>
+                
+                    Published by Kwanghyun Won
+                
+                
+                
+                    and tagged
+                    
+                        <a href="https://wonkwh.github.io/tags/swift/">swift</a>
+                        
+                            
+                                
+                                    and
+                                
+                            
+                        
+                    
+                        <a href="https://wonkwh.github.io/tags/apple-signin/">apple_signin</a>
+                        
+                            
+                        
+                    
+                
+            </p>
+        </footer>
+    
+</article>
+
+
+    </body>
+
+</html>

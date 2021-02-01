@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+      <!-- Enable responsiveness on mobile devices-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+      <title></title>
+
+      
+
+      
+          <link rel="stylesheet" href="https://wonkwh.github.io/site.css">
+      
+
+      
+      
+    </head>
+
+    <body class="hack dark main container">
+        
+
+<article itemscope itemtype="http://schema.org/BlogPosting">
+    <header>
+        <h1 itemprop="headline">ListController like SwifUI&#x27;s List</h1>
+        <span class="muted">
+    <svg style="margin-bottom:-3px" class="i-clock" viewBox="0 0 32 32"
+         width="16" height="16" fill="none" stroke="currentcolor"
+         stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
+        <circle cx="16" cy="16" r="14"/>
+        <path d="M16 8 L16 16 20 20"/>
+    </svg>
+    <span>2 minute read</span>
+    <svg style="margin-bottom: -3px" class="i-edit" viewBox="0 0 32 32"
+         width="16" height="16" fill="none" stroke="currentcolor"
+         stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
+        <path d="M30 7 L25 2 5 22 3 29 10 27 Z M21 6 L26 11 Z M5 22 L10 27 Z"/>
+    </svg>
+
+    Published: 2020-03-16
+</span>
+    </header>
+    <div itemprop="articleBody">
+      <p><code>Micro</code> Lib를 이용하여 swiftUI의 <code>List</code>와 유사하게 collectionView를 구성</p>
+<ul>
+<li>original article 
+<ul>
+<li><a href="https://onmyway133.github.io/blog/How-to-build-SwiftUI-style-UICollectionView-data-source-in-Swift/">How-to-build-SwiftUI-style-UICollectionView-data-source-in-Swift</a></li>
+</ul>
+</li>
+</ul>
+<span id="continue-reading"></span><h2 id="implementation">Implementation</h2>
+<ul>
+<li>iOS13 이상의 SwiftUI로 List를 구성하는 소스는 아래와 같이 직관적이다. </li>
+</ul>
+<pre style="background-color:#2b303b;">
+<code class="language-swift" data-lang="swift"><span style="color:#b48ead;">var</span><span style="color:#c0c5ce;"> body: some View {
+    List {
+        ForEach(blogs) { blog </span><span style="color:#b48ead;">in
+</span><span style="color:#c0c5ce;">            VStack {
+                Text(blog.name)
+            }
+            .onTap {
+                print(</span><span style="color:#a3be8c;">&quot;cell was tapped&quot;</span><span style="color:#c0c5ce;">)
+            }
+        }
+    }
+}
+</span></code></pre>
+<ul>
+<li>전 Building Better View에서 수정했던 UI를 아래와 <strong>Micro</strong> lib 사용하면 아래와 같이 구현할 수 있다.</li>
+<li>Section Header, Footer View를 구현하기 위해 라이브러리 소스코드를 일부 수정하였다. </li>
+</ul>
+<pre style="background-color:#2b303b;">
+<code class="language-swift" data-lang="swift"><span style="color:#b48ead;">import </span><span style="color:#c0c5ce;">UIKit
+</span><span style="color:#b48ead;">import </span><span style="color:#c0c5ce;">LBTATools
+</span><span style="color:#b48ead;">import </span><span style="color:#c0c5ce;">Nuke
+
+</span><span style="color:#b48ead;">class</span><span style="color:#c0c5ce;"> CustomDataSource: DataSource {
+    </span><span style="color:#b48ead;">func </span><span style="color:#c0c5ce;">collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -&gt; UICollectionReusableView {
+        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: </span><span style="color:#a3be8c;">&quot;footerId&quot;</span><span style="color:#c0c5ce;">, </span><span style="color:#b48ead;">for</span><span style="color:#c0c5ce;">: indexPath)
+        </span><span style="color:#b48ead;">return</span><span style="color:#c0c5ce;"> footer
+    }
+}
+
+</span><span style="color:#b48ead;">class</span><span style="color:#c0c5ce;"> MicroListController: UIViewController {
+    </span><span style="color:#b48ead;">var</span><span style="color:#c0c5ce;"> dataSource: DataSource!
+
+    </span><span style="color:#b48ead;">lazy var</span><span style="color:#c0c5ce;"> collectionView: UICollectionView = {
+        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> layout = UICollectionViewFlowLayout()
+        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> view = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        view.backgroundColor = .white
+        </span><span style="color:#b48ead;">return</span><span style="color:#c0c5ce;"> view
+    }()
+
+    </span><span style="color:#b48ead;">var</span><span style="color:#c0c5ce;"> results = [Result]()
+
+    </span><span style="color:#b48ead;">override func </span><span style="color:#c0c5ce;">viewDidLoad() {
+        </span><span style="color:#b48ead;">super</span><span style="color:#c0c5ce;">.viewDidLoad()
+
+        collectionView.register(LoadingFooter.</span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: </span><span style="color:#a3be8c;">&quot;footerId&quot;</span><span style="color:#c0c5ce;">)
+        view.addSubview(collectionView)
+        collectionView.fillSuperviewSafeAreaLayoutGuide()
+
+        </span><span style="color:#65737e;">//micro
+</span><span style="color:#c0c5ce;">        dataSource = CustomDataSource(collectionView: collectionView)
+        collectionView.dataSource = dataSource
+        collectionView.delegate = dataSource
+
+        setDataSource()
+        fetchData()
+    }
+
+    </span><span style="color:#b48ead;">var</span><span style="color:#c0c5ce;"> isPaginating = </span><span style="color:#b48ead;">false
+    var</span><span style="color:#c0c5ce;"> isDonePaginating = </span><span style="color:#b48ead;">false
+
+    func </span><span style="color:#c0c5ce;">setDataSource() {
+        dataSource.state = forEach(results) { result </span><span style="color:#b48ead;">in
+</span><span style="color:#c0c5ce;">            Cell&lt;ListCell&gt;() { context, cell </span><span style="color:#b48ead;">in
+</span><span style="color:#c0c5ce;">                cell.configure(viewData: result)
+
+                </span><span style="color:#65737e;">// initiate pagination
+                </span><span style="color:#b48ead;">if</span><span style="color:#c0c5ce;"> context.indexPath.item == </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.results.count - </span><span style="color:#d08770;">5 </span><span style="color:#c0c5ce;">&amp;&amp; !</span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.isPaginating {
+                    print(</span><span style="color:#a3be8c;">&quot;fetch more data&quot;</span><span style="color:#c0c5ce;">)
+
+                    </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.isPaginating = </span><span style="color:#b48ead;">true
+
+                    let</span><span style="color:#c0c5ce;"> urlString = </span><span style="color:#a3be8c;">&quot;https://itunes.apple.com/search?term=</span><span style="color:#c0c5ce;">\(</span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.searchTerm)</span><span style="color:#a3be8c;">&amp;offset=</span><span style="color:#c0c5ce;">\(</span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.results.count)</span><span style="color:#a3be8c;">&amp;limit=20&quot;
+</span><span style="color:#c0c5ce;">                    Service.shared.fetchGenericJSONData(urlString: urlString) { (searchResult: SearchResult?, err) </span><span style="color:#b48ead;">in
+
+                        if let</span><span style="color:#c0c5ce;"> err = err {
+                            print(</span><span style="color:#a3be8c;">&quot;Failed to paginate data:&quot;</span><span style="color:#c0c5ce;">, err)
+                            </span><span style="color:#b48ead;">return
+                        </span><span style="color:#c0c5ce;">}
+
+                        </span><span style="color:#b48ead;">if</span><span style="color:#c0c5ce;"> searchResult?.results.count == </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;"> {
+                            </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.isDonePaginating = </span><span style="color:#b48ead;">true
+</span><span style="color:#c0c5ce;">                        }
+
+                        sleep(</span><span style="color:#d08770;">2</span><span style="color:#c0c5ce;">)
+
+                        </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.results += searchResult?.results ?? []
+                        DispatchQueue.main.async {
+                            </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.setDataSource()
+                        }
+                        </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.isPaginating = </span><span style="color:#b48ead;">false
+</span><span style="color:#c0c5ce;">                    }
+                }
+            }
+            .onSelect { context </span><span style="color:#b48ead;">in
+</span><span style="color:#c0c5ce;">                print(</span><span style="color:#a3be8c;">&quot;cell at index </span><span style="color:#c0c5ce;">\(context.indexPath.item) </span><span style="color:#a3be8c;">is selected&quot;</span><span style="color:#c0c5ce;">)
+            }
+            .onSize { context -&gt; CGSize </span><span style="color:#b48ead;">in
+                return </span><span style="color:#c0c5ce;">.</span><span style="color:#b48ead;">init</span><span style="color:#c0c5ce;">(width: </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.view.frame.width, height: </span><span style="color:#d08770;">100</span><span style="color:#c0c5ce;">.</span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">)
+            }
+            .onFooterSize { context -&gt; CGSize </span><span style="color:#b48ead;">in
+                let</span><span style="color:#c0c5ce;"> height: CGFloat = </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.isDonePaginating ? </span><span style="color:#d08770;">0 </span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">100
+                </span><span style="color:#b48ead;">return </span><span style="color:#c0c5ce;">.</span><span style="color:#b48ead;">init</span><span style="color:#c0c5ce;">(width: </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.view.frame.width, height: height)
+            }
+        }
+    }
+
+
+    </span><span style="color:#b48ead;">fileprivate let</span><span style="color:#c0c5ce;"> searchTerm = </span><span style="color:#a3be8c;">&quot;IZONE&quot;
+
+    </span><span style="color:#b48ead;">fileprivate func </span><span style="color:#c0c5ce;">fetchData() {
+        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> urlString = </span><span style="color:#a3be8c;">&quot;https://itunes.apple.com/search?term=</span><span style="color:#c0c5ce;">\(searchTerm)</span><span style="color:#a3be8c;">&amp;offset=0&amp;limit=20&quot;
+</span><span style="color:#c0c5ce;">        Service.shared.fetchGenericJSONData(urlString: urlString) { (searchResult: SearchResult?, err) </span><span style="color:#b48ead;">in
+
+            if let</span><span style="color:#c0c5ce;"> err = err {
+                print(</span><span style="color:#a3be8c;">&quot;Failed to paginate data:&quot;</span><span style="color:#c0c5ce;">, err)
+                </span><span style="color:#b48ead;">return
+            </span><span style="color:#c0c5ce;">}
+
+            </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.results = searchResult?.results ?? []
+            DispatchQueue.main.async {
+                </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.setDataSource()
+            }
+        }
+    }
+}
+
+
+</span></code></pre><h2 id="fullsource">fullSource</h2>
+<ul>
+<li>https://github.com/wonkwh/BlogShowcase/tree/feature/apply_micro</li>
+</ul>
+
+    </div>
+
+    
+        <footer>
+            <hr>
+            <p>
+                
+                    Published by Kwanghyun Won
+                
+                
+                
+                    and tagged
+                    
+                        <a href="https://wonkwh.github.io/tags/swift/">swift</a>
+                        
+                            
+                                
+                                    ,
+                                
+                            
+                        
+                    
+                        <a href="https://wonkwh.github.io/tags/uikit/">uikit</a>
+                        
+                            
+                                
+                                    and
+                                
+                            
+                        
+                    
+                        <a href="https://wonkwh.github.io/tags/uicollectionview/">uicollectionview</a>
+                        
+                            
+                        
+                    
+                
+            </p>
+        </footer>
+    
+</article>
+
+
+    </body>
+
+</html>

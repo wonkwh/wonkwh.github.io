@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+      <!-- Enable responsiveness on mobile devices-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+      <title></title>
+
+      
+
+      
+          <link rel="stylesheet" href="https://wonkwh.github.io/site.css">
+      
+
+      
+      
+    </head>
+
+    <body class="hack dark main container">
+        
+
+<article itemscope itemtype="http://schema.org/BlogPosting">
+    <header>
+        <h1 itemprop="headline">usage-official-swift-log</h1>
+        <span class="muted">
+    <svg style="margin-bottom:-3px" class="i-clock" viewBox="0 0 32 32"
+         width="16" height="16" fill="none" stroke="currentcolor"
+         stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
+        <circle cx="16" cy="16" r="14"/>
+        <path d="M16 8 L16 16 20 20"/>
+    </svg>
+    <span>2 minute read</span>
+    <svg style="margin-bottom: -3px" class="i-edit" viewBox="0 0 32 32"
+         width="16" height="16" fill="none" stroke="currentcolor"
+         stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
+        <path d="M30 7 L25 2 5 22 3 29 10 27 Z M21 6 L26 11 Z M5 22 L10 27 Z"/>
+    </svg>
+
+    Published: 2020-01-06
+</span>
+    </header>
+    <div itemprop="articleBody">
+      <p>Apple의 official swift-log package를 이용하여 os unified logging를 사용하는 방법</p>
+<span id="continue-reading"></span><h3 id="configuration">Configuration</h3>
+<ul>
+<li>https://github.com/apple/swift-log</li>
+<li>https://github.com/chrisaljoudi/swift-log-oslog</li>
+</ul>
+<p>swift-log의 oslog backend 패키지를 Package.swift에 추가</p>
+<pre style="background-color:#2b303b;">
+<code class="language-swift" data-lang="swift"><span style="color:#c0c5ce;">dependencies: [
+        .package(url: </span><span style="color:#a3be8c;">&quot;https://github.com/chrisaljoudi/swift-log-oslog.git&quot;</span><span style="color:#c0c5ce;">, from: </span><span style="color:#a3be8c;">&quot;0.2.1&quot;</span><span style="color:#c0c5ce;">)
+    ],
+targets: [
+    .target(
+        name: </span><span style="color:#a3be8c;">&quot;VExtensionUtility&quot;</span><span style="color:#c0c5ce;">,
+        dependencies: [
+            </span><span style="color:#a3be8c;">&quot;LoggingOSLog&quot;
+</span><span style="color:#c0c5ce;">        ]
+    ),
+</span></code></pre><h3 id="generate-log-class">generate Log class</h3>
+<ul>
+<li>다음과 같은 Wrapping class를 생성하면 조금더 편리하게 사용할 수 있다. </li>
+</ul>
+<pre style="background-color:#2b303b;">
+<code class="language-swift" data-lang="swift"><span style="color:#65737e;">//
+//  Log.swift
+//
+//  Created by kwanghyun.won` on 2020/01/06.
+//
+
+</span><span style="color:#b48ead;">import </span><span style="color:#c0c5ce;">Logging
+</span><span style="color:#b48ead;">import </span><span style="color:#c0c5ce;">LoggingOSLog
+
+</span><span style="color:#65737e;">/// Example:
+///     Log.setup(subsystem: &quot;com.Vingle.DesignKitDemo&quot;, level: .debug)
+///     Log.info(&quot;setup Log Complete!&quot;)
+</span><span style="color:#b48ead;">public final class</span><span style="color:#c0c5ce;"> Log {
+
+    </span><span style="color:#b48ead;">public static var</span><span style="color:#c0c5ce;"> `</span><span style="color:#b48ead;">default</span><span style="color:#c0c5ce;">`: Logger = Logger(label: </span><span style="color:#a3be8c;">&quot;com.Vingle.app&quot;</span><span style="color:#c0c5ce;">, factory: LoggingOSLog.</span><span style="color:#b48ead;">init</span><span style="color:#c0c5ce;">)
+
+    </span><span style="color:#b48ead;">public class func </span><span style="color:#c0c5ce;">setup(subsystem: String, level: Logger.Level = .debug) {
+        </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.</span><span style="color:#b48ead;">default </span><span style="color:#c0c5ce;">= Logger(label: subsystem, factory: LoggingOSLog.</span><span style="color:#b48ead;">init</span><span style="color:#c0c5ce;">)
+        </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.</span><span style="color:#b48ead;">default</span><span style="color:#c0c5ce;">.logLevel = level
+    }
+}
+
+</span><span style="color:#b48ead;">public extension</span><span style="color:#c0c5ce;"> Log {
+    </span><span style="color:#b48ead;">static func </span><span style="color:#c0c5ce;">trace(_ message: Logger.Message, functionName: String = #function, fileName: String = #file) {
+        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> className = fileName.extractClassName()
+        </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.</span><span style="color:#b48ead;">default</span><span style="color:#c0c5ce;">.trace(</span><span style="color:#a3be8c;">&quot;</span><span style="color:#c0c5ce;">\(className)</span><span style="color:#a3be8c;">:</span><span style="color:#c0c5ce;">\(functionName) \(message)</span><span style="color:#a3be8c;">&quot;</span><span style="color:#c0c5ce;">)
+    }
+
+    </span><span style="color:#b48ead;">static func </span><span style="color:#c0c5ce;">debug(_ message: Logger.Message, functionName: String = #function, fileName: String = #file) {
+        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> className = fileName.extractClassName()
+        </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.</span><span style="color:#b48ead;">default</span><span style="color:#c0c5ce;">.debug(</span><span style="color:#a3be8c;">&quot;</span><span style="color:#c0c5ce;">\(className)</span><span style="color:#a3be8c;">:</span><span style="color:#c0c5ce;">\(functionName) \(message)</span><span style="color:#a3be8c;">&quot;</span><span style="color:#c0c5ce;">)
+    }
+
+    </span><span style="color:#b48ead;">static func </span><span style="color:#c0c5ce;">info(_ message: Logger.Message, functionName: String = #function, fileName: String = #file) {
+        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> className = fileName.extractClassName()
+        </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.</span><span style="color:#b48ead;">default</span><span style="color:#c0c5ce;">.info(</span><span style="color:#a3be8c;">&quot;</span><span style="color:#c0c5ce;">\(className)</span><span style="color:#a3be8c;">:</span><span style="color:#c0c5ce;">\(functionName) \(message)</span><span style="color:#a3be8c;">&quot;</span><span style="color:#c0c5ce;">)
+    }
+
+    </span><span style="color:#b48ead;">static func </span><span style="color:#c0c5ce;">notice(_ message: Logger.Message, functionName: String = #function, fileName: String = #file) {
+        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> className = fileName.extractClassName()
+        </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.</span><span style="color:#b48ead;">default</span><span style="color:#c0c5ce;">.notice(</span><span style="color:#a3be8c;">&quot;</span><span style="color:#c0c5ce;">\(className)</span><span style="color:#a3be8c;">:</span><span style="color:#c0c5ce;">\(functionName) \(message)</span><span style="color:#a3be8c;">&quot;</span><span style="color:#c0c5ce;">)
+    }
+
+    </span><span style="color:#b48ead;">static func </span><span style="color:#c0c5ce;">warning(_ message: Logger.Message, functionName: String = #function, fileName: String = #file) {
+        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> className = fileName.extractClassName()
+        </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.</span><span style="color:#b48ead;">default</span><span style="color:#c0c5ce;">.warning(</span><span style="color:#a3be8c;">&quot;</span><span style="color:#c0c5ce;">\(className)</span><span style="color:#a3be8c;">:</span><span style="color:#c0c5ce;">\(functionName) \(message)</span><span style="color:#a3be8c;">&quot;</span><span style="color:#c0c5ce;">)
+    }
+
+    </span><span style="color:#b48ead;">static func </span><span style="color:#c0c5ce;">error(_ message: Logger.Message, functionName: String = #function, fileName: String = #file) {
+        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> className = fileName.extractClassName()
+        </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.</span><span style="color:#b48ead;">default</span><span style="color:#c0c5ce;">.error(</span><span style="color:#a3be8c;">&quot;</span><span style="color:#c0c5ce;">\(className)</span><span style="color:#a3be8c;">:</span><span style="color:#c0c5ce;">\(functionName) \(message)</span><span style="color:#a3be8c;">&quot;</span><span style="color:#c0c5ce;">)
+    }
+
+    </span><span style="color:#b48ead;">static func </span><span style="color:#c0c5ce;">critical(_ message: Logger.Message, functionName: String = #function, fileName: String = #file) {
+        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> className = fileName.extractClassName()
+        </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.</span><span style="color:#b48ead;">default</span><span style="color:#c0c5ce;">.critical(</span><span style="color:#a3be8c;">&quot;</span><span style="color:#c0c5ce;">\(className)</span><span style="color:#a3be8c;">:</span><span style="color:#c0c5ce;">\(functionName) \(message)</span><span style="color:#a3be8c;">&quot;</span><span style="color:#c0c5ce;">)
+    }
+}
+</span></code></pre><h3 id="usage">usage</h3>
+<ul>
+<li><code>AppDelegate.swift</code> 에 Log setting </li>
+</ul>
+<blockquote>
+<p>Log.setup(subsystem: &quot;com.Vingle.DesignKitDemo&quot;, level: .debug)</p>
+</blockquote>
+<ul>
+<li>그 이후 자유롭게 Log 사용 </li>
+</ul>
+<blockquote>
+<p>Log.debug(&quot; debug message (variable)&quot;)</p>
+</blockquote>
+<h3 id="link">Link</h3>
+<ul>
+<li><a href="https://www.raywenderlich.com/605079-migrating-to-unified-logging-console-and-instruments">migrating-to-unified-logging-console-and-instruments</a> 
+<ul>
+<li>raywenderlich 의 os-log tutorial </li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+        <footer>
+            <hr>
+            <p>
+                
+                    Published by Kwanghyun Won
+                
+                
+                
+                    and tagged
+                    
+                        <a href="https://wonkwh.github.io/tags/swift/">swift</a>
+                        
+                            
+                                
+                                    ,
+                                
+                            
+                        
+                    
+                        <a href="https://wonkwh.github.io/tags/log/">log</a>
+                        
+                            
+                                
+                                    and
+                                
+                            
+                        
+                    
+                        <a href="https://wonkwh.github.io/tags/spm/">spm</a>
+                        
+                            
+                        
+                    
+                
+            </p>
+        </footer>
+    
+</article>
+
+
+    </body>
+
+</html>
