@@ -1,6 +1,6 @@
 +++
 title = "Refactoring Massive App Delegate"
-date = 2020-02-01
+date = 2021-02-01
 category = "swift"
 
 [taxonomies]
