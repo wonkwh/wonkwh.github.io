@@ -278,6 +278,7 @@ struct BitcoinPriceFetcher: PriceFetcher {
 - `PriveFetcher` protocol은  HTTP 요청이 아니더라도 모든 데이터소스에서 발생가능
 - 이는 UnitTest의 중요한 특징이 될 것
 
-> part 1 끝, part 2로... 
+> part 1 끝
+> to be continue
 ----
 - tag: #swift, #uikit, #dependancy_injection, #protocol, #design_pattern
