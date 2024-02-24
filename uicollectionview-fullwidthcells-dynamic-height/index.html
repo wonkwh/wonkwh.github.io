@@ -45,78 +45,77 @@
     <div itemprop="articleBody">
       <p>CollectionView 를 이용해 tableview와 유사한 ListView를 사용하면서 tableview의 dynamic height와 같이 autolayout 기반의 dynamic height를 구현하는 코드</p>
 <span id="continue-reading"></span><h3 id="collectionview-gibanyi-listcontroller">CollectionView 기반의 ListController</h3>
-<pre style="background-color:#2b303b;">
-<code class="language-swift" data-lang="swift"><span style="color:#b48ead;">import </span><span style="color:#c0c5ce;">UIKit
+<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">import UIKit
 
-</span><span style="color:#b48ead;">extension</span><span style="color:#c0c5ce;"> UIView {
-    </span><span style="color:#b48ead;">func </span><span style="color:#c0c5ce;">insect(by insect: UIEdgeInsets) {
-        </span><span style="color:#b48ead;">guard let</span><span style="color:#c0c5ce;"> superview = superview </span><span style="color:#b48ead;">else</span><span style="color:#c0c5ce;"> {
-            </span><span style="color:#b48ead;">return
-        </span><span style="color:#c0c5ce;">}
+extension UIView {
+    func insect(by insect: UIEdgeInsets) {
+        guard let superview = superview else {
+            return
+        }
 
-        translatesAutoresizingMaskIntoConstraints = </span><span style="color:#b48ead;">false
+        translatesAutoresizingMaskIntoConstraints = false
 
-</span><span style="color:#c0c5ce;">        leadingAnchor.constraint(equalTo: superview.leadingAnchor, constant: insect.</span><span style="color:#b48ead;">left</span><span style="color:#c0c5ce;">).isActive = </span><span style="color:#b48ead;">true
-</span><span style="color:#c0c5ce;">        trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: -insect.</span><span style="color:#b48ead;">right</span><span style="color:#c0c5ce;">).isActive = </span><span style="color:#b48ead;">true
-</span><span style="color:#c0c5ce;">        topAnchor.constraint(equalTo: superview.topAnchor, constant: insect.top).isActive = </span><span style="color:#b48ead;">true
-</span><span style="color:#c0c5ce;">        bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: -insect.bottom).isActive = </span><span style="color:#b48ead;">true
-</span><span style="color:#c0c5ce;">    }
+        leadingAnchor.constraint(equalTo: superview.leadingAnchor, constant: insect.left).isActive = true
+        trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: -insect.right).isActive = true
+        topAnchor.constraint(equalTo: superview.topAnchor, constant: insect.top).isActive = true
+        bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: -insect.bottom).isActive = true
+    }
 }
-</span><span style="color:#b48ead;">class</span><span style="color:#c0c5ce;"> ListCell: UICollectionViewCell {
-    </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> titleLabel: UILabel = {
-        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> label = UILabel()
-        label.text = </span><span style="color:#a3be8c;">&quot;App Section Title&quot;
-</span><span style="color:#c0c5ce;">        label.font = UIFont.preferredFont(forTextStyle: .body)
-        label.numberOfLines = </span><span style="color:#d08770;">0
-</span><span style="color:#c0c5ce;">        label.textColor = .black
-        </span><span style="color:#b48ead;">return</span><span style="color:#c0c5ce;"> label
+class ListCell: UICollectionViewCell {
+    let titleLabel: UILabel = {
+        let label = UILabel()
+        label.text = &quot;App Section Title&quot;
+        label.font = UIFont.preferredFont(forTextStyle: .body)
+        label.numberOfLines = 0
+        label.textColor = .black
+        return label
     }()
 
 
-    </span><span style="color:#b48ead;">override init</span><span style="color:#c0c5ce;">(frame: CGRect) {
-        </span><span style="color:#b48ead;">super</span><span style="color:#c0c5ce;">.</span><span style="color:#b48ead;">init</span><span style="color:#c0c5ce;">(frame: frame)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         contentView.backgroundColor = .green
         contentView.addSubview(titleLabel)
-        titleLabel.insect(by: .</span><span style="color:#b48ead;">init</span><span style="color:#c0c5ce;">(top: </span><span style="color:#d08770;">5</span><span style="color:#c0c5ce;">, </span><span style="color:#b48ead;">left</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">5</span><span style="color:#c0c5ce;">, bottom: </span><span style="color:#d08770;">5</span><span style="color:#c0c5ce;">, </span><span style="color:#b48ead;">right</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">5</span><span style="color:#c0c5ce;">))
+        titleLabel.insect(by: .init(top: 5, left: 5, bottom: 5, right: 5))
     }
 
-    </span><span style="color:#b48ead;">required init</span><span style="color:#c0c5ce;">?(coder: NSCoder) {
-        fatalError(</span><span style="color:#a3be8c;">&quot;init(coder:) has not been implemented&quot;</span><span style="color:#c0c5ce;">)
+    required init?(coder: NSCoder) {
+        fatalError(&quot;init(coder:) has not been implemented&quot;)
     }
 }
 
-</span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> items = [
-        </span><span style="color:#a3be8c;">&quot;Lorem ipsum dolor sit amet.&quot;</span><span style="color:#c0c5ce;">,
-        </span><span style="color:#a3be8c;">&quot;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris. Lorem ipsum dolor sit amet, consectetur adipiscing elit.&quot;</span><span style="color:#c0c5ce;">,
-        </span><span style="color:#a3be8c;">&quot;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.&quot;</span><span style="color:#c0c5ce;">,
-        </span><span style="color:#a3be8c;">&quot;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.&quot;</span><span style="color:#c0c5ce;">,
-        </span><span style="color:#a3be8c;">&quot;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.&quot;</span><span style="color:#c0c5ce;">,
-        </span><span style="color:#a3be8c;">&quot;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.&quot;</span><span style="color:#c0c5ce;">,
-        </span><span style="color:#a3be8c;">&quot;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.&quot;</span><span style="color:#c0c5ce;">,
-        </span><span style="color:#a3be8c;">&quot;Lorem ipsum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.&quot;
-</span><span style="color:#c0c5ce;">]
+let items = [
+        &quot;Lorem ipsum dolor sit amet.&quot;,
+        &quot;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris. Lorem ipsum dolor sit amet, consectetur adipiscing elit.&quot;,
+        &quot;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.&quot;,
+        &quot;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.&quot;,
+        &quot;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.&quot;,
+        &quot;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.&quot;,
+        &quot;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.&quot;,
+        &quot;Lorem ipsum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.&quot;
+]
 
-</span><span style="color:#b48ead;">class</span><span style="color:#c0c5ce;"> ListController: UIViewController {
-    </span><span style="color:#b48ead;">lazy var</span><span style="color:#c0c5ce;"> collectionView: UICollectionView = {
-        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> layout = UICollectionViewFlowLayout()
+class ListController: UIViewController {
+    lazy var collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        </span><span style="color:#65737e;">//layout.itemSize = .init(width: self.view.frame.width, height: 80)
-</span><span style="color:#c0c5ce;">        layout.sectionInset = .</span><span style="color:#b48ead;">init</span><span style="color:#c0c5ce;">(top: </span><span style="color:#d08770;">12</span><span style="color:#c0c5ce;">, </span><span style="color:#b48ead;">left</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">, bottom: </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">, </span><span style="color:#b48ead;">right</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">)
-        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> view = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        &#x2F;&#x2F;layout.itemSize = .init(width: self.view.frame.width, height: 80)
+        layout.sectionInset = .init(top: 12, left: 0, bottom: 0, right: 0)
+        let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
         view.backgroundColor = .white
-        view.register(ListCell.</span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">, forCellWithReuseIdentifier: </span><span style="color:#a3be8c;">&quot;ListCell&quot;</span><span style="color:#c0c5ce;">)
-        view.dataSource = </span><span style="color:#b48ead;">self
-</span><span style="color:#c0c5ce;">        view.delegate = </span><span style="color:#b48ead;">self
-</span><span style="color:#c0c5ce;">        view.alwaysBounceVertical = </span><span style="color:#b48ead;">true
-</span><span style="color:#c0c5ce;">        view.translatesAutoresizingMaskIntoConstraints = </span><span style="color:#b48ead;">false
-        return</span><span style="color:#c0c5ce;"> view
+        view.register(ListCell.self, forCellWithReuseIdentifier: &quot;ListCell&quot;)
+        view.dataSource = self
+        view.delegate = self
+        view.alwaysBounceVertical = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
 
-    </span><span style="color:#b48ead;">override func </span><span style="color:#c0c5ce;">viewDidLoad() {
-        </span><span style="color:#b48ead;">super</span><span style="color:#c0c5ce;">.viewDidLoad()
-        </span><span style="color:#65737e;">//navigationController?.navigationBar.prefersLargeTitles = true
-</span><span style="color:#c0c5ce;">        navigationItem.title = </span><span style="color:#a3be8c;">&quot;ListController&quot;
-</span><span style="color:#c0c5ce;">        view.addSubview(collectionView)
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        &#x2F;&#x2F;navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.title = &quot;ListController&quot;
+        view.addSubview(collectionView)
 
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -128,26 +127,26 @@
     }
 }
 
-</span><span style="color:#65737e;">// MARK: - UICollectionViewDataSource
-</span><span style="color:#b48ead;">extension</span><span style="color:#c0c5ce;"> ListController: UICollectionViewDataSource {
-    </span><span style="color:#b48ead;">func </span><span style="color:#c0c5ce;">collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -&gt; Int {
-        </span><span style="color:#b48ead;">return </span><span style="color:#d08770;">8
-    </span><span style="color:#c0c5ce;">}
+&#x2F;&#x2F; MARK: - UICollectionViewDataSource
+extension ListController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -&gt; Int {
+        return 8
+    }
 
-    </span><span style="color:#b48ead;">func </span><span style="color:#c0c5ce;">collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -&gt; UICollectionViewCell {
-        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> cell = collectionView.dequeueReusableCell(withReuseIdentifier: </span><span style="color:#a3be8c;">&quot;ListCell&quot;</span><span style="color:#c0c5ce;">, </span><span style="color:#b48ead;">for</span><span style="color:#c0c5ce;">: indexPath) as! ListCell
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -&gt; UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: &quot;ListCell&quot;, for: indexPath) as! ListCell
         cell.titleLabel.text = items[indexPath.item]
-        </span><span style="color:#b48ead;">return</span><span style="color:#c0c5ce;"> cell
+        return cell
     }
 }
 
-</span><span style="color:#b48ead;">extension</span><span style="color:#c0c5ce;"> ListController: UICollectionViewDelegateFlowLayout {
-    </span><span style="color:#b48ead;">func </span><span style="color:#c0c5ce;">collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -&gt; CGSize {
-        </span><span style="color:#b48ead;">return </span><span style="color:#c0c5ce;">.</span><span style="color:#b48ead;">init</span><span style="color:#c0c5ce;">(width: </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.view.frame.width, height: </span><span style="color:#d08770;">80</span><span style="color:#c0c5ce;">)
+extension ListController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -&gt; CGSize {
+        return .init(width: self.view.frame.width, height: 80)
     }
 }
 
-</span></code></pre>
+</code></pre>
 <ul>
 <li><code>UICollectionViewDelegateFlowLayout</code>  의 sizeForItemAt method를 오버라이드하여 width를 full width로 설정하면 된다.</li>
 <li>하지만 height를 위와 같이 80으로 고정하면 contents내용에 따라 동적으로 height를 구성하기 꽤 빡시다.
@@ -158,56 +157,54 @@
 <li>참조 링크를 보면 꽤 다양한 방법들이 존재하나 가장 심플한 방법</li>
 <li><code>UICollectionViewDelegateFlowLayout</code> 관련 코드를 삭제</li>
 </ul>
-<pre style="background-color:#2b303b;">
-<code class="language-swift" data-lang="swift"><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">lazy var</span><span style="color:#c0c5ce;"> collectionView: UICollectionView = {
-        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> layout = UICollectionViewFlowLayout()
+<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">    lazy var collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
         ...
-        view.delegate = </span><span style="color:#b48ead;">self </span><span style="color:#65737e;">// 요 라인만 삭제
-        </span><span style="color:#c0c5ce;">...
+        view.delegate = self &#x2F;&#x2F; 요 라인만 삭제
+        ...
     }()
 
 ...
-</span><span style="color:#b48ead;">extension</span><span style="color:#c0c5ce;"> ListController: UICollectionViewDelegateFlowLayout {
-    </span><span style="color:#b48ead;">func </span><span style="color:#c0c5ce;">collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -&gt; CGSize {
-        </span><span style="color:#b48ead;">return </span><span style="color:#c0c5ce;">.</span><span style="color:#b48ead;">init</span><span style="color:#c0c5ce;">(width: </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.view.frame.width, height: </span><span style="color:#d08770;">80</span><span style="color:#c0c5ce;">)
+extension ListController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -&gt; CGSize {
+        return .init(width: self.view.frame.width, height: 80)
     }
 }
-</span></code></pre>
+</code></pre>
 <ul>
 <li>다음 코드를 추가
 <ul>
 <li>
 <p>ListCell 에 width anchor를 추가한다.</p>
-<pre style="background-color:#2b303b;">
-<code class="language-swift" data-lang="swift"><span style="color:#b48ead;">class</span><span style="color:#c0c5ce;"> ListCell: UICollectionViewCell {
-</span><span style="color:#c0c5ce;">    ...
-</span><span style="color:#c0c5ce;">  </span><span style="color:#b48ead;">override init</span><span style="color:#c0c5ce;">(frame: CGRect) {
-</span><span style="color:#c0c5ce;">      </span><span style="color:#b48ead;">super</span><span style="color:#c0c5ce;">.</span><span style="color:#b48ead;">init</span><span style="color:#c0c5ce;">(frame: frame)
-</span><span style="color:#c0c5ce;">      contentView.backgroundColor = .green
-</span><span style="color:#c0c5ce;">      contentView.addSubview(titleLabel)
-</span><span style="color:#c0c5ce;">      </span><span style="color:#65737e;">//하단 라인 추가
-</span><span style="color:#c0c5ce;">      titleLabel.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.size.width - </span><span style="color:#d08770;">10</span><span style="color:#c0c5ce;">).isActive = </span><span style="color:#b48ead;">true
-</span><span style="color:#c0c5ce;">      titleLabel.insect(by: .</span><span style="color:#b48ead;">init</span><span style="color:#c0c5ce;">(top: </span><span style="color:#d08770;">5</span><span style="color:#c0c5ce;">, </span><span style="color:#b48ead;">left</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">5</span><span style="color:#c0c5ce;">, bottom: </span><span style="color:#d08770;">5</span><span style="color:#c0c5ce;">, </span><span style="color:#b48ead;">right</span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">5</span><span style="color:#c0c5ce;">))
-</span><span style="color:#c0c5ce;">  }
+<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">class ListCell: UICollectionViewCell {
+    ...
+  override init(frame: CGRect) {
+      super.init(frame: frame)
+      contentView.backgroundColor = .green
+      contentView.addSubview(titleLabel)
+      &#x2F;&#x2F;하단 라인 추가
+      titleLabel.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.size.width - 10).isActive = true
+      titleLabel.insect(by: .init(top: 5, left: 5, bottom: 5, right: 5))
+  }
 
-</span><span style="color:#c0c5ce;">}
-</span><span style="color:#c0c5ce;">...
-</span></code></pre></li>
+}
+...
+</code></pre>
+</li>
 <li>
 <p>ListController 에 <code>itemSize</code> ,<code>estimatedItemSize</code> 를 추가</p>
-<pre style="background-color:#2b303b;">
-<code class="language-swift" data-lang="swift"><span style="color:#b48ead;">lazy var</span><span style="color:#c0c5ce;"> collectionView: UICollectionView = {
-</span><span style="color:#c0c5ce;">    </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> layout = UICollectionViewFlowLayout()
-</span><span style="color:#c0c5ce;">    ...
-</span><span style="color:#c0c5ce;">    </span><span style="color:#65737e;">// 하단 두라인 추가
+<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">lazy var collectionView: UICollectionView = {
+    let layout = UICollectionViewFlowLayout()
+    ...
+    &#x2F;&#x2F; 하단 두라인 추가
 
-</span><span style="color:#c0c5ce;">    layout.itemSize = UICollectionViewFlowLayout.automaticSize
-</span><span style="color:#c0c5ce;">    layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+    layout.itemSize = UICollectionViewFlowLayout.automaticSize
+    layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
 
-</span><span style="color:#c0c5ce;">    ...
-</span><span style="color:#c0c5ce;">}()
-</span><span style="color:#c0c5ce;">...
-</span></code></pre>
+    ...
+}()
+...
+</code></pre>
 <p><img src="https://user-images.githubusercontent.com/911787/75467646-50632a80-59cf-11ea-9023-5f233f0ce146.png" alt="dynamic_height" /></p>
 </li>
 </ul>

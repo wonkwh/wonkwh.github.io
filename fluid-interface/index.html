@@ -47,198 +47,195 @@
 <ul>
 <li><a href="https://github.com/nathangitter/fluid-interfaces">fluid-interfaces</a></li>
 </ul>
-<span id="continue-reading"></span><h3 id="ios-appjjun-ggyssagihaeyi-bbeteungwa-ngaheu-hyogwa">ios app중 계산기앱의 버튼과 같은 효과</h3>
+<span id="continue-reading"></span><h3 id="ios-appjung-gyesangiaebyi-beoteungwa-gateun-hyogwa">ios app중 계산기앱의 버튼과 같은 효과</h3>
 <ul>
 <li>Button구현의 풀소스는 다음과 같다 </li>
 </ul>
-<pre style="background-color:#2b303b;">
-<code class="language-swift" data-lang="swift"><span style="color:#65737e;">//
-//  Button.swift
-//  Example
-//
-//  Created by kwanghyun.won on 2019/11/07.
-//  Copyright © 2019 vingle. All rights reserved.
-//
+<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">&#x2F;&#x2F;
+&#x2F;&#x2F;  Button.swift
+&#x2F;&#x2F;  Example
+&#x2F;&#x2F;
+&#x2F;&#x2F;  Created by kwanghyun.won on 2019&#x2F;11&#x2F;07.
+&#x2F;&#x2F;  Copyright © 2019 vingle. All rights reserved.
+&#x2F;&#x2F;
 
-</span><span style="color:#b48ead;">import </span><span style="color:#c0c5ce;">UIKit
+import UIKit
 
-</span><span style="color:#b48ead;">open class</span><span style="color:#c0c5ce;"> Button: UIButton {
-    </span><span style="color:#b48ead;">private struct</span><span style="color:#c0c5ce;"> Const {
-        </span><span style="color:#b48ead;">static let</span><span style="color:#c0c5ce;"> borderWidth: CGFloat = </span><span style="color:#d08770;">1
-        </span><span style="color:#b48ead;">static let</span><span style="color:#c0c5ce;"> cornerRadius: CGFloat = </span><span style="color:#d08770;">2
-</span><span style="color:#c0c5ce;">    }
-
-    </span><span style="color:#b48ead;">open override var</span><span style="color:#c0c5ce;"> intrinsicContentSize: CGSize {
-        </span><span style="color:#b48ead;">var</span><span style="color:#c0c5ce;"> origSize = </span><span style="color:#b48ead;">super</span><span style="color:#c0c5ce;">.intrinsicContentSize
-        origSize.height = </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.size == .large ? origSize.height + </span><span style="color:#d08770;">4</span><span style="color:#c0c5ce;">.</span><span style="color:#d08770;">0 </span><span style="color:#c0c5ce;">: origSize.height + </span><span style="color:#d08770;">2</span><span style="color:#c0c5ce;">.</span><span style="color:#d08770;">0
-        </span><span style="color:#65737e;">//dump(origSize)
-        </span><span style="color:#b48ead;">return</span><span style="color:#c0c5ce;"> origSize
+open class Button: UIButton {
+    private struct Const {
+        static let borderWidth: CGFloat = 1
+        static let cornerRadius: CGFloat = 2
     }
 
-    </span><span style="color:#b48ead;">open override func </span><span style="color:#c0c5ce;">tintColorDidChange() {
-        </span><span style="color:#b48ead;">super</span><span style="color:#c0c5ce;">.tintColorDidChange()
+    open override var intrinsicContentSize: CGSize {
+        var origSize = super.intrinsicContentSize
+        origSize.height = self.size == .large ? origSize.height + 4.0 : origSize.height + 2.0
+        &#x2F;&#x2F;dump(origSize)
+        return origSize
+    }
+
+    open override func tintColorDidChange() {
+        super.tintColorDidChange()
         update()
     }
 
-    </span><span style="color:#b48ead;">open var</span><span style="color:#c0c5ce;"> style: ButtonStyle = .flat {
-        </span><span style="color:#b48ead;">didSet</span><span style="color:#c0c5ce;"> {
-            </span><span style="color:#b48ead;">if</span><span style="color:#c0c5ce;"> style != oldValue {
+    open var style: ButtonStyle = .flat {
+        didSet {
+            if style != oldValue {
                 update()
             }
         }
     }
 
-    </span><span style="color:#b48ead;">open var</span><span style="color:#c0c5ce;"> size: ButtonSize = .large {
-        </span><span style="color:#b48ead;">didSet</span><span style="color:#c0c5ce;"> {
-            </span><span style="color:#b48ead;">if</span><span style="color:#c0c5ce;"> size != oldValue {
+    open var size: ButtonSize = .large {
+        didSet {
+            if size != oldValue {
                 update()
             }
         }
     }
 
-    </span><span style="color:#b48ead;">open override var</span><span style="color:#c0c5ce;"> isHighlighted: Bool {
-        </span><span style="color:#b48ead;">didSet</span><span style="color:#c0c5ce;"> {
-            </span><span style="color:#b48ead;">if</span><span style="color:#c0c5ce;"> isHighlighted != oldValue {
+    open override var isHighlighted: Bool {
+        didSet {
+            if isHighlighted != oldValue {
                 update()
             }
         }
     }
 
-    </span><span style="color:#b48ead;">open override var</span><span style="color:#c0c5ce;"> isEnabled: Bool {
-        </span><span style="color:#b48ead;">didSet</span><span style="color:#c0c5ce;"> {
-            </span><span style="color:#b48ead;">if</span><span style="color:#c0c5ce;"> isEnabled != oldValue {
+    open override var isEnabled: Bool {
+        didSet {
+            if isEnabled != oldValue {
                 update()
             }
         }
     }
 
-    </span><span style="color:#b48ead;">private var</span><span style="color:#c0c5ce;"> animator = UIViewPropertyAnimator()
-    </span><span style="color:#b48ead;">private let</span><span style="color:#c0c5ce;"> activationFeedBackGenerator = UIImpactFeedbackGenerator(style: .light)
+    private var animator = UIViewPropertyAnimator()
+    private let activationFeedBackGenerator = UIImpactFeedbackGenerator(style: .light)
 
-    </span><span style="color:#b48ead;">public init</span><span style="color:#c0c5ce;">(style: ButtonStyle = .flat, size: ButtonSize = .large) {
-        </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.style = style
-        </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.size = size
-        </span><span style="color:#b48ead;">super</span><span style="color:#c0c5ce;">.</span><span style="color:#b48ead;">init</span><span style="color:#c0c5ce;">(frame: .zero)
+    public init(style: ButtonStyle = .flat, size: ButtonSize = .large) {
+        self.style = style
+        self.size = size
+        super.init(frame: .zero)
         initialize()
     }
     
-    </span><span style="color:#b48ead;">public override init</span><span style="color:#c0c5ce;">(frame: CGRect) {
-        </span><span style="color:#b48ead;">super</span><span style="color:#c0c5ce;">.</span><span style="color:#b48ead;">init</span><span style="color:#c0c5ce;">(frame: frame)
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
         initialize()
     }
 
-    </span><span style="color:#b48ead;">public required init</span><span style="color:#c0c5ce;">?(coder aDecoder: NSCoder) {
-        </span><span style="color:#b48ead;">super</span><span style="color:#c0c5ce;">.</span><span style="color:#b48ead;">init</span><span style="color:#c0c5ce;">(coder: aDecoder)
+    public required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
         initialize()
     }
 
-    </span><span style="color:#b48ead;">open override func </span><span style="color:#c0c5ce;">layoutSubviews() {
-        </span><span style="color:#b48ead;">super</span><span style="color:#c0c5ce;">.layoutSubviews()
+    open override func layoutSubviews() {
+        super.layoutSubviews()
         layer.cornerRadius = Const.cornerRadius
-        layer.borderWidth = style == .ghost ? Const.borderWidth : </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">.</span><span style="color:#d08770;">0
-    </span><span style="color:#c0c5ce;">}
-
-    </span><span style="color:#b48ead;">func </span><span style="color:#c0c5ce;">initialize() {
-        update()
-        NotificationCenter.</span><span style="color:#b48ead;">default</span><span style="color:#c0c5ce;">.addObserver(</span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">, selector: #selector(didContentSizeCategoryDidChange),
-                                               name: UIContentSizeCategory.didChangeNotification, object: </span><span style="color:#d08770;">nil</span><span style="color:#c0c5ce;">)
-        addTarget(</span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">, action: #selector(didTouchDown), </span><span style="color:#b48ead;">for</span><span style="color:#c0c5ce;">: [.touchDown, .touchDragEnter])
-        addTarget(</span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">, action: #selector(didTouchUp), </span><span style="color:#b48ead;">for</span><span style="color:#c0c5ce;">: [.touchUpInside, .touchDragExit, .touchCancel])
+        layer.borderWidth = style == .ghost ? Const.borderWidth : 0.0
     }
 
-    </span><span style="color:#b48ead;">private func </span><span style="color:#c0c5ce;">update() {
-        setTitleColor(style.titleColor, </span><span style="color:#b48ead;">for</span><span style="color:#c0c5ce;">: .normal)
-        setTitleColor(style.hightlightTitleColor, </span><span style="color:#b48ead;">for</span><span style="color:#c0c5ce;">: .highlighted)
-        setTitleColor(style.disableTitleColor, </span><span style="color:#b48ead;">for</span><span style="color:#c0c5ce;">: .disabled)
+    func initialize() {
+        update()
+        NotificationCenter.default.addObserver(self, selector: #selector(didContentSizeCategoryDidChange),
+                                               name: UIContentSizeCategory.didChangeNotification, object: nil)
+        addTarget(self, action: #selector(didTouchDown), for: [.touchDown, .touchDragEnter])
+        addTarget(self, action: #selector(didTouchUp), for: [.touchUpInside, .touchDragExit, .touchCancel])
+    }
 
-        </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.backgroundColor = isEnabled ? style.backgroundColor : style.disableBackgroundColor
+    private func update() {
+        setTitleColor(style.titleColor, for: .normal)
+        setTitleColor(style.hightlightTitleColor, for: .highlighted)
+        setTitleColor(style.disableTitleColor, for: .disabled)
+
+        self.backgroundColor = isEnabled ? style.backgroundColor : style.disableBackgroundColor
 
         layer.borderColor = isEnabled ? style.titleColor.cgColor : style.disableTitleColor.cgColor
 
         titleLabel?.font = size.titleFont
-        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> lineHeight: CGFloat = (size == .large) ? </span><span style="color:#d08770;">22</span><span style="color:#c0c5ce;">.</span><span style="color:#d08770;">0 </span><span style="color:#c0c5ce;">: </span><span style="color:#d08770;">19</span><span style="color:#c0c5ce;">.</span><span style="color:#d08770;">0
-</span><span style="color:#c0c5ce;">        titleLabel?.setLineHeight(lineHeight: lineHeight)
+        let lineHeight: CGFloat = (size == .large) ? 22.0 : 19.0
+        titleLabel?.setLineHeight(lineHeight: lineHeight)
 
         contentEdgeInsets = size.contentEdgeInsets
     }
 
 }
 
-</span><span style="color:#65737e;">// MARK: - event
-</span><span style="color:#b48ead;">extension</span><span style="color:#c0c5ce;"> Button {
-    </span><span style="color:#b48ead;">@objc private func </span><span style="color:#c0c5ce;">didContentSizeCategoryDidChange() {
+&#x2F;&#x2F; MARK: - event
+extension Button {
+    @objc private func didContentSizeCategoryDidChange() {
         update()
     }
 
-    </span><span style="color:#b48ead;">@objc private func </span><span style="color:#c0c5ce;">didTouchDown() {
-        animator.stopAnimation(</span><span style="color:#b48ead;">true</span><span style="color:#c0c5ce;">)
+    @objc private func didTouchDown() {
+        animator.stopAnimation(true)
         backgroundColor = style.hightlightBackgroundColor
         layer.borderColor = Colors.Button.borderHighlighted.cgColor
         activationFeedBackGenerator.impactOccurred()
     }
 
-    </span><span style="color:#b48ead;">@objc private func </span><span style="color:#c0c5ce;">didTouchUp() {
-        animator = UIViewPropertyAnimator(duration: </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">.</span><span style="color:#d08770;">5</span><span style="color:#c0c5ce;">, curve: .easeOut, animations: {
-            </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.backgroundColor = </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.style.backgroundColor
-            </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.layer.borderColor = Colors.Button.border.cgColor
+    @objc private func didTouchUp() {
+        animator = UIViewPropertyAnimator(duration: 0.5, curve: .easeOut, animations: {
+            self.backgroundColor = self.style.backgroundColor
+            self.layer.borderColor = Colors.Button.border.cgColor
         })
         animator.startAnimation()
     }
 }
 
-</span></code></pre>
+</code></pre>
 <ul>
 <li>위소스중 계산기 버튼과 같은 효과를 주기위한 효과는 </li>
 </ul>
-<pre style="background-color:#2b303b;">
-<code class="language-swift" data-lang="swift"><span style="color:#b48ead;">private var</span><span style="color:#c0c5ce;"> animator = UIViewPropertyAnimator()
-</span><span style="color:#65737e;">///...
+<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">private var animator = UIViewPropertyAnimator()
+&#x2F;&#x2F;&#x2F;...
 
-    </span><span style="color:#b48ead;">@objc private func </span><span style="color:#c0c5ce;">didTouchDown() {
-        animator.stopAnimation(</span><span style="color:#b48ead;">true</span><span style="color:#c0c5ce;">)
+    @objc private func didTouchDown() {
+        animator.stopAnimation(true)
         backgroundColor = style.hightlightBackgroundColor
-        </span><span style="color:#65737e;">//..
-    </span><span style="color:#c0c5ce;">}
+        &#x2F;&#x2F;..
+    }
 
-    </span><span style="color:#b48ead;">@objc private func </span><span style="color:#c0c5ce;">didTouchUp() {
-        animator = UIViewPropertyAnimator(duration: </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">.</span><span style="color:#d08770;">5</span><span style="color:#c0c5ce;">, curve: .easeOut, animations: {
-            </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.backgroundColor = </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.style.backgroundColor
-            </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.layer.borderColor = Colors.Button.border.cgColor
+    @objc private func didTouchUp() {
+        animator = UIViewPropertyAnimator(duration: 0.5, curve: .easeOut, animations: {
+            self.backgroundColor = self.style.backgroundColor
+            self.layer.borderColor = Colors.Button.border.cgColor
         })
         animator.startAnimation()
     }
 
-</span></code></pre><h2 id="flashlight-button-gwa-ngaheu-hwagdda-cugso-aenimeissyeogwa-jjiddon-feedback">flashlight button 과 같은 확대,축소 애니메이션과 진동 feedback</h2>
-<pre style="background-color:#2b303b;">
-<code>위 버튼 구현 소스에는 확대,축소 애니메이션은 구현되어 있지 않다 
+</code></pre>
+<h2 id="flashlight-button-gwa-gateun-hwagdae-cugso-aenimeisyeongwa-jindong-feedback">flashlight button 과 같은 확대,축소 애니메이션과 진동 feedback</h2>
+<pre><code>위 버튼 구현 소스에는 확대,축소 애니메이션은 구현되어 있지 않다 
 </code></pre>
 <ul>
 <li>진동 피드백 효과</li>
 </ul>
-<pre style="background-color:#2b303b;">
-<code class="language-swift" data-lang="swift"><span style="color:#c0c5ce;">
-    </span><span style="color:#b48ead;">private let</span><span style="color:#c0c5ce;"> activationFeedBackGenerator = UIImpactFeedbackGenerator(style: 
+<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">
+    private let activationFeedBackGenerator = UIImpactFeedbackGenerator(style: 
     .light)
-    </span><span style="color:#65737e;">//...
-    </span><span style="color:#b48ead;">@objc private func </span><span style="color:#c0c5ce;">didTouchDown() {
+    &#x2F;&#x2F;...
+    @objc private func didTouchDown() {
         activationFeedBackGenerator.impactOccurred()
     }
-</span></code></pre>
+</code></pre>
 <ul>
 <li>확대,축소 효과를 주려면 아래 코드를 추가하면 된다. </li>
 </ul>
-<pre style="background-color:#2b303b;">
-<code class="language-swift" data-lang="swift"><span style="color:#c0c5ce;"> </span><span style="color:#b48ead;">private func </span><span style="color:#c0c5ce;">animate() {
-        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> timingParameters = UISpringTimingParameters(damping: </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">.</span><span style="color:#d08770;">4</span><span style="color:#c0c5ce;">, response: </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">.</span><span style="color:#d08770;">2</span><span style="color:#c0c5ce;">)
-        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> animator = UIViewPropertyAnimator(duration: </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">, timingParameters: timingParameters)
+<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift"> private func animate() {
+        let timingParameters = UISpringTimingParameters(damping: 0.4, response: 0.2)
+        let animator = UIViewPropertyAnimator(duration: 0, timingParameters: timingParameters)
         animator.addAnimations {
-            </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.transform = CGAffineTransform(scaleX: </span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">, y: </span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">)
-            </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.backgroundColor = </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.isOn ? </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.onColor : </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.offColor
+            self.transform = CGAffineTransform(scaleX: 1, y: 1)
+            self.backgroundColor = self.isOn ? self.onColor : self.offColor
         }
-        animator.isInterruptible = </span><span style="color:#b48ead;">true
-</span><span style="color:#c0c5ce;">        animator.startAnimation()
+        animator.isInterruptible = true
+        animator.startAnimation()
     }
-</span></code></pre>
+</code></pre>
+
     </div>
 
     

@@ -45,47 +45,47 @@
     <div itemprop="articleBody">
       <p><code>Reusable</code> protocol 을 이용하여 cell register , dequeueReusableCell </p>
 <span id="continue-reading"></span><h3 id="protocol-implementation">protocol implementation</h3>
-<pre style="background-color:#2b303b;">
-<code class="language-swift" data-lang="swift"><span style="color:#b48ead;">import </span><span style="color:#c0c5ce;">UIKit
+<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">import UIKit
 
-</span><span style="color:#b48ead;">public protocol</span><span style="color:#c0c5ce;"> Reusable {
-    </span><span style="color:#b48ead;">static var</span><span style="color:#c0c5ce;"> identifier: String { </span><span style="color:#b48ead;">get set</span><span style="color:#c0c5ce;"> }
+public protocol Reusable {
+    static var identifier: String { get set }
 }
 
-</span><span style="color:#b48ead;">public extension</span><span style="color:#c0c5ce;"> UITableView {
+public extension UITableView {
     
-    </span><span style="color:#65737e;">/// Reusable 프로토콜을 구현한 TableViewCell 의 register
-    ///
-    /// For Example:
-    /// ```
-    /// tableView.register(cellType: TableViewCell.self)
-    /// ```
-    ///
-    /// - Parameter cellType: Reusable type cell
-    </span><span style="color:#b48ead;">func </span><span style="color:#c0c5ce;">register&lt;T: UITableViewCell&gt;(cellType: T.</span><span style="color:#b48ead;">Type</span><span style="color:#c0c5ce;">) where T: Reusable {
-        register(cellType.</span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">, forCellReuseIdentifier: cellType.identifier)
+    &#x2F;&#x2F;&#x2F; Reusable 프로토콜을 구현한 TableViewCell 의 register
+    &#x2F;&#x2F;&#x2F;
+    &#x2F;&#x2F;&#x2F; For Example:
+    &#x2F;&#x2F;&#x2F; ```
+    &#x2F;&#x2F;&#x2F; tableView.register(cellType: TableViewCell.self)
+    &#x2F;&#x2F;&#x2F; ```
+    &#x2F;&#x2F;&#x2F;
+    &#x2F;&#x2F;&#x2F; - Parameter cellType: Reusable type cell
+    func register&lt;T: UITableViewCell&gt;(cellType: T.Type) where T: Reusable {
+        register(cellType.self, forCellReuseIdentifier: cellType.identifier)
     }
     
-    </span><span style="color:#65737e;">///  Reusable 프로토콜을 구현한 TableViewCell 을 register후 reuse
-    ///
-    ///  For Example:
-    ///  ```
-    ///  let cell = tableView.dequeueReusableCell(for: indexPath, cellType: TableViewCell.self)
-    ///  ```
-    ///
-    /// - Parameters:
-    ///   - indexPath: IndexPath
-    ///   - cellType: Reusable TableCell type
-    </span><span style="color:#b48ead;">func </span><span style="color:#c0c5ce;">dequeueReusableCell&lt;T: UITableViewCell&gt;(</span><span style="color:#b48ead;">for</span><span style="color:#c0c5ce;"> indexPath: IndexPath,
-                                                 cellType: T.</span><span style="color:#b48ead;">Type </span><span style="color:#c0c5ce;">= T.</span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">) -&gt; T where T: Reusable {
-        </span><span style="color:#b48ead;">guard let</span><span style="color:#c0c5ce;"> cell = </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.dequeueReusableCell(withIdentifier: cellType.identifier, </span><span style="color:#b48ead;">for</span><span style="color:#c0c5ce;">: indexPath) as? T </span><span style="color:#b48ead;">else</span><span style="color:#c0c5ce;"> {
-            fatalError(</span><span style="color:#a3be8c;">&quot;Failed to dequeue a cell </span><span style="color:#c0c5ce;">\(cellType.identifier) </span><span style="color:#a3be8c;">matching type </span><span style="color:#c0c5ce;">\(cellType.</span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">)</span><span style="color:#a3be8c;">.&quot;</span><span style="color:#c0c5ce;">)
+    &#x2F;&#x2F;&#x2F;  Reusable 프로토콜을 구현한 TableViewCell 을 register후 reuse
+    &#x2F;&#x2F;&#x2F;
+    &#x2F;&#x2F;&#x2F;  For Example:
+    &#x2F;&#x2F;&#x2F;  ```
+    &#x2F;&#x2F;&#x2F;  let cell = tableView.dequeueReusableCell(for: indexPath, cellType: TableViewCell.self)
+    &#x2F;&#x2F;&#x2F;  ```
+    &#x2F;&#x2F;&#x2F;
+    &#x2F;&#x2F;&#x2F; - Parameters:
+    &#x2F;&#x2F;&#x2F;   - indexPath: IndexPath
+    &#x2F;&#x2F;&#x2F;   - cellType: Reusable TableCell type
+    func dequeueReusableCell&lt;T: UITableViewCell&gt;(for indexPath: IndexPath,
+                                                 cellType: T.Type = T.self) -&gt; T where T: Reusable {
+        guard let cell = self.dequeueReusableCell(withIdentifier: cellType.identifier, for: indexPath) as? T else {
+            fatalError(&quot;Failed to dequeue a cell \(cellType.identifier) matching type \(cellType.self).&quot;)
         }
         
-        </span><span style="color:#b48ead;">return</span><span style="color:#c0c5ce;"> cell
+        return cell
     }
 }
-</span></code></pre>
+</code></pre>
+
     </div>
 
     

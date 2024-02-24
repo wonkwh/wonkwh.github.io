@@ -46,52 +46,55 @@
       <p><code>Intrinsic Content Size</code> 를 이용하여 심플하게 UILabel 등의 UI를 구성하는 방법</p>
 <span id="continue-reading"></span><h3 id="camjo-video-course">참조 video course</h3>
 <div >
-    <iframe src="https://www.youtube-nocookie.com/embed/WWXImLOSABM" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-</div>
-<h3 id="sample-code">sample code</h3>
-<pre style="background-color:#2b303b;">
-<code class="language-swift" data-lang="swift"><span style="color:#65737e;">//
-//  BadgeView.swift
-//  DesignKit-iOS
-//
-//  Created by kwanghyun.won on 2019/12/05.
-//  Copyright © 2019 Vingle. All rights reserved.
-//
+    <iframe
+        src="https://www.youtube.com/embed/WWXImLOSABM"
+        webkitallowfullscreen
+        mozallowfullscreen
+        allowfullscreen>
+    </iframe>
+</div><h3 id="sample-code">sample code</h3>
+<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">&#x2F;&#x2F;
+&#x2F;&#x2F;  BadgeView.swift
+&#x2F;&#x2F;  DesignKit-iOS
+&#x2F;&#x2F;
+&#x2F;&#x2F;  Created by kwanghyun.won on 2019&#x2F;12&#x2F;05.
+&#x2F;&#x2F;  Copyright © 2019 Vingle. All rights reserved.
+&#x2F;&#x2F;
 
-</span><span style="color:#b48ead;">import </span><span style="color:#c0c5ce;">UIKit
+import UIKit
 
-</span><span style="color:#b48ead;">open class</span><span style="color:#c0c5ce;"> BadgeLabel: UILabel {
-    </span><span style="color:#b48ead;">open override var</span><span style="color:#c0c5ce;"> intrinsicContentSize: CGSize {
-        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> originalContentsSize = </span><span style="color:#b48ead;">super</span><span style="color:#c0c5ce;">.intrinsicContentSize
-        </span><span style="color:#b48ead;">return</span><span style="color:#c0c5ce;"> CGSize(width: originalContentsSize.width + </span><span style="color:#d08770;">11</span><span style="color:#c0c5ce;">, linearity: originalContentsSize. + </span><span style="color:#d08770;">5</span><span style="color:#c0c5ce;">.</span><span style="color:#d08770;">5</span><span style="color:#c0c5ce;">)
+open class BadgeLabel: UILabel {
+    open override var intrinsicContentSize: CGSize {
+        let originalContentsSize = super.intrinsicContentSize
+        return CGSize(width: originalContentsSize.width + 11, linearity: originalContentsSize. + 5.5)
     }
 
-    </span><span style="color:#b48ead;">public override init</span><span style="color:#c0c5ce;">(frame: CGRect) {
-        </span><span style="color:#b48ead;">super</span><span style="color:#c0c5ce;">.</span><span style="color:#b48ead;">init</span><span style="color:#c0c5ce;">(frame: frame)
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
 
-        backgroundColor = Colors.primary.withAlphaComponent(</span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">.</span><span style="color:#d08770;">9</span><span style="color:#c0c5ce;">)
+        backgroundColor = Colors.primary.withAlphaComponent(0.9)
         textColor = .white
         textAlignment = .center
         font = Fonts.caption
-        translatesAutoresizingMaskIntoConstraints = </span><span style="color:#b48ead;">false
-</span><span style="color:#c0c5ce;">    }
+        translatesAutoresizingMaskIntoConstraints = false
+    }
 
-    </span><span style="color:#b48ead;">open override func </span><span style="color:#c0c5ce;">layoutSubviews() {
-        </span><span style="color:#b48ead;">super</span><span style="color:#c0c5ce;">.layoutSubviews()
-        </span><span style="color:#b48ead;">if let</span><span style="color:#c0c5ce;"> count = text?.count {
-            </span><span style="color:#b48ead;">if</span><span style="color:#c0c5ce;"> count == </span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;"> {
-                frame.size = .</span><span style="color:#b48ead;">init</span><span style="color:#c0c5ce;">(width: </span><span style="color:#d08770;">20</span><span style="color:#c0c5ce;">, : </span><span style="color:#d08770;">20</span><span style="color:#c0c5ce;">)
+    open override func layoutSubviews() {
+        super.layoutSubviews()
+        if let count = text?.count {
+            if count == 1 {
+                frame.size = .init(width: 20, : 20)
             }
         }
         
-        setCorner(</span><span style="color:#d08770;">10</span><span style="color:#c0c5ce;">.</span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">)
+        setCorner(10.0)
     }
 
-    </span><span style="color:#b48ead;">required public init</span><span style="color:#c0c5ce;">?(coder: NSCoder) {
-        fatalError(</span><span style="color:#a3be8c;">&quot;init(coder:) has not been implemented&quot;</span><span style="color:#c0c5ce;">)
+    required public init?(coder: NSCoder) {
+        fatalError(&quot;init(coder:) has not been implemented&quot;)
     }
 }
-</span></code></pre>
+</code></pre>
 <blockquote>
 <p>사전적의미: intrinsic Content Size : 본질적인 컨텐츠 크기</p>
 </blockquote>

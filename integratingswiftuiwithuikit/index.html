@@ -52,36 +52,35 @@
 <ul>
 <li>UIViewController에서 SwiftUI로 만들어진 View를 present하려면 <code>UIHostingController</code>를 이용하여 아래와 같이 사용하면 된다.</li>
 </ul>
-<pre style="background-color:#2b303b;">
-<code class="language-swift" data-lang="swift"><span style="color:#b48ead;">if</span><span style="color:#c0c5ce;"> #available(iOS </span><span style="color:#d08770;">13</span><span style="color:#c0c5ce;">.</span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">, *) {
+<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">if #available(iOS 13.0, *) {
     presentSwiftUIView()
-} </span><span style="color:#b48ead;">else</span><span style="color:#c0c5ce;"> {
-    </span><span style="color:#65737e;">// Fallback on earlier versions
-</span><span style="color:#c0c5ce;">}
-
-</span><span style="color:#b48ead;">func </span><span style="color:#c0c5ce;">presentSwiftUIView() {
-    </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> swiftUIView = SwiftUIView()
-    </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> hostingController = UIHostingController(rootView: swiftUIView)
-    present(hostingController, animated: </span><span style="color:#b48ead;">true</span><span style="color:#c0c5ce;">, completion: </span><span style="color:#d08770;">nil</span><span style="color:#c0c5ce;">)
+} else {
+    &#x2F;&#x2F; Fallback on earlier versions
 }
-</span></code></pre><h2 id="adding-a-swiftui-view-to-a-uikit-view">Adding a SwiftUI view to a UIKit view</h2>
+
+func presentSwiftUIView() {
+    let swiftUIView = SwiftUIView()
+    let hostingController = UIHostingController(rootView: swiftUIView)
+    present(hostingController, animated: true, completion: nil)
+}
+</code></pre>
+<h2 id="adding-a-swiftui-view-to-a-uikit-view">Adding a SwiftUI view to a UIKit view</h2>
 <ul>
 <li>위와 유사하게 present하는것이 아니라 child view로 추가시키려면 아래와 같이 추가 </li>
 </ul>
-<pre style="background-color:#2b303b;">
-<code class="language-swift" data-lang="swift"><span style="color:#b48ead;">func </span><span style="color:#c0c5ce;">addSwiftUIView() {
-    </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> swiftUIView = SwiftUIView()
-    </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> hostingController = UIHostingController(rootView: swiftUIView)
+<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">func addSwiftUIView() {
+    let swiftUIView = SwiftUIView()
+    let hostingController = UIHostingController(rootView: swiftUIView)
 
-    </span><span style="color:#65737e;">/// Add as a child of the current view controller.
-</span><span style="color:#c0c5ce;">    addChild(hostingController)
+    &#x2F;&#x2F;&#x2F; Add as a child of the current view controller.
+    addChild(hostingController)
 
-    </span><span style="color:#65737e;">/// Add the SwiftUI view to the view controller view hierarchy.
-</span><span style="color:#c0c5ce;">    view.addSubview(hostingController.view)
+    &#x2F;&#x2F;&#x2F; Add the SwiftUI view to the view controller view hierarchy.
+    view.addSubview(hostingController.view)
 
-    </span><span style="color:#65737e;">/// Setup the constraints to update the SwiftUI view boundaries.
-</span><span style="color:#c0c5ce;">    hostingController.view.translatesAutoresizingMaskIntoConstraints = </span><span style="color:#b48ead;">false
-    let</span><span style="color:#c0c5ce;"> constraints = [
+    &#x2F;&#x2F;&#x2F; Setup the constraints to update the SwiftUI view boundaries.
+    hostingController.view.translatesAutoresizingMaskIntoConstraints = false
+    let constraints = [
         hostingController.view.topAnchor.constraint(equalTo: view.topAnchor),
         hostingController.view.leftAnchor.constraint(equalTo: view.leftAnchor),
         view.bottomAnchor.constraint(equalTo: hostingController.view.bottomAnchor),
@@ -90,29 +89,29 @@
 
     NSLayoutConstraint.activate(constraints)
 
-    </span><span style="color:#65737e;">/// Notify the hosting controller that it has been moved to the current view controller.
-</span><span style="color:#c0c5ce;">    hostingController.didMove(toParent: </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">)
+    &#x2F;&#x2F;&#x2F; Notify the hosting controller that it has been moved to the current view controller.
+    hostingController.didMove(toParent: self)
 }
-</span></code></pre><h2 id="swiftui-viewreul-cugahaneun-uiviewcontroller-extension-guhyeon">swiftUI view를 추가하는  UIViewController Extension 구현</h2>
-<pre style="background-color:#2b303b;">
-<code class="language-swift" data-lang="swift"><span style="color:#b48ead;">extension</span><span style="color:#c0c5ce;"> UIViewController {
+</code></pre>
+<h2 id="swiftui-viewreul-cugahaneun-uiviewcontroller-extension-guhyeon">swiftUI view를 추가하는  UIViewController Extension 구현</h2>
+<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">extension UIViewController {
 
-    </span><span style="color:#65737e;">/// Add a SwiftUI `View` as a child of the input `UIView`.
-    /// - Parameters:
-    ///   - swiftUIView: The SwiftUI `View` to add as a child.
-    ///   - view: The `UIView` instance to which the view should be added.
-    </span><span style="color:#b48ead;">func </span><span style="color:#c0c5ce;">addSubSwiftUIView&lt;Content&gt;(_ swiftUIView: Content, to view: UIView) where Content : View {
-        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> hostingController = UIHostingController(rootView: swiftUIView)
+    &#x2F;&#x2F;&#x2F; Add a SwiftUI `View` as a child of the input `UIView`.
+    &#x2F;&#x2F;&#x2F; - Parameters:
+    &#x2F;&#x2F;&#x2F;   - swiftUIView: The SwiftUI `View` to add as a child.
+    &#x2F;&#x2F;&#x2F;   - view: The `UIView` instance to which the view should be added.
+    func addSubSwiftUIView&lt;Content&gt;(_ swiftUIView: Content, to view: UIView) where Content : View {
+        let hostingController = UIHostingController(rootView: swiftUIView)
 
-        </span><span style="color:#65737e;">/// Add as a child of the current view controller.
-</span><span style="color:#c0c5ce;">        addChild(hostingController)
+        &#x2F;&#x2F;&#x2F; Add as a child of the current view controller.
+        addChild(hostingController)
 
-        </span><span style="color:#65737e;">/// Add the SwiftUI view to the view controller view hierarchy.
-</span><span style="color:#c0c5ce;">        view.addSubview(hostingController.view)
+        &#x2F;&#x2F;&#x2F; Add the SwiftUI view to the view controller view hierarchy.
+        view.addSubview(hostingController.view)
 
-        </span><span style="color:#65737e;">/// Setup the contraints to update the SwiftUI view boundaries.
-</span><span style="color:#c0c5ce;">        hostingController.view.translatesAutoresizingMaskIntoConstraints = </span><span style="color:#b48ead;">false
-        let</span><span style="color:#c0c5ce;"> constraints = [
+        &#x2F;&#x2F;&#x2F; Setup the contraints to update the SwiftUI view boundaries.
+        hostingController.view.translatesAutoresizingMaskIntoConstraints = false
+        let constraints = [
             hostingController.view.topAnchor.constraint(equalTo: view.topAnchor),
             hostingController.view.leftAnchor.constraint(equalTo: view.leftAnchor),
             view.bottomAnchor.constraint(equalTo: hostingController.view.bottomAnchor),
@@ -121,18 +120,18 @@
 
         NSLayoutConstraint.activate(constraints)
 
-        </span><span style="color:#65737e;">/// Notify the hosting controller that it has been moved to the current view controller.
-</span><span style="color:#c0c5ce;">        hostingController.didMove(toParent: </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">)
+        &#x2F;&#x2F;&#x2F; Notify the hosting controller that it has been moved to the current view controller.
+        hostingController.didMove(toParent: self)
     }
 }
-</span></code></pre>
+</code></pre>
 <p>위와 같이 추가하고 <code>UIViewController</code> 에서 아래와 같이 사용하면 된다</p>
-<pre style="background-color:#2b303b;">
-<code class="language-swift" data-lang="swift"><span style="color:#b48ead;">func </span><span style="color:#c0c5ce;">addSwiftUIView() {
-    </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> swiftUIView = SwiftUIView()
+<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">func addSwiftUIView() {
+    let swiftUIView = SwiftUIView()
     addSubSwiftUIView(swiftUIView, to: view)
 }
-</span></code></pre>
+</code></pre>
+
     </div>
 
     

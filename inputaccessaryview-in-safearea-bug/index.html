@@ -45,40 +45,39 @@
     <div itemprop="articleBody">
       <p>keyboard 위에 추가 뷰를 만들려면 NotificationHandler로 직접 콘트롤해도 되지만 <code>inputAccessoryView</code> 를 override해서 view를 재정의해주면 간단하다 
 하지만 iphone x 이상 safelayout 을 인식하지 못하는 문제가 있다 이를 해결하기 위한 코드</p>
-<span id="continue-reading"></span><h3 id="inputaccessoryview-jjajjeonyi">inputAccessoryView 재정의</h3>
-<pre style="background-color:#2b303b;">
-<code class="language-swift" data-lang="swift"><span style="color:#b48ead;">class</span><span style="color:#c0c5ce;"> MessageInputDemoController: UIViewController {
-    </span><span style="color:#b48ead;">lazy var</span><span style="color:#c0c5ce;"> messageInputView: MessageInputContainerView = {
-        </span><span style="color:#b48ead;">let</span><span style="color:#c0c5ce;"> view = MessageInputContainerView()
-        view.frame = .</span><span style="color:#b48ead;">init</span><span style="color:#c0c5ce;">(x: </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">, y: </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">, width: </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.view.frame.width, height: </span><span style="color:#d08770;">103</span><span style="color:#c0c5ce;">.</span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">)
-        </span><span style="color:#b48ead;">return</span><span style="color:#c0c5ce;"> view
+<span id="continue-reading"></span><h3 id="inputaccessoryview-jaejeongyi">inputAccessoryView 재정의</h3>
+<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">class MessageInputDemoController: UIViewController {
+    lazy var messageInputView: MessageInputContainerView = {
+        let view = MessageInputContainerView()
+        view.frame = .init(x: 0, y: 0, width: self.view.frame.width, height: 103.0)
+        return view
     }()
 
-    </span><span style="color:#b48ead;">override func </span><span style="color:#c0c5ce;">viewDidLoad() {
-        </span><span style="color:#b48ead;">super</span><span style="color:#c0c5ce;">.viewDidLoad()
+    override func viewDidLoad() {
+        super.viewDidLoad()
         view.backgroundColor = Colors.background
     }
 
-    </span><span style="color:#b48ead;">override var</span><span style="color:#c0c5ce;"> inputAccessoryView: UIView? {
-        </span><span style="color:#b48ead;">return</span><span style="color:#c0c5ce;"> messageInputView
+    override var inputAccessoryView: UIView? {
+        return messageInputView
     }
 
-    </span><span style="color:#b48ead;">override var</span><span style="color:#c0c5ce;"> canBecomeFirstResponder: Bool {
-        </span><span style="color:#b48ead;">return true
-</span><span style="color:#c0c5ce;">    }
-}
-</span></code></pre><h3 id="safelayout-wie-olrigi-wihan-cuga-kodde">SafeLayout 위에 올리기 위한 추가 코드</h3>
-<pre style="background-color:#2b303b;">
-<code class="language-swift" data-lang="swift"><span style="color:#b48ead;">public class</span><span style="color:#c0c5ce;"> MessageInputContainerView: UIView {
-    ....
-    </span><span style="color:#b48ead;">public override func </span><span style="color:#c0c5ce;">didMoveToWindow() {
-        </span><span style="color:#b48ead;">if let</span><span style="color:#c0c5ce;"> window = </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.window {
-            </span><span style="color:#b48ead;">self</span><span style="color:#c0c5ce;">.bottomAnchor.constraint(lessThanOrEqualToSystemSpacingBelow: window.safeAreaLayoutGuide.bottomAnchor,
-                                         multiplier: </span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">.</span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">).isActive = </span><span style="color:#b48ead;">true
-        </span><span style="color:#c0c5ce;">}
+    override var canBecomeFirstResponder: Bool {
+        return true
     }
 }
-</span></code></pre>
+</code></pre>
+<h3 id="safelayout-wie-olrigi-wihan-cuga-kodeu">SafeLayout 위에 올리기 위한 추가 코드</h3>
+<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">public class MessageInputContainerView: UIView {
+    ....
+    public override func didMoveToWindow() {
+        if let window = self.window {
+            self.bottomAnchor.constraint(lessThanOrEqualToSystemSpacingBelow: window.safeAreaLayoutGuide.bottomAnchor,
+                                         multiplier: 1.0).isActive = true
+        }
+    }
+}
+</code></pre>
 <ul>
 <li>위와 같이 <code>didMoteToWindow()</code>메소드에 추가 구현해주면 된다. </li>
 </ul>

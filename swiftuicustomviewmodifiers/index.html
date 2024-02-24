@@ -46,144 +46,147 @@
       <p>SwiftUI에서 ViewModifier 를 이용하여 Custom View를 만드는 방법</p>
 <span id="continue-reading"></span><h2 id="swiftui-custom-view-modifiers">SwiftUI Custom View Modifiers</h2>
 <div >
-    <iframe src="https://www.youtube-nocookie.com/embed/7sosLx-wzBE" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-</div>
-<h3 id="create-custom-button">Create Custom Button</h3>
+    <iframe
+        src="https://www.youtube.com/embed/7sosLx-wzBE"
+        webkitallowfullscreen
+        mozallowfullscreen
+        allowfullscreen>
+    </iframe>
+</div><h3 id="create-custom-button">Create Custom Button</h3>
 <ul>
 <li>아래와 같은 Custom button view를 생성하려면 </li>
 </ul>
 <img width="167" alt="viewModifier1" src="https://user-images.githubusercontent.com/911787/100363789-91f93280-3040-11eb-9390-1932129bd642.png">
-<pre style="background-color:#2b303b;">
-<code class="language-swift" data-lang="swift"><span style="color:#b48ead;">struct</span><span style="color:#c0c5ce;"> CustomButton: View {
-    </span><span style="color:#b48ead;">var</span><span style="color:#c0c5ce;"> body: some View {
+<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">struct CustomButton: View {
+    var body: some View {
         Button(action: {
-            print(</span><span style="color:#a3be8c;">&quot;select button&quot;</span><span style="color:#c0c5ce;">)
+            print(&quot;select button&quot;)
         }, label: {
-            Text(</span><span style="color:#a3be8c;">&quot;Continue&quot;</span><span style="color:#c0c5ce;">)
-                .font(.system(size: </span><span style="color:#d08770;">16</span><span style="color:#c0c5ce;">))
+            Text(&quot;Continue&quot;)
+                .font(.system(size: 16))
                 .foregroundColor(.white)
-                .padding(.horizontal, </span><span style="color:#d08770;">14</span><span style="color:#c0c5ce;">)
-                .padding(.vertical, </span><span style="color:#d08770;">10</span><span style="color:#c0c5ce;">)
+                .padding(.horizontal, 14)
+                .padding(.vertical, 10)
                 .background(Color.blue)
                 .overlay(
-                    RoundedRectangle(cornerRadius: </span><span style="color:#d08770;">3</span><span style="color:#c0c5ce;">)
-                        .strokeBorder(style: StrokeStyle(lineWidth: </span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">))
-                        .foregroundColor(Color(.sRGB, red: </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">.</span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">, green: </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">.</span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">, blue: </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">.</span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">, opacity: </span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">))
-                        .cornerRadius(</span><span style="color:#d08770;">4</span><span style="color:#c0c5ce;">)
-                        .shadow(color: Color(.sRGB, red: </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">, green: </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">, blue: </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">, opacity: </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">.</span><span style="color:#d08770;">5</span><span style="color:#c0c5ce;">), radius: </span><span style="color:#d08770;">5</span><span style="color:#c0c5ce;">, x: </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">, y: </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">)
+                    RoundedRectangle(cornerRadius: 3)
+                        .strokeBorder(style: StrokeStyle(lineWidth: 1))
+                        .foregroundColor(Color(.sRGB, red: 0.1, green: 0.1, blue: 0.1, opacity: 1))
+                        .cornerRadius(4)
+                        .shadow(color: Color(.sRGB, red: 0, green: 0, blue: 0, opacity: 0.5), radius: 5, x: 0, y: 0)
                 )
         })
     }
 }
-</span></code></pre><h3 id="using-modifier">Using Modifier</h3>
+</code></pre>
+<h3 id="using-modifier">Using Modifier</h3>
 <ul>
 <li>위와 동일한 결과를 아래와 같이 <code>ViewModifier</code> 를 통해서 구현할 수 있다.</li>
 </ul>
-<pre style="background-color:#2b303b;">
-<code class="language-swift" data-lang="swift"><span style="color:#b48ead;">struct</span><span style="color:#c0c5ce;"> CustomModifierButton: View {
-    </span><span style="color:#b48ead;">var</span><span style="color:#c0c5ce;"> body: some View {
+<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">struct CustomModifierButton: View {
+    var body: some View {
         Button(action: {
-            print(</span><span style="color:#a3be8c;">&quot;select button&quot;</span><span style="color:#c0c5ce;">)
+            print(&quot;select button&quot;)
         }, label: {
-            Text(</span><span style="color:#a3be8c;">&quot;Cancel&quot;</span><span style="color:#c0c5ce;">)
+            Text(&quot;Cancel&quot;)
                 .modifier(ButtonModifier())
         })
     }
 }
 
 
-</span><span style="color:#b48ead;">struct</span><span style="color:#c0c5ce;"> ButtonModifier: ViewModifier {
-    </span><span style="color:#b48ead;">func </span><span style="color:#c0c5ce;">body(content: Content) -&gt; some View {
-        </span><span style="color:#b48ead;">return</span><span style="color:#c0c5ce;"> content
-            .font(.system(size: </span><span style="color:#d08770;">16</span><span style="color:#c0c5ce;">))
+struct ButtonModifier: ViewModifier {
+    func body(content: Content) -&gt; some View {
+        return content
+            .font(.system(size: 16))
             .foregroundColor(.white)
-            .padding(.horizontal, </span><span style="color:#d08770;">14</span><span style="color:#c0c5ce;">)
-            .padding(.vertical, </span><span style="color:#d08770;">10</span><span style="color:#c0c5ce;">)
+            .padding(.horizontal, 14)
+            .padding(.vertical, 10)
             .background(Color.green)
             .overlay(
-                RoundedRectangle(cornerRadius: </span><span style="color:#d08770;">3</span><span style="color:#c0c5ce;">)
-                    .strokeBorder(style: StrokeStyle(lineWidth: </span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">))
-                    .foregroundColor(Color(.sRGB, red: </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">.</span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">, green: </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">.</span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">, blue: </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">.</span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">, opacity: </span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">))
-                    .cornerRadius(</span><span style="color:#d08770;">4</span><span style="color:#c0c5ce;">)
-                    .shadow(color: Color(.sRGB, red: </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">, green: </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">, blue: </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">, opacity: </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">.</span><span style="color:#d08770;">5</span><span style="color:#c0c5ce;">), radius: </span><span style="color:#d08770;">5</span><span style="color:#c0c5ce;">, x: </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">, y: </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">)
+                RoundedRectangle(cornerRadius: 3)
+                    .strokeBorder(style: StrokeStyle(lineWidth: 1))
+                    .foregroundColor(Color(.sRGB, red: 0.1, green: 0.1, blue: 0.1, opacity: 1))
+                    .cornerRadius(4)
+                    .shadow(color: Color(.sRGB, red: 0, green: 0, blue: 0, opacity: 0.5), radius: 5, x: 0, y: 0)
             )
     }
 }
 
-</span></code></pre><h3 id="using-modifier-added-state-parameter">Using Modifier added state parameter</h3>
+</code></pre>
+<h3 id="using-modifier-added-state-parameter">Using Modifier added state parameter</h3>
 <img width="268" alt="viewModifier2" src="https://user-images.githubusercontent.com/911787/100363802-97567d00-3040-11eb-84df-62714bbb086f.png">
 <ul>
 <li>만약 각각 다른 background color를 가진 버튼에 style을 <code>ViewModifier</code> 로 구현하고 싶다면 </li>
 <li>아래와 같이 구현할수 있다.</li>
 </ul>
-<pre style="background-color:#2b303b;">
-<code class="language-swift" data-lang="swift"><span style="color:#b48ead;">struct</span><span style="color:#c0c5ce;"> ButtonModifier: ViewModifier {
-    </span><span style="color:#b48ead;">@State var</span><span style="color:#c0c5ce;"> backgroundColor = Color.red
+<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">struct ButtonModifier: ViewModifier {
+    @State var backgroundColor = Color.red
 	...
-</span></code></pre>
+</code></pre>
 <ul>
 <li>추가로 fontSize같은 value도 <code>@State</code> 변수로 추가할 수 있다.</li>
 <li>전체 sample code</li>
 </ul>
-<pre style="background-color:#2b303b;">
-<code class="language-swift" data-lang="swift"><span style="color:#b48ead;">struct</span><span style="color:#c0c5ce;"> ModifierStackView: View {
-    </span><span style="color:#b48ead;">var</span><span style="color:#c0c5ce;"> body: some View {
+<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">struct ModifierStackView: View {
+    var body: some View {
         HStack {
             CustomBlueButton()
             CustomRedButton()
             Button(action: {
-                print(</span><span style="color:#a3be8c;">&quot;select button&quot;</span><span style="color:#c0c5ce;">)
+                print(&quot;select button&quot;)
             }, label: {
-                Text(</span><span style="color:#a3be8c;">&quot;Cancel&quot;</span><span style="color:#c0c5ce;">)
+                Text(&quot;Cancel&quot;)
                     .modifier(ButtonModifier(backgroundColor: .green))
             })
         }
     }
 }
 
-</span><span style="color:#b48ead;">struct</span><span style="color:#c0c5ce;"> CustomBlueButton: View {
-    </span><span style="color:#b48ead;">var</span><span style="color:#c0c5ce;"> body: some View {
+struct CustomBlueButton: View {
+    var body: some View {
         Button(action: {
-            print(</span><span style="color:#a3be8c;">&quot;select button&quot;</span><span style="color:#c0c5ce;">)
+            print(&quot;select button&quot;)
         }, label: {
-            Text(</span><span style="color:#a3be8c;">&quot;Continue&quot;</span><span style="color:#c0c5ce;">)
+            Text(&quot;Continue&quot;)
                 .modifier(ButtonModifier(backgroundColor: .blue))
         })
     }
 }
 
-</span><span style="color:#b48ead;">struct</span><span style="color:#c0c5ce;"> CustomRedButton: View {
-    </span><span style="color:#b48ead;">var</span><span style="color:#c0c5ce;"> body: some View {
+struct CustomRedButton: View {
+    var body: some View {
         Button(action: {
-            print(</span><span style="color:#a3be8c;">&quot;select button&quot;</span><span style="color:#c0c5ce;">)
+            print(&quot;select button&quot;)
         }, label: {
-            Text(</span><span style="color:#a3be8c;">&quot;Okay&quot;</span><span style="color:#c0c5ce;">)
+            Text(&quot;Okay&quot;)
                 .modifier(ButtonModifier(backgroundColor: .red))
         })
     }
 }
 
-</span><span style="color:#b48ead;">struct</span><span style="color:#c0c5ce;"> ButtonModifier: ViewModifier {
-    </span><span style="color:#b48ead;">@State var</span><span style="color:#c0c5ce;"> backgroundColor = Color.red
+struct ButtonModifier: ViewModifier {
+    @State var backgroundColor = Color.red
     
-    </span><span style="color:#b48ead;">func </span><span style="color:#c0c5ce;">body(content: Content) -&gt; some View {
-        </span><span style="color:#b48ead;">return</span><span style="color:#c0c5ce;"> content
-            .font(.system(size: </span><span style="color:#d08770;">16</span><span style="color:#c0c5ce;">))
+    func body(content: Content) -&gt; some View {
+        return content
+            .font(.system(size: 16))
             .foregroundColor(.white)
-            .padding(.horizontal, </span><span style="color:#d08770;">14</span><span style="color:#c0c5ce;">)
-            .padding(.vertical, </span><span style="color:#d08770;">10</span><span style="color:#c0c5ce;">)
+            .padding(.horizontal, 14)
+            .padding(.vertical, 10)
             .background(backgroundColor)
             .overlay(
-                RoundedRectangle(cornerRadius: </span><span style="color:#d08770;">3</span><span style="color:#c0c5ce;">)
-                    .strokeBorder(style: StrokeStyle(lineWidth: </span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">))
-                    .foregroundColor(Color(.sRGB, red: </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">.</span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">, green: </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">.</span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">, blue: </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">.</span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">, opacity: </span><span style="color:#d08770;">1</span><span style="color:#c0c5ce;">))
-                    .cornerRadius(</span><span style="color:#d08770;">4</span><span style="color:#c0c5ce;">)
-                    .shadow(color: Color(.sRGB, red: </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">, green: </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">, blue: </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">, opacity: </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">.</span><span style="color:#d08770;">5</span><span style="color:#c0c5ce;">), radius: </span><span style="color:#d08770;">5</span><span style="color:#c0c5ce;">, x: </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">, y: </span><span style="color:#d08770;">0</span><span style="color:#c0c5ce;">)
+                RoundedRectangle(cornerRadius: 3)
+                    .strokeBorder(style: StrokeStyle(lineWidth: 1))
+                    .foregroundColor(Color(.sRGB, red: 0.1, green: 0.1, blue: 0.1, opacity: 1))
+                    .cornerRadius(4)
+                    .shadow(color: Color(.sRGB, red: 0, green: 0, blue: 0, opacity: 0.5), radius: 5, x: 0, y: 0)
             )
     }
 }
 
-</span></code></pre>
+</code></pre>
+
     </div>
 
     
