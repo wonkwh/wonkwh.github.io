@@ -52,143 +52,143 @@
 <li>먼저 AppLifeCycle mediator 를 정의한다.</li>
 <li>아래 소스는 <code>appDelegate.m</code> 이 objective-c 로 구현되어 있기에 <code>NSObject</code>를 상속받고 <code>objc</code> propertyObserver를 붙였다.</li>
 </ul>
-<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">import Foundation
-
-&#x2F;&#x2F; MARK: - AppLifecycleListener
-protocol AppLifecycleListener {
-  func onAppWillEnterForeground()
-  func onAppDidEnterBackground()
-  func onAppDidFinishLaunching()
-}
-
-extension AppLifecycleListener {
-  func onAppWillEnterForeground() {}
-  func onAppDidEnterBackground() {}
-}
-
-&#x2F;&#x2F; MARK: - Mediator
-@objc
-class AppLifecycleMediator: NSObject {
-  private let listeners: [AppLifecycleListener]
-  
-  init(listeners: [AppLifecycleListener]) {
-    self.listeners = listeners
-    super.init()
-    subscribe()
-  }
-  
-  deinit {
-    NotificationCenter.default.removeObserver(self)
-  }
-  
-  private func subscribe() {
-    NotificationCenter.default.addObserver(self, selector: #selector(onAppWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
-    NotificationCenter.default.addObserver(self, selector: #selector(onAppDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
-    NotificationCenter.default.addObserver(self, selector: #selector(onAppDidFinishLaunching), name: UIApplication.didFinishLaunchingNotification, object: nil)
-  }
-  
-  @objc private func onAppWillEnterForeground() {
-    listeners.forEach { $0.onAppWillEnterForeground() }
-  }
-  
-  @objc private func onAppDidEnterBackground() {
-    listeners.forEach { $0.onAppDidEnterBackground() }
-  }
-  
-  @objc private func onAppDidFinishLaunching() {
-    listeners.forEach { $0.onAppDidFinishLaunching() }
-  }
-}
-</code></pre>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#b48ead;">import </span><span>Foundation
+</span><span>
+</span><span style="color:#65737e;">// MARK: - AppLifecycleListener
+</span><span style="color:#b48ead;">protocol</span><span> AppLifecycleListener {
+</span><span>  </span><span style="color:#b48ead;">func </span><span>onAppWillEnterForeground()
+</span><span>  func onAppDidEnterBackground()
+</span><span>  func onAppDidFinishLaunching()
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">extension</span><span> AppLifecycleListener {
+</span><span>  </span><span style="color:#b48ead;">func </span><span>onAppWillEnterForeground() {}
+</span><span>  </span><span style="color:#b48ead;">func </span><span>onAppDidEnterBackground() {}
+</span><span>}
+</span><span>
+</span><span style="color:#65737e;">// MARK: - Mediator
+</span><span style="color:#b48ead;">@objc
+</span><span style="color:#b48ead;">class</span><span> AppLifecycleMediator: NSObject {
+</span><span>  </span><span style="color:#b48ead;">private let</span><span> listeners: [AppLifecycleListener]
+</span><span>  
+</span><span>  </span><span style="color:#b48ead;">init</span><span>(listeners: [AppLifecycleListener]) {
+</span><span>    </span><span style="color:#b48ead;">self</span><span>.listeners = listeners
+</span><span>    </span><span style="color:#b48ead;">super</span><span>.</span><span style="color:#b48ead;">init</span><span>()
+</span><span>    subscribe()
+</span><span>  }
+</span><span>  
+</span><span>  </span><span style="color:#b48ead;">deinit</span><span> {
+</span><span>    NotificationCenter.</span><span style="color:#b48ead;">default</span><span>.removeObserver(</span><span style="color:#b48ead;">self</span><span>)
+</span><span>  }
+</span><span>  
+</span><span>  </span><span style="color:#b48ead;">private func </span><span>subscribe() {
+</span><span>    NotificationCenter.</span><span style="color:#b48ead;">default</span><span>.addObserver(</span><span style="color:#b48ead;">self</span><span>, selector: #selector(onAppWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: </span><span style="color:#d08770;">nil</span><span>)
+</span><span>    NotificationCenter.</span><span style="color:#b48ead;">default</span><span>.addObserver(</span><span style="color:#b48ead;">self</span><span>, selector: #selector(onAppDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: </span><span style="color:#d08770;">nil</span><span>)
+</span><span>    NotificationCenter.</span><span style="color:#b48ead;">default</span><span>.addObserver(</span><span style="color:#b48ead;">self</span><span>, selector: #selector(onAppDidFinishLaunching), name: UIApplication.didFinishLaunchingNotification, object: </span><span style="color:#d08770;">nil</span><span>)
+</span><span>  }
+</span><span>  
+</span><span>  </span><span style="color:#b48ead;">@objc private func </span><span>onAppWillEnterForeground() {
+</span><span>    listeners.forEach { $</span><span style="color:#d08770;">0</span><span>.onAppWillEnterForeground() }
+</span><span>  }
+</span><span>  
+</span><span>  </span><span style="color:#b48ead;">@objc private func </span><span>onAppDidEnterBackground() {
+</span><span>    listeners.forEach { $</span><span style="color:#d08770;">0</span><span>.onAppDidEnterBackground() }
+</span><span>  }
+</span><span>  
+</span><span>  </span><span style="color:#b48ead;">@objc private func </span><span>onAppDidFinishLaunching() {
+</span><span>    listeners.forEach { $</span><span style="color:#d08770;">0</span><span>.onAppDidFinishLaunching() }
+</span><span>  }
+</span><span>}
+</span></code></pre>
 <h3 id="applistener-class-guhyeon">AppListener class 구현</h3>
 <ul>
 <li>이제 <code>AppLifecycleListener</code> 를 상속하여 클래스를 구현한다.</li>
 <li>appDelegate 에서 구현된 각각의 서비스 구현들을 여기에 Extract 하여 구현</li>
 <li>예를 들면 기존에 AppDelegate에서 구현되어있던 location permission 관련 feature 들은 아래와 같이 <code>AppLocationListener</code> 구현한다.</li>
 </ul>
-<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">import Foundation
-import CoreLocation
-import LoggingKit
-
-class AppLocationListener: NSObject, AppLifecycleListener {
- let locationManager = CLLocationManager()
- 
- fileprivate func permissionState(_ status: CLAuthorizationStatus) {
-   LogService.shared.debug(&quot;LocationPermission: \(status.rawValue)&quot;, logCategory: \.debug)
-   switch status {
-   case .authorizedAlways, .authorizedWhenInUse:
-     locationManager.startUpdatingLocation()
-   case .restricted, .notDetermined:
-     locationManager.requestWhenInUseAuthorization()
-   case .denied:
-     stopLocation()
-   @unknown default:
-     print(&quot;GPS: Default&quot;)
-   }
- }
- 
- func stopLocation() {
-   locationManager.stopUpdatingHeading()
-   locationManager.stopUpdatingLocation()
-   locationManager.delegate = nil
- }
- 
- func onAppDidFinishLaunching() {
-   locationManager.delegate = self
-   locationManager.desiredAccuracy = kCLLocationAccuracyBest
-   let status: CLAuthorizationStatus
-   if #available(iOS 14.0, *) {
-     status = locationManager.authorizationStatus
-   } else {
-     status = CLLocationManager.authorizationStatus()
-   }
-   permissionState(status)
- }
-}
-
-extension AppLocationListener: CLLocationManagerDelegate {
- func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-   self.permissionState(status)
- }
- 
- func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-   locationManager.stopUpdatingLocation()
- }
- 
- func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-   let newLocation = locations[0]
-   let geocoder = CLGeocoder()
-   geocoder.reverseGeocodeLocation(newLocation) { (playmarks, error) in
-     if let _ = error {
-       self.stopLocation()
-       return
-     }
-     
-     if let city = playmarks?.first?.locality {
-       cityDefault.saveLocationLng(&quot;\(newLocation.coordinate.longitude)&quot;)
-       cityDefault.saveLocationLat(&quot;\(newLocation.coordinate.latitude)&quot;)
-       cityDefault.saveLocationCity(city)
-     }
-   }
-   stopLocation()
- }
-}
-
-</code></pre>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#b48ead;">import </span><span>Foundation
+</span><span style="color:#b48ead;">import </span><span>CoreLocation
+</span><span style="color:#b48ead;">import </span><span>LoggingKit
+</span><span>
+</span><span style="color:#b48ead;">class</span><span> AppLocationListener: NSObject, AppLifecycleListener {
+</span><span> </span><span style="color:#b48ead;">let</span><span> locationManager = CLLocationManager()
+</span><span> 
+</span><span> </span><span style="color:#b48ead;">fileprivate func </span><span>permissionState(_ status: CLAuthorizationStatus) {
+</span><span>   LogService.shared.debug(</span><span style="color:#a3be8c;">&quot;LocationPermission: </span><span>\(status.rawValue)</span><span style="color:#a3be8c;">&quot;</span><span>, logCategory: \.debug)
+</span><span>   </span><span style="color:#b48ead;">switch</span><span> status {
+</span><span>   </span><span style="color:#b48ead;">case </span><span>.authorizedAlways, .authorizedWhenInUse:
+</span><span>     locationManager.startUpdatingLocation()
+</span><span>   </span><span style="color:#b48ead;">case </span><span>.restricted, .notDetermined:
+</span><span>     locationManager.requestWhenInUseAuthorization()
+</span><span>   </span><span style="color:#b48ead;">case </span><span>.denied:
+</span><span>     stopLocation()
+</span><span>   </span><span style="color:#b48ead;">@unknown default</span><span>:
+</span><span>     print(</span><span style="color:#a3be8c;">&quot;GPS: Default&quot;</span><span>)
+</span><span>   }
+</span><span> }
+</span><span> 
+</span><span> </span><span style="color:#b48ead;">func </span><span>stopLocation() {
+</span><span>   locationManager.stopUpdatingHeading()
+</span><span>   locationManager.stopUpdatingLocation()
+</span><span>   locationManager.delegate = </span><span style="color:#d08770;">nil
+</span><span> }
+</span><span> 
+</span><span> </span><span style="color:#b48ead;">func </span><span>onAppDidFinishLaunching() {
+</span><span>   locationManager.delegate = </span><span style="color:#b48ead;">self
+</span><span>   locationManager.desiredAccuracy = kCLLocationAccuracyBest
+</span><span>   </span><span style="color:#b48ead;">let</span><span> status: CLAuthorizationStatus
+</span><span>   </span><span style="color:#b48ead;">if</span><span> #available(iOS </span><span style="color:#d08770;">14</span><span>.</span><span style="color:#d08770;">0</span><span>, *) {
+</span><span>     status = locationManager.authorizationStatus
+</span><span>   } </span><span style="color:#b48ead;">else</span><span> {
+</span><span>     status = CLLocationManager.authorizationStatus()
+</span><span>   }
+</span><span>   permissionState(status)
+</span><span> }
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">extension</span><span> AppLocationListener: CLLocationManagerDelegate {
+</span><span> </span><span style="color:#b48ead;">func </span><span>locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+</span><span>   </span><span style="color:#b48ead;">self</span><span>.permissionState(status)
+</span><span> }
+</span><span> 
+</span><span> </span><span style="color:#b48ead;">func </span><span>locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+</span><span>   locationManager.stopUpdatingLocation()
+</span><span> }
+</span><span> 
+</span><span> </span><span style="color:#b48ead;">func </span><span>locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+</span><span>   </span><span style="color:#b48ead;">let</span><span> newLocation = locations[</span><span style="color:#d08770;">0</span><span>]
+</span><span>   </span><span style="color:#b48ead;">let</span><span> geocoder = CLGeocoder()
+</span><span>   geocoder.reverseGeocodeLocation(newLocation) { (playmarks, error) </span><span style="color:#b48ead;">in
+</span><span>     </span><span style="color:#b48ead;">if let</span><span> _ = error {
+</span><span>       </span><span style="color:#b48ead;">self</span><span>.stopLocation()
+</span><span>       </span><span style="color:#b48ead;">return
+</span><span>     }
+</span><span>     
+</span><span>     </span><span style="color:#b48ead;">if let</span><span> city = playmarks?.first?.locality {
+</span><span>       cityDefault.saveLocationLng(</span><span style="color:#a3be8c;">&quot;</span><span>\(newLocation.coordinate.longitude)</span><span style="color:#a3be8c;">&quot;</span><span>)
+</span><span>       cityDefault.saveLocationLat(</span><span style="color:#a3be8c;">&quot;</span><span>\(newLocation.coordinate.latitude)</span><span style="color:#a3be8c;">&quot;</span><span>)
+</span><span>       cityDefault.saveLocationCity(city)
+</span><span>     }
+</span><span>   }
+</span><span>   stopLocation()
+</span><span> }
+</span><span>}
+</span><span>
+</span></code></pre>
 <ul>
 <li>그리고 <code>AppLifecycleMediator</code> 에 listener  에 추가</li>
 </ul>
-<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">extension AppLifecycleMediator {
-  @objc
-  static func makeDefaultMediator() -&gt; AppLifecycleMediator {
-    let locationListener = AppLocationListener()
-    let debugListener = AppDebugListener()
-
-    return AppLifecycleMediator(listeners: [debugListener, locationListener])
-  }
-}
-
-</code></pre>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#b48ead;">extension</span><span> AppLifecycleMediator {
+</span><span>  </span><span style="color:#b48ead;">@objc
+</span><span>  </span><span style="color:#b48ead;">static func </span><span>makeDefaultMediator() -&gt; AppLifecycleMediator {
+</span><span>    </span><span style="color:#b48ead;">let</span><span> locationListener = AppLocationListener()
+</span><span>    </span><span style="color:#b48ead;">let</span><span> debugListener = AppDebugListener()
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">return</span><span> AppLifecycleMediator(listeners: [debugListener, locationListener])
+</span><span>  }
+</span><span>}
+</span><span>
+</span></code></pre>
 <ul>
 <li>3rdParty service 들, debug feature 등 listener 로 추가하여 refactoring 해주면 된다. </li>
 </ul>
@@ -197,37 +197,37 @@ extension AppLocationListener: CLLocationManagerDelegate {
 <li>이제 mediator class 를 AppDelegate 에 등록한다.</li>
 <li>다음 코드 한줄만 appDelegate 에 추가하면 된다.</li>
 </ul>
-<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">@UIApplicationMain
-
-class AppDelegate: UIResponder, UIApplicationDelegate {
-
-   var window: UIWindow?
-
-   let mediator = AppLifecycleMediator.makeDefaultMediator() &#x2F;&#x2F; 여기에 추가
-
-   func application(_ application: UIApplication,                                           didFinishLaunchingWithOptions launchOptions:                              [UIApplicationLaunchOptionsKey: Any]?) -&gt; Bool {
-
-      return true
-
-   }
-}
-</code></pre>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#b48ead;">@UIApplicationMain
+</span><span>
+</span><span style="color:#b48ead;">class</span><span> AppDelegate: UIResponder, UIApplicationDelegate {
+</span><span>
+</span><span>   </span><span style="color:#b48ead;">var</span><span> window: UIWindow?
+</span><span>
+</span><span>   </span><span style="color:#b48ead;">let</span><span> mediator = AppLifecycleMediator.makeDefaultMediator() </span><span style="color:#65737e;">// 여기에 추가
+</span><span>
+</span><span>   </span><span style="color:#b48ead;">func </span><span>application(_ application: UIApplication,                                           didFinishLaunchingWithOptions launchOptions:                              [UIApplicationLaunchOptionsKey: Any]?) -&gt; Bool {
+</span><span>
+</span><span>      </span><span style="color:#b48ead;">return true
+</span><span>
+</span><span>   }
+</span><span>}
+</span></code></pre>
 <ul>
 <li>objective-c 구현에 붙인다면 조금 애매한데 <code>willFinishLaunchingWithOptions</code> 메소드에 다음과 같이 추가하였다. </li>
 </ul>
-<pre data-lang="objc" class="language-objc "><code class="language-objc" data-lang="objc">@interface AppDelegate ()&lt;CLLocationManagerDelegate, UNUserNotificationCenterDelegate, FIRMessagingDelegate, AppsFlyerLibDelegate&gt;
-{
-  AppLifecycleMediator *_mediator; &#x2F;&#x2F; 여기에 선언하고 
-}
-
-
-...
-- (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-  _mediator = [AppLifecycleMediator makeDefaultMediator]; &#x2F;&#x2F; 구현추가.
-  return YES;
-}
-
-</code></pre>
+<pre data-lang="objc" style="background-color:#2b303b;color:#c0c5ce;" class="language-objc "><code class="language-objc" data-lang="objc"><span>@interface AppDelegate ()&lt;CLLocationManagerDelegate, UNUserNotificationCenterDelegate, FIRMessagingDelegate, AppsFlyerLibDelegate&gt;
+</span><span>{
+</span><span>  AppLifecycleMediator *_mediator; // 여기에 선언하고 
+</span><span>}
+</span><span>
+</span><span>
+</span><span>...
+</span><span>- (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+</span><span>  _mediator = [AppLifecycleMediator makeDefaultMediator]; // 구현추가.
+</span><span>  return YES;
+</span><span>}
+</span><span>
+</span></code></pre>
 <h2 id="reference">Reference</h2>
 <ul>
 <li><a href="https://www.vadimbulavin.com/refactoring-massive-app-delegate/">refactoring-massive-app-delegate</a></li>

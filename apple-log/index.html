@@ -50,80 +50,80 @@
 <li>https://github.com/chrisaljoudi/swift-log-oslog</li>
 </ul>
 <p>swift-log의 oslog backend 패키지를 Package.swift에 추가</p>
-<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">dependencies: [
-        .package(url: &quot;https:&#x2F;&#x2F;github.com&#x2F;chrisaljoudi&#x2F;swift-log-oslog.git&quot;, from: &quot;0.2.1&quot;)
-    ],
-targets: [
-    .target(
-        name: &quot;VExtensionUtility&quot;,
-        dependencies: [
-            &quot;LoggingOSLog&quot;
-        ]
-    ),
-</code></pre>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span>dependencies: [
+</span><span>        .package(url: </span><span style="color:#a3be8c;">&quot;https://github.com/chrisaljoudi/swift-log-oslog.git&quot;</span><span>, from: </span><span style="color:#a3be8c;">&quot;0.2.1&quot;</span><span>)
+</span><span>    ],
+</span><span>targets: [
+</span><span>    .target(
+</span><span>        name: </span><span style="color:#a3be8c;">&quot;VExtensionUtility&quot;</span><span>,
+</span><span>        dependencies: [
+</span><span>            </span><span style="color:#a3be8c;">&quot;LoggingOSLog&quot;
+</span><span>        ]
+</span><span>    ),
+</span></code></pre>
 <h3 id="generate-log-class">generate Log class</h3>
 <ul>
 <li>다음과 같은 Wrapping class를 생성하면 조금더 편리하게 사용할 수 있다. </li>
 </ul>
-<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">&#x2F;&#x2F;
-&#x2F;&#x2F;  Log.swift
-&#x2F;&#x2F;
-&#x2F;&#x2F;  Created by kwanghyun.won` on 2020&#x2F;01&#x2F;06.
-&#x2F;&#x2F;
-
-import Logging
-import LoggingOSLog
-
-&#x2F;&#x2F;&#x2F; Example:
-&#x2F;&#x2F;&#x2F;     Log.setup(subsystem: &quot;com.Vingle.DesignKitDemo&quot;, level: .debug)
-&#x2F;&#x2F;&#x2F;     Log.info(&quot;setup Log Complete!&quot;)
-public final class Log {
-
-    public static var `default`: Logger = Logger(label: &quot;com.Vingle.app&quot;, factory: LoggingOSLog.init)
-
-    public class func setup(subsystem: String, level: Logger.Level = .debug) {
-        self.default = Logger(label: subsystem, factory: LoggingOSLog.init)
-        self.default.logLevel = level
-    }
-}
-
-public extension Log {
-    static func trace(_ message: Logger.Message, functionName: String = #function, fileName: String = #file) {
-        let className = fileName.extractClassName()
-        self.default.trace(&quot;\(className):\(functionName) \(message)&quot;)
-    }
-
-    static func debug(_ message: Logger.Message, functionName: String = #function, fileName: String = #file) {
-        let className = fileName.extractClassName()
-        self.default.debug(&quot;\(className):\(functionName) \(message)&quot;)
-    }
-
-    static func info(_ message: Logger.Message, functionName: String = #function, fileName: String = #file) {
-        let className = fileName.extractClassName()
-        self.default.info(&quot;\(className):\(functionName) \(message)&quot;)
-    }
-
-    static func notice(_ message: Logger.Message, functionName: String = #function, fileName: String = #file) {
-        let className = fileName.extractClassName()
-        self.default.notice(&quot;\(className):\(functionName) \(message)&quot;)
-    }
-
-    static func warning(_ message: Logger.Message, functionName: String = #function, fileName: String = #file) {
-        let className = fileName.extractClassName()
-        self.default.warning(&quot;\(className):\(functionName) \(message)&quot;)
-    }
-
-    static func error(_ message: Logger.Message, functionName: String = #function, fileName: String = #file) {
-        let className = fileName.extractClassName()
-        self.default.error(&quot;\(className):\(functionName) \(message)&quot;)
-    }
-
-    static func critical(_ message: Logger.Message, functionName: String = #function, fileName: String = #file) {
-        let className = fileName.extractClassName()
-        self.default.critical(&quot;\(className):\(functionName) \(message)&quot;)
-    }
-}
-</code></pre>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#65737e;">//
+</span><span style="color:#65737e;">//  Log.swift
+</span><span style="color:#65737e;">//
+</span><span style="color:#65737e;">//  Created by kwanghyun.won` on 2020/01/06.
+</span><span style="color:#65737e;">//
+</span><span>
+</span><span style="color:#b48ead;">import </span><span>Logging
+</span><span style="color:#b48ead;">import </span><span>LoggingOSLog
+</span><span>
+</span><span style="color:#65737e;">/// Example:
+</span><span style="color:#65737e;">///     Log.setup(subsystem: &quot;com.Vingle.DesignKitDemo&quot;, level: .debug)
+</span><span style="color:#65737e;">///     Log.info(&quot;setup Log Complete!&quot;)
+</span><span style="color:#b48ead;">public final class</span><span> Log {
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">public static var</span><span> `</span><span style="color:#b48ead;">default</span><span>`: Logger = Logger(label: </span><span style="color:#a3be8c;">&quot;com.Vingle.app&quot;</span><span>, factory: LoggingOSLog.</span><span style="color:#b48ead;">init</span><span>)
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">public class func </span><span>setup(subsystem: String, level: Logger.Level = .debug) {
+</span><span>        </span><span style="color:#b48ead;">self</span><span>.</span><span style="color:#b48ead;">default </span><span>= Logger(label: subsystem, factory: LoggingOSLog.</span><span style="color:#b48ead;">init</span><span>)
+</span><span>        </span><span style="color:#b48ead;">self</span><span>.</span><span style="color:#b48ead;">default</span><span>.logLevel = level
+</span><span>    }
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">public extension</span><span> Log {
+</span><span>    </span><span style="color:#b48ead;">static func </span><span>trace(_ message: Logger.Message, functionName: String = #function, fileName: String = #file) {
+</span><span>        </span><span style="color:#b48ead;">let</span><span> className = fileName.extractClassName()
+</span><span>        </span><span style="color:#b48ead;">self</span><span>.</span><span style="color:#b48ead;">default</span><span>.trace(</span><span style="color:#a3be8c;">&quot;</span><span>\(className)</span><span style="color:#a3be8c;">:</span><span>\(functionName) \(message)</span><span style="color:#a3be8c;">&quot;</span><span>)
+</span><span>    }
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">static func </span><span>debug(_ message: Logger.Message, functionName: String = #function, fileName: String = #file) {
+</span><span>        </span><span style="color:#b48ead;">let</span><span> className = fileName.extractClassName()
+</span><span>        </span><span style="color:#b48ead;">self</span><span>.</span><span style="color:#b48ead;">default</span><span>.debug(</span><span style="color:#a3be8c;">&quot;</span><span>\(className)</span><span style="color:#a3be8c;">:</span><span>\(functionName) \(message)</span><span style="color:#a3be8c;">&quot;</span><span>)
+</span><span>    }
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">static func </span><span>info(_ message: Logger.Message, functionName: String = #function, fileName: String = #file) {
+</span><span>        </span><span style="color:#b48ead;">let</span><span> className = fileName.extractClassName()
+</span><span>        </span><span style="color:#b48ead;">self</span><span>.</span><span style="color:#b48ead;">default</span><span>.info(</span><span style="color:#a3be8c;">&quot;</span><span>\(className)</span><span style="color:#a3be8c;">:</span><span>\(functionName) \(message)</span><span style="color:#a3be8c;">&quot;</span><span>)
+</span><span>    }
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">static func </span><span>notice(_ message: Logger.Message, functionName: String = #function, fileName: String = #file) {
+</span><span>        </span><span style="color:#b48ead;">let</span><span> className = fileName.extractClassName()
+</span><span>        </span><span style="color:#b48ead;">self</span><span>.</span><span style="color:#b48ead;">default</span><span>.notice(</span><span style="color:#a3be8c;">&quot;</span><span>\(className)</span><span style="color:#a3be8c;">:</span><span>\(functionName) \(message)</span><span style="color:#a3be8c;">&quot;</span><span>)
+</span><span>    }
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">static func </span><span>warning(_ message: Logger.Message, functionName: String = #function, fileName: String = #file) {
+</span><span>        </span><span style="color:#b48ead;">let</span><span> className = fileName.extractClassName()
+</span><span>        </span><span style="color:#b48ead;">self</span><span>.</span><span style="color:#b48ead;">default</span><span>.warning(</span><span style="color:#a3be8c;">&quot;</span><span>\(className)</span><span style="color:#a3be8c;">:</span><span>\(functionName) \(message)</span><span style="color:#a3be8c;">&quot;</span><span>)
+</span><span>    }
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">static func </span><span>error(_ message: Logger.Message, functionName: String = #function, fileName: String = #file) {
+</span><span>        </span><span style="color:#b48ead;">let</span><span> className = fileName.extractClassName()
+</span><span>        </span><span style="color:#b48ead;">self</span><span>.</span><span style="color:#b48ead;">default</span><span>.error(</span><span style="color:#a3be8c;">&quot;</span><span>\(className)</span><span style="color:#a3be8c;">:</span><span>\(functionName) \(message)</span><span style="color:#a3be8c;">&quot;</span><span>)
+</span><span>    }
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">static func </span><span>critical(_ message: Logger.Message, functionName: String = #function, fileName: String = #file) {
+</span><span>        </span><span style="color:#b48ead;">let</span><span> className = fileName.extractClassName()
+</span><span>        </span><span style="color:#b48ead;">self</span><span>.</span><span style="color:#b48ead;">default</span><span>.critical(</span><span style="color:#a3be8c;">&quot;</span><span>\(className)</span><span style="color:#a3be8c;">:</span><span>\(functionName) \(message)</span><span style="color:#a3be8c;">&quot;</span><span>)
+</span><span>    }
+</span><span>}
+</span></code></pre>
 <h3 id="usage">usage</h3>
 <ul>
 <li><code>AppDelegate.swift</code> 에 Log setting </li>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title> - animation</title>
+    <link rel="self" type="application/atom+xml" href="https://wonkwh.github.io/tags/animation/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://wonkwh.github.io"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2019-11-27T00:00:00+00:00</updated>
+    <id>https://wonkwh.github.io/tags/animation/atom.xml</id>
+    <entry xml:lang="en">
+        <title>fluid interface effect</title>
+        <published>2019-11-27T00:00:00+00:00</published>
+        <updated>2019-11-27T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://wonkwh.github.io/fluid-interface/"/>
+        <id>https://wonkwh.github.io/fluid-interface/</id>
+        
+        <summary type="html">&lt;p&gt;wwdc2018 세션중 하나인 &lt;a href=&quot;https:&#x2F;&#x2F;developer.apple.com&#x2F;videos&#x2F;play&#x2F;wwdc2018&#x2F;803&#x2F;&quot;&gt;Designing Fluid Interfaces&lt;&#x2F;a&gt; 를 직접 구현한 opensource중 button 구현에 대해 정리&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;nathangitter&#x2F;fluid-interfaces&quot;&gt;fluid-interfaces&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+</summary>
+        
+    </entry>
+</feed>

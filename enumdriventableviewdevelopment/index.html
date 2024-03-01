@@ -56,101 +56,101 @@
 <p>original source </p>
 </li>
 </ul>
-<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">class ListController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
-
-    fileprivate let cellId = &quot;cellId&quot;
-    fileprivate let footerId = &quot;footerId&quot;
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        collectionView.backgroundColor = .white
-
-        collectionView.register(ListCell.self, forCellWithReuseIdentifier: cellId)
-        collectionView.register(LoadingFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: footerId)
-
-        fetchData()
-    }
-
-    var results = [Result]()
-
-    fileprivate let searchTerm = &quot;BTS&quot;
-
-    fileprivate func fetchData() {
-        let urlString = &quot;https:&#x2F;&#x2F;itunes.apple.com&#x2F;search?term=\(searchTerm)&amp;offset=0&amp;limit=20&quot;
-        Service.shared.fetchGenericJSONData(urlString: urlString) { (searchResult: SearchResult?, err) in
-
-            if let err = err {
-                print(&quot;Failed to paginate data:&quot;, err)
-                return
-            }
-
-            self.results = searchResult?.results ?? []
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
-            }
-        }
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -&gt; UICollectionReusableView {
-        let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: footerId, for: indexPath)
-        return footer
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -&gt; CGSize {
-        let height: CGFloat = isDonePaginating ? 0 : 100
-        return .init(width: view.frame.width, height: height)
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -&gt; Int {
-        return results.count
-    }
-
-    var isPaginating = false
-    var isDonePaginating = false
-
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -&gt; UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! ListCell
-
-        let track = results[indexPath.item]
-        cell.configure(viewData: track)
-        &#x2F;&#x2F; initiate pagination
-        if indexPath.item == results.count - 1 &amp;&amp; !isPaginating {
-            print(&quot;fetch more data&quot;)
-
-            isPaginating = true
-
-            let urlString = &quot;https:&#x2F;&#x2F;itunes.apple.com&#x2F;search?term=\(searchTerm)&amp;offset=\(results.count)&amp;limit=20&quot;
-            Service.shared.fetchGenericJSONData(urlString: urlString) { (searchResult: SearchResult?, err) in
-
-                if let err = err {
-                    print(&quot;Failed to paginate data:&quot;, err)
-                    return
-                }
-
-                if searchResult?.results.count == 0 {
-                    self.isDonePaginating = true
-                }
-
-                sleep(2)
-
-                self.results += searchResult?.results ?? []
-                DispatchQueue.main.async {
-                    self.collectionView.reloadData()
-                }
-                self.isPaginating = false
-            }
-        }
-
-        return cell
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -&gt; CGSize {
-        return .init(width: view.frame.width, height: 100)
-    }
-
-}
-
-</code></pre>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#b48ead;">class</span><span> ListController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">fileprivate let</span><span> cellId = </span><span style="color:#a3be8c;">&quot;cellId&quot;
+</span><span>    </span><span style="color:#b48ead;">fileprivate let</span><span> footerId = </span><span style="color:#a3be8c;">&quot;footerId&quot;
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">override func </span><span>viewDidLoad() {
+</span><span>        </span><span style="color:#b48ead;">super</span><span>.viewDidLoad()
+</span><span>        collectionView.backgroundColor = .white
+</span><span>
+</span><span>        collectionView.register(ListCell.</span><span style="color:#b48ead;">self</span><span>, forCellWithReuseIdentifier: cellId)
+</span><span>        collectionView.register(LoadingFooter.</span><span style="color:#b48ead;">self</span><span>, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: footerId)
+</span><span>
+</span><span>        fetchData()
+</span><span>    }
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">var</span><span> results = [Result]()
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">fileprivate let</span><span> searchTerm = </span><span style="color:#a3be8c;">&quot;BTS&quot;
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">fileprivate func </span><span>fetchData() {
+</span><span>        </span><span style="color:#b48ead;">let</span><span> urlString = </span><span style="color:#a3be8c;">&quot;https://itunes.apple.com/search?term=</span><span>\(searchTerm)</span><span style="color:#a3be8c;">&amp;offset=0&amp;limit=20&quot;
+</span><span>        Service.shared.fetchGenericJSONData(urlString: urlString) { (searchResult: SearchResult?, err) </span><span style="color:#b48ead;">in
+</span><span>
+</span><span>            </span><span style="color:#b48ead;">if let</span><span> err = err {
+</span><span>                print(</span><span style="color:#a3be8c;">&quot;Failed to paginate data:&quot;</span><span>, err)
+</span><span>                </span><span style="color:#b48ead;">return
+</span><span>            }
+</span><span>
+</span><span>            </span><span style="color:#b48ead;">self</span><span>.results = searchResult?.results ?? []
+</span><span>            DispatchQueue.main.async {
+</span><span>                </span><span style="color:#b48ead;">self</span><span>.collectionView.reloadData()
+</span><span>            }
+</span><span>        }
+</span><span>    }
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">override func </span><span>collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -&gt; UICollectionReusableView {
+</span><span>        </span><span style="color:#b48ead;">let</span><span> footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: footerId, </span><span style="color:#b48ead;">for</span><span>: indexPath)
+</span><span>        </span><span style="color:#b48ead;">return</span><span> footer
+</span><span>    }
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">func </span><span>collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -&gt; CGSize {
+</span><span>        </span><span style="color:#b48ead;">let</span><span> height: CGFloat = isDonePaginating ? </span><span style="color:#d08770;">0 </span><span>: </span><span style="color:#d08770;">100
+</span><span>        </span><span style="color:#b48ead;">return </span><span>.</span><span style="color:#b48ead;">init</span><span>(width: view.frame.width, height: height)
+</span><span>    }
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">override func </span><span>collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -&gt; Int {
+</span><span>        </span><span style="color:#b48ead;">return</span><span> results.count
+</span><span>    }
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">var</span><span> isPaginating = </span><span style="color:#b48ead;">false
+</span><span>    </span><span style="color:#b48ead;">var</span><span> isDonePaginating = </span><span style="color:#b48ead;">false
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">override func </span><span>collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -&gt; UICollectionViewCell {
+</span><span>        </span><span style="color:#b48ead;">let</span><span> cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, </span><span style="color:#b48ead;">for</span><span>: indexPath) as! ListCell
+</span><span>
+</span><span>        </span><span style="color:#b48ead;">let</span><span> track = results[indexPath.item]
+</span><span>        cell.configure(viewData: track)
+</span><span>        </span><span style="color:#65737e;">// initiate pagination
+</span><span>        </span><span style="color:#b48ead;">if</span><span> indexPath.item == results.count - </span><span style="color:#d08770;">1 </span><span>&amp;&amp; !isPaginating {
+</span><span>            print(</span><span style="color:#a3be8c;">&quot;fetch more data&quot;</span><span>)
+</span><span>
+</span><span>            isPaginating = </span><span style="color:#b48ead;">true
+</span><span>
+</span><span>            </span><span style="color:#b48ead;">let</span><span> urlString = </span><span style="color:#a3be8c;">&quot;https://itunes.apple.com/search?term=</span><span>\(searchTerm)</span><span style="color:#a3be8c;">&amp;offset=</span><span>\(results.count)</span><span style="color:#a3be8c;">&amp;limit=20&quot;
+</span><span>            Service.shared.fetchGenericJSONData(urlString: urlString) { (searchResult: SearchResult?, err) </span><span style="color:#b48ead;">in
+</span><span>
+</span><span>                </span><span style="color:#b48ead;">if let</span><span> err = err {
+</span><span>                    print(</span><span style="color:#a3be8c;">&quot;Failed to paginate data:&quot;</span><span>, err)
+</span><span>                    </span><span style="color:#b48ead;">return
+</span><span>                }
+</span><span>
+</span><span>                </span><span style="color:#b48ead;">if</span><span> searchResult?.results.count == </span><span style="color:#d08770;">0</span><span> {
+</span><span>                    </span><span style="color:#b48ead;">self</span><span>.isDonePaginating = </span><span style="color:#b48ead;">true
+</span><span>                }
+</span><span>
+</span><span>                sleep(</span><span style="color:#d08770;">2</span><span>)
+</span><span>
+</span><span>                </span><span style="color:#b48ead;">self</span><span>.results += searchResult?.results ?? []
+</span><span>                DispatchQueue.main.async {
+</span><span>                    </span><span style="color:#b48ead;">self</span><span>.collectionView.reloadData()
+</span><span>                }
+</span><span>                </span><span style="color:#b48ead;">self</span><span>.isPaginating = </span><span style="color:#b48ead;">false
+</span><span>            }
+</span><span>        }
+</span><span>
+</span><span>        </span><span style="color:#b48ead;">return</span><span> cell
+</span><span>    }
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">func </span><span>collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -&gt; CGSize {
+</span><span>        </span><span style="color:#b48ead;">return </span><span>.</span><span style="color:#b48ead;">init</span><span>(width: view.frame.width, height: </span><span style="color:#d08770;">100</span><span>)
+</span><span>    }
+</span><span>
+</span><span>}
+</span><span>
+</span></code></pre>
 <h2 id="different-states">Different States</h2>
 <ul>
 <li>잘 디자인된 리스트는 다음의 4가지 state를 가진다
@@ -166,63 +166,63 @@
 <ul>
 <li>enum 추가 </li>
 </ul>
-<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">    case loading
-    case paging([Result])
-    case populated([Result])
-    case empty
-    case error(Error)
-
-    var currentResults: [Result] {
-        switch self {
-        case .paging(let results):
-            return results
-        case .populated(let results):
-            return results
-        default:
-            return []
-        }
-    }
-
-</code></pre>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span>    </span><span style="color:#b48ead;">case</span><span> loading
+</span><span>    </span><span style="color:#b48ead;">case</span><span> paging([Result])
+</span><span>    </span><span style="color:#b48ead;">case</span><span> populated([Result])
+</span><span>    </span><span style="color:#b48ead;">case</span><span> empty
+</span><span>    </span><span style="color:#b48ead;">case</span><span> error(Error)
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">var</span><span> currentResults: [Result] {
+</span><span>        </span><span style="color:#b48ead;">switch self</span><span> {
+</span><span>        </span><span style="color:#b48ead;">case </span><span>.paging(</span><span style="color:#b48ead;">let</span><span> results):
+</span><span>            </span><span style="color:#b48ead;">return</span><span> results
+</span><span>        </span><span style="color:#b48ead;">case </span><span>.populated(</span><span style="color:#b48ead;">let</span><span> results):
+</span><span>            </span><span style="color:#b48ead;">return</span><span> results
+</span><span>        </span><span style="color:#b48ead;">default</span><span>:
+</span><span>            </span><span style="color:#b48ead;">return</span><span> []
+</span><span>        }
+</span><span>    }
+</span><span>
+</span></code></pre>
 <ul>
 <li>property observer를 적용한 state variable 추가 </li>
 <li>다른곳에 사용한 collectionView.reloadData() 는 모두 지운다.</li>
 </ul>
-<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">    var state = State.loading {
-        didSet {
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
-            }
-        }
-    }
-
-</code></pre>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span>    </span><span style="color:#b48ead;">var</span><span> state = State.loading {
+</span><span>        </span><span style="color:#b48ead;">didSet</span><span> {
+</span><span>            DispatchQueue.main.async {
+</span><span>                </span><span style="color:#b48ead;">self</span><span>.collectionView.reloadData()
+</span><span>            }
+</span><span>        }
+</span><span>    }
+</span><span>
+</span></code></pre>
 <ul>
 <li><code>results</code> 전역 변수를 지우고 <code>state.currentResults</code> 로 변경한다. </li>
 <li><code>isPaginating</code>, <code>isDonePaginating</code> 전역변수도 지우고 state 변경으로 refactoring</li>
 </ul>
-<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">    fileprivate func loadPage() {
-        state = .paging(state.currentResults)
-        let urlString = &quot;https:&#x2F;&#x2F;itunes.apple.com&#x2F;search?term=\(searchTerm)&amp;offset=\(state.currentResults.count)&amp;limit=20&quot;
-        Service.shared.fetchGenericJSONData(urlString: urlString) { (searchResult: SearchResult?, err) in
-            if let err = err {
-                self.state = .error(err)
-                return
-            }
-
-            if searchResult?.results.count == 0 {
-                self.state = .empty
-                return
-            }
-
-            sleep(2)
-
-            var allResults = self.state.currentResults
-            allResults += searchResult?.results ?? []
-            self.state = .populated(allResults)
-        }
-    }
-</code></pre>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span>    </span><span style="color:#b48ead;">fileprivate func </span><span>loadPage() {
+</span><span>        state = .paging(state.currentResults)
+</span><span>        </span><span style="color:#b48ead;">let</span><span> urlString = </span><span style="color:#a3be8c;">&quot;https://itunes.apple.com/search?term=</span><span>\(searchTerm)</span><span style="color:#a3be8c;">&amp;offset=</span><span>\(state.currentResults.count)</span><span style="color:#a3be8c;">&amp;limit=20&quot;
+</span><span>        Service.shared.fetchGenericJSONData(urlString: urlString) { (searchResult: SearchResult?, err) </span><span style="color:#b48ead;">in
+</span><span>            </span><span style="color:#b48ead;">if let</span><span> err = err {
+</span><span>                </span><span style="color:#b48ead;">self</span><span>.state = .error(err)
+</span><span>                </span><span style="color:#b48ead;">return
+</span><span>            }
+</span><span>
+</span><span>            </span><span style="color:#b48ead;">if</span><span> searchResult?.results.count == </span><span style="color:#d08770;">0</span><span> {
+</span><span>                </span><span style="color:#b48ead;">self</span><span>.state = .empty
+</span><span>                </span><span style="color:#b48ead;">return
+</span><span>            }
+</span><span>
+</span><span>            sleep(</span><span style="color:#d08770;">2</span><span>)
+</span><span>
+</span><span>            </span><span style="color:#b48ead;">var</span><span> allResults = </span><span style="color:#b48ead;">self</span><span>.state.currentResults
+</span><span>            allResults += searchResult?.results ?? []
+</span><span>            </span><span style="color:#b48ead;">self</span><span>.state = .populated(allResults)
+</span><span>        }
+</span><span>    }
+</span></code></pre>
 <h2 id="final-source">final source</h2>
 <ul>
 <li><a href="https://github.com/wonkwh/BlogShowcase/blob/develop/BlogShowcase/BlogShowcase/showcase/EnumListController.swift">here</a></li>

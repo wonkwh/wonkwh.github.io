@@ -52,85 +52,85 @@
 <ul>
 <li>UIViewController에서 SwiftUI로 만들어진 View를 present하려면 <code>UIHostingController</code>를 이용하여 아래와 같이 사용하면 된다.</li>
 </ul>
-<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">if #available(iOS 13.0, *) {
-    presentSwiftUIView()
-} else {
-    &#x2F;&#x2F; Fallback on earlier versions
-}
-
-func presentSwiftUIView() {
-    let swiftUIView = SwiftUIView()
-    let hostingController = UIHostingController(rootView: swiftUIView)
-    present(hostingController, animated: true, completion: nil)
-}
-</code></pre>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#b48ead;">if</span><span> #available(iOS </span><span style="color:#d08770;">13</span><span>.</span><span style="color:#d08770;">0</span><span>, *) {
+</span><span>    presentSwiftUIView()
+</span><span>} </span><span style="color:#b48ead;">else</span><span> {
+</span><span>    </span><span style="color:#65737e;">// Fallback on earlier versions
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">func </span><span>presentSwiftUIView() {
+</span><span>    </span><span style="color:#b48ead;">let</span><span> swiftUIView = SwiftUIView()
+</span><span>    </span><span style="color:#b48ead;">let</span><span> hostingController = UIHostingController(rootView: swiftUIView)
+</span><span>    present(hostingController, animated: </span><span style="color:#b48ead;">true</span><span>, completion: </span><span style="color:#d08770;">nil</span><span>)
+</span><span>}
+</span></code></pre>
 <h2 id="adding-a-swiftui-view-to-a-uikit-view">Adding a SwiftUI view to a UIKit view</h2>
 <ul>
 <li>위와 유사하게 present하는것이 아니라 child view로 추가시키려면 아래와 같이 추가 </li>
 </ul>
-<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">func addSwiftUIView() {
-    let swiftUIView = SwiftUIView()
-    let hostingController = UIHostingController(rootView: swiftUIView)
-
-    &#x2F;&#x2F;&#x2F; Add as a child of the current view controller.
-    addChild(hostingController)
-
-    &#x2F;&#x2F;&#x2F; Add the SwiftUI view to the view controller view hierarchy.
-    view.addSubview(hostingController.view)
-
-    &#x2F;&#x2F;&#x2F; Setup the constraints to update the SwiftUI view boundaries.
-    hostingController.view.translatesAutoresizingMaskIntoConstraints = false
-    let constraints = [
-        hostingController.view.topAnchor.constraint(equalTo: view.topAnchor),
-        hostingController.view.leftAnchor.constraint(equalTo: view.leftAnchor),
-        view.bottomAnchor.constraint(equalTo: hostingController.view.bottomAnchor),
-        view.rightAnchor.constraint(equalTo: hostingController.view.rightAnchor)
-    ]
-
-    NSLayoutConstraint.activate(constraints)
-
-    &#x2F;&#x2F;&#x2F; Notify the hosting controller that it has been moved to the current view controller.
-    hostingController.didMove(toParent: self)
-}
-</code></pre>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#b48ead;">func </span><span>addSwiftUIView() {
+</span><span>    </span><span style="color:#b48ead;">let</span><span> swiftUIView = SwiftUIView()
+</span><span>    </span><span style="color:#b48ead;">let</span><span> hostingController = UIHostingController(rootView: swiftUIView)
+</span><span>
+</span><span>    </span><span style="color:#65737e;">/// Add as a child of the current view controller.
+</span><span>    addChild(hostingController)
+</span><span>
+</span><span>    </span><span style="color:#65737e;">/// Add the SwiftUI view to the view controller view hierarchy.
+</span><span>    view.addSubview(hostingController.view)
+</span><span>
+</span><span>    </span><span style="color:#65737e;">/// Setup the constraints to update the SwiftUI view boundaries.
+</span><span>    hostingController.view.translatesAutoresizingMaskIntoConstraints = </span><span style="color:#b48ead;">false
+</span><span>    </span><span style="color:#b48ead;">let</span><span> constraints = [
+</span><span>        hostingController.view.topAnchor.constraint(equalTo: view.topAnchor),
+</span><span>        hostingController.view.leftAnchor.constraint(equalTo: view.leftAnchor),
+</span><span>        view.bottomAnchor.constraint(equalTo: hostingController.view.bottomAnchor),
+</span><span>        view.rightAnchor.constraint(equalTo: hostingController.view.rightAnchor)
+</span><span>    ]
+</span><span>
+</span><span>    NSLayoutConstraint.activate(constraints)
+</span><span>
+</span><span>    </span><span style="color:#65737e;">/// Notify the hosting controller that it has been moved to the current view controller.
+</span><span>    hostingController.didMove(toParent: </span><span style="color:#b48ead;">self</span><span>)
+</span><span>}
+</span></code></pre>
 <h2 id="swiftui-viewreul-cugahaneun-uiviewcontroller-extension-guhyeon">swiftUI view를 추가하는  UIViewController Extension 구현</h2>
-<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">extension UIViewController {
-
-    &#x2F;&#x2F;&#x2F; Add a SwiftUI `View` as a child of the input `UIView`.
-    &#x2F;&#x2F;&#x2F; - Parameters:
-    &#x2F;&#x2F;&#x2F;   - swiftUIView: The SwiftUI `View` to add as a child.
-    &#x2F;&#x2F;&#x2F;   - view: The `UIView` instance to which the view should be added.
-    func addSubSwiftUIView&lt;Content&gt;(_ swiftUIView: Content, to view: UIView) where Content : View {
-        let hostingController = UIHostingController(rootView: swiftUIView)
-
-        &#x2F;&#x2F;&#x2F; Add as a child of the current view controller.
-        addChild(hostingController)
-
-        &#x2F;&#x2F;&#x2F; Add the SwiftUI view to the view controller view hierarchy.
-        view.addSubview(hostingController.view)
-
-        &#x2F;&#x2F;&#x2F; Setup the contraints to update the SwiftUI view boundaries.
-        hostingController.view.translatesAutoresizingMaskIntoConstraints = false
-        let constraints = [
-            hostingController.view.topAnchor.constraint(equalTo: view.topAnchor),
-            hostingController.view.leftAnchor.constraint(equalTo: view.leftAnchor),
-            view.bottomAnchor.constraint(equalTo: hostingController.view.bottomAnchor),
-            view.rightAnchor.constraint(equalTo: hostingController.view.rightAnchor)
-        ]
-
-        NSLayoutConstraint.activate(constraints)
-
-        &#x2F;&#x2F;&#x2F; Notify the hosting controller that it has been moved to the current view controller.
-        hostingController.didMove(toParent: self)
-    }
-}
-</code></pre>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#b48ead;">extension</span><span> UIViewController {
+</span><span>
+</span><span>    </span><span style="color:#65737e;">/// Add a SwiftUI `View` as a child of the input `UIView`.
+</span><span>    </span><span style="color:#65737e;">/// - Parameters:
+</span><span>    </span><span style="color:#65737e;">///   - swiftUIView: The SwiftUI `View` to add as a child.
+</span><span>    </span><span style="color:#65737e;">///   - view: The `UIView` instance to which the view should be added.
+</span><span>    </span><span style="color:#b48ead;">func </span><span>addSubSwiftUIView&lt;Content&gt;(_ swiftUIView: Content, to view: UIView) where Content : View {
+</span><span>        </span><span style="color:#b48ead;">let</span><span> hostingController = UIHostingController(rootView: swiftUIView)
+</span><span>
+</span><span>        </span><span style="color:#65737e;">/// Add as a child of the current view controller.
+</span><span>        addChild(hostingController)
+</span><span>
+</span><span>        </span><span style="color:#65737e;">/// Add the SwiftUI view to the view controller view hierarchy.
+</span><span>        view.addSubview(hostingController.view)
+</span><span>
+</span><span>        </span><span style="color:#65737e;">/// Setup the contraints to update the SwiftUI view boundaries.
+</span><span>        hostingController.view.translatesAutoresizingMaskIntoConstraints = </span><span style="color:#b48ead;">false
+</span><span>        </span><span style="color:#b48ead;">let</span><span> constraints = [
+</span><span>            hostingController.view.topAnchor.constraint(equalTo: view.topAnchor),
+</span><span>            hostingController.view.leftAnchor.constraint(equalTo: view.leftAnchor),
+</span><span>            view.bottomAnchor.constraint(equalTo: hostingController.view.bottomAnchor),
+</span><span>            view.rightAnchor.constraint(equalTo: hostingController.view.rightAnchor)
+</span><span>        ]
+</span><span>
+</span><span>        NSLayoutConstraint.activate(constraints)
+</span><span>
+</span><span>        </span><span style="color:#65737e;">/// Notify the hosting controller that it has been moved to the current view controller.
+</span><span>        hostingController.didMove(toParent: </span><span style="color:#b48ead;">self</span><span>)
+</span><span>    }
+</span><span>}
+</span></code></pre>
 <p>위와 같이 추가하고 <code>UIViewController</code> 에서 아래와 같이 사용하면 된다</p>
-<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">func addSwiftUIView() {
-    let swiftUIView = SwiftUIView()
-    addSubSwiftUIView(swiftUIView, to: view)
-}
-</code></pre>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#b48ead;">func </span><span>addSwiftUIView() {
+</span><span>    </span><span style="color:#b48ead;">let</span><span> swiftUIView = SwiftUIView()
+</span><span>    addSubSwiftUIView(swiftUIView, to: view)
+</span><span>}
+</span></code></pre>
 
     </div>
 

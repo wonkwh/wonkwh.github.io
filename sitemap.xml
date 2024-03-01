@@ -15,6 +15,10 @@
         <loc>https://wonkwh.github.io/categories/</loc>
     </url>
     <url>
+        <loc>https://wonkwh.github.io/cleancodebook-0/</loc>
+        <lastmod>2024-03-01</lastmod>
+    </url>
+    <url>
         <loc>https://wonkwh.github.io/collectionviewlikeswiftui/</loc>
         <lastmod>2020-03-16</lastmod>
     </url>
@@ -117,6 +121,9 @@
         <loc>https://wonkwh.github.io/tags/enum/</loc>
     </url>
     <url>
+        <loc>https://wonkwh.github.io/tags/gaebaljabugkeulreob/</loc>
+    </url>
+    <url>
         <loc>https://wonkwh.github.io/tags/intrinsiccontentsize/</loc>
     </url>
     <url>
@@ -127,6 +134,12 @@
     </url>
     <url>
         <loc>https://wonkwh.github.io/tags/log/</loc>
+    </url>
+    <url>
+        <loc>https://wonkwh.github.io/tags/nogaebug/</loc>
+    </url>
+    <url>
+        <loc>https://wonkwh.github.io/tags/nomadeukodeo/</loc>
     </url>
     <url>
         <loc>https://wonkwh.github.io/tags/pointfree/</loc>

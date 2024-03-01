@@ -55,133 +55,133 @@
 <ul>
 <li>iOS13 이상의 SwiftUI로 List를 구성하는 소스는 아래와 같이 직관적이다. </li>
 </ul>
-<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">var body: some View {
-    List {
-        ForEach(blogs) { blog in
-            VStack {
-                Text(blog.name)
-            }
-            .onTap {
-                print(&quot;cell was tapped&quot;)
-            }
-        }
-    }
-}
-</code></pre>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#b48ead;">var</span><span> body: some View {
+</span><span>    List {
+</span><span>        ForEach(blogs) { blog </span><span style="color:#b48ead;">in
+</span><span>            VStack {
+</span><span>                Text(blog.name)
+</span><span>            }
+</span><span>            .onTap {
+</span><span>                print(</span><span style="color:#a3be8c;">&quot;cell was tapped&quot;</span><span>)
+</span><span>            }
+</span><span>        }
+</span><span>    }
+</span><span>}
+</span></code></pre>
 <ul>
 <li>전 Building Better View에서 수정했던 UI를 아래와 <strong>Micro</strong> lib 사용하면 아래와 같이 구현할 수 있다.</li>
 <li>Section Header, Footer View를 구현하기 위해 라이브러리 소스코드를 일부 수정하였다. </li>
 </ul>
-<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">import UIKit
-import LBTATools
-import Nuke
-
-class CustomDataSource: DataSource {
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -&gt; UICollectionReusableView {
-        let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: &quot;footerId&quot;, for: indexPath)
-        return footer
-    }
-}
-
-class MicroListController: UIViewController {
-    var dataSource: DataSource!
-
-    lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        let view = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        view.backgroundColor = .white
-        return view
-    }()
-
-    var results = [Result]()
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        collectionView.register(LoadingFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: &quot;footerId&quot;)
-        view.addSubview(collectionView)
-        collectionView.fillSuperviewSafeAreaLayoutGuide()
-
-        &#x2F;&#x2F;micro
-        dataSource = CustomDataSource(collectionView: collectionView)
-        collectionView.dataSource = dataSource
-        collectionView.delegate = dataSource
-
-        setDataSource()
-        fetchData()
-    }
-
-    var isPaginating = false
-    var isDonePaginating = false
-
-    func setDataSource() {
-        dataSource.state = forEach(results) { result in
-            Cell&lt;ListCell&gt;() { context, cell in
-                cell.configure(viewData: result)
-
-                &#x2F;&#x2F; initiate pagination
-                if context.indexPath.item == self.results.count - 5 &amp;&amp; !self.isPaginating {
-                    print(&quot;fetch more data&quot;)
-
-                    self.isPaginating = true
-
-                    let urlString = &quot;https:&#x2F;&#x2F;itunes.apple.com&#x2F;search?term=\(self.searchTerm)&amp;offset=\(self.results.count)&amp;limit=20&quot;
-                    Service.shared.fetchGenericJSONData(urlString: urlString) { (searchResult: SearchResult?, err) in
-
-                        if let err = err {
-                            print(&quot;Failed to paginate data:&quot;, err)
-                            return
-                        }
-
-                        if searchResult?.results.count == 0 {
-                            self.isDonePaginating = true
-                        }
-
-                        sleep(2)
-
-                        self.results += searchResult?.results ?? []
-                        DispatchQueue.main.async {
-                            self.setDataSource()
-                        }
-                        self.isPaginating = false
-                    }
-                }
-            }
-            .onSelect { context in
-                print(&quot;cell at index \(context.indexPath.item) is selected&quot;)
-            }
-            .onSize { context -&gt; CGSize in
-                return .init(width: self.view.frame.width, height: 100.0)
-            }
-            .onFooterSize { context -&gt; CGSize in
-                let height: CGFloat = self.isDonePaginating ? 0 : 100
-                return .init(width: self.view.frame.width, height: height)
-            }
-        }
-    }
-
-
-    fileprivate let searchTerm = &quot;IZONE&quot;
-
-    fileprivate func fetchData() {
-        let urlString = &quot;https:&#x2F;&#x2F;itunes.apple.com&#x2F;search?term=\(searchTerm)&amp;offset=0&amp;limit=20&quot;
-        Service.shared.fetchGenericJSONData(urlString: urlString) { (searchResult: SearchResult?, err) in
-
-            if let err = err {
-                print(&quot;Failed to paginate data:&quot;, err)
-                return
-            }
-
-            self.results = searchResult?.results ?? []
-            DispatchQueue.main.async {
-                self.setDataSource()
-            }
-        }
-    }
-}
-
-
-</code></pre>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#b48ead;">import </span><span>UIKit
+</span><span style="color:#b48ead;">import </span><span>LBTATools
+</span><span style="color:#b48ead;">import </span><span>Nuke
+</span><span>
+</span><span style="color:#b48ead;">class</span><span> CustomDataSource: DataSource {
+</span><span>    </span><span style="color:#b48ead;">func </span><span>collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -&gt; UICollectionReusableView {
+</span><span>        </span><span style="color:#b48ead;">let</span><span> footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: </span><span style="color:#a3be8c;">&quot;footerId&quot;</span><span>, </span><span style="color:#b48ead;">for</span><span>: indexPath)
+</span><span>        </span><span style="color:#b48ead;">return</span><span> footer
+</span><span>    }
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">class</span><span> MicroListController: UIViewController {
+</span><span>    </span><span style="color:#b48ead;">var</span><span> dataSource: DataSource!
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">lazy var</span><span> collectionView: UICollectionView = {
+</span><span>        </span><span style="color:#b48ead;">let</span><span> layout = UICollectionViewFlowLayout()
+</span><span>        </span><span style="color:#b48ead;">let</span><span> view = UICollectionView(frame: .zero, collectionViewLayout: layout)
+</span><span>        view.backgroundColor = .white
+</span><span>        </span><span style="color:#b48ead;">return</span><span> view
+</span><span>    }()
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">var</span><span> results = [Result]()
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">override func </span><span>viewDidLoad() {
+</span><span>        </span><span style="color:#b48ead;">super</span><span>.viewDidLoad()
+</span><span>
+</span><span>        collectionView.register(LoadingFooter.</span><span style="color:#b48ead;">self</span><span>, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: </span><span style="color:#a3be8c;">&quot;footerId&quot;</span><span>)
+</span><span>        view.addSubview(collectionView)
+</span><span>        collectionView.fillSuperviewSafeAreaLayoutGuide()
+</span><span>
+</span><span>        </span><span style="color:#65737e;">//micro
+</span><span>        dataSource = CustomDataSource(collectionView: collectionView)
+</span><span>        collectionView.dataSource = dataSource
+</span><span>        collectionView.delegate = dataSource
+</span><span>
+</span><span>        setDataSource()
+</span><span>        fetchData()
+</span><span>    }
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">var</span><span> isPaginating = </span><span style="color:#b48ead;">false
+</span><span>    </span><span style="color:#b48ead;">var</span><span> isDonePaginating = </span><span style="color:#b48ead;">false
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">func </span><span>setDataSource() {
+</span><span>        dataSource.state = forEach(results) { result </span><span style="color:#b48ead;">in
+</span><span>            Cell&lt;ListCell&gt;() { context, cell </span><span style="color:#b48ead;">in
+</span><span>                cell.configure(viewData: result)
+</span><span>
+</span><span>                </span><span style="color:#65737e;">// initiate pagination
+</span><span>                </span><span style="color:#b48ead;">if</span><span> context.indexPath.item == </span><span style="color:#b48ead;">self</span><span>.results.count - </span><span style="color:#d08770;">5 </span><span>&amp;&amp; !</span><span style="color:#b48ead;">self</span><span>.isPaginating {
+</span><span>                    print(</span><span style="color:#a3be8c;">&quot;fetch more data&quot;</span><span>)
+</span><span>
+</span><span>                    </span><span style="color:#b48ead;">self</span><span>.isPaginating = </span><span style="color:#b48ead;">true
+</span><span>
+</span><span>                    </span><span style="color:#b48ead;">let</span><span> urlString = </span><span style="color:#a3be8c;">&quot;https://itunes.apple.com/search?term=</span><span>\(</span><span style="color:#b48ead;">self</span><span>.searchTerm)</span><span style="color:#a3be8c;">&amp;offset=</span><span>\(</span><span style="color:#b48ead;">self</span><span>.results.count)</span><span style="color:#a3be8c;">&amp;limit=20&quot;
+</span><span>                    Service.shared.fetchGenericJSONData(urlString: urlString) { (searchResult: SearchResult?, err) </span><span style="color:#b48ead;">in
+</span><span>
+</span><span>                        </span><span style="color:#b48ead;">if let</span><span> err = err {
+</span><span>                            print(</span><span style="color:#a3be8c;">&quot;Failed to paginate data:&quot;</span><span>, err)
+</span><span>                            </span><span style="color:#b48ead;">return
+</span><span>                        }
+</span><span>
+</span><span>                        </span><span style="color:#b48ead;">if</span><span> searchResult?.results.count == </span><span style="color:#d08770;">0</span><span> {
+</span><span>                            </span><span style="color:#b48ead;">self</span><span>.isDonePaginating = </span><span style="color:#b48ead;">true
+</span><span>                        }
+</span><span>
+</span><span>                        sleep(</span><span style="color:#d08770;">2</span><span>)
+</span><span>
+</span><span>                        </span><span style="color:#b48ead;">self</span><span>.results += searchResult?.results ?? []
+</span><span>                        DispatchQueue.main.async {
+</span><span>                            </span><span style="color:#b48ead;">self</span><span>.setDataSource()
+</span><span>                        }
+</span><span>                        </span><span style="color:#b48ead;">self</span><span>.isPaginating = </span><span style="color:#b48ead;">false
+</span><span>                    }
+</span><span>                }
+</span><span>            }
+</span><span>            .onSelect { context </span><span style="color:#b48ead;">in
+</span><span>                print(</span><span style="color:#a3be8c;">&quot;cell at index </span><span>\(context.indexPath.item) </span><span style="color:#a3be8c;">is selected&quot;</span><span>)
+</span><span>            }
+</span><span>            .onSize { context -&gt; CGSize </span><span style="color:#b48ead;">in
+</span><span>                </span><span style="color:#b48ead;">return </span><span>.</span><span style="color:#b48ead;">init</span><span>(width: </span><span style="color:#b48ead;">self</span><span>.view.frame.width, height: </span><span style="color:#d08770;">100</span><span>.</span><span style="color:#d08770;">0</span><span>)
+</span><span>            }
+</span><span>            .onFooterSize { context -&gt; CGSize </span><span style="color:#b48ead;">in
+</span><span>                </span><span style="color:#b48ead;">let</span><span> height: CGFloat = </span><span style="color:#b48ead;">self</span><span>.isDonePaginating ? </span><span style="color:#d08770;">0 </span><span>: </span><span style="color:#d08770;">100
+</span><span>                </span><span style="color:#b48ead;">return </span><span>.</span><span style="color:#b48ead;">init</span><span>(width: </span><span style="color:#b48ead;">self</span><span>.view.frame.width, height: height)
+</span><span>            }
+</span><span>        }
+</span><span>    }
+</span><span>
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">fileprivate let</span><span> searchTerm = </span><span style="color:#a3be8c;">&quot;IZONE&quot;
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">fileprivate func </span><span>fetchData() {
+</span><span>        </span><span style="color:#b48ead;">let</span><span> urlString = </span><span style="color:#a3be8c;">&quot;https://itunes.apple.com/search?term=</span><span>\(searchTerm)</span><span style="color:#a3be8c;">&amp;offset=0&amp;limit=20&quot;
+</span><span>        Service.shared.fetchGenericJSONData(urlString: urlString) { (searchResult: SearchResult?, err) </span><span style="color:#b48ead;">in
+</span><span>
+</span><span>            </span><span style="color:#b48ead;">if let</span><span> err = err {
+</span><span>                print(</span><span style="color:#a3be8c;">&quot;Failed to paginate data:&quot;</span><span>, err)
+</span><span>                </span><span style="color:#b48ead;">return
+</span><span>            }
+</span><span>
+</span><span>            </span><span style="color:#b48ead;">self</span><span>.results = searchResult?.results ?? []
+</span><span>            DispatchQueue.main.async {
+</span><span>                </span><span style="color:#b48ead;">self</span><span>.setDataSource()
+</span><span>            }
+</span><span>        }
+</span><span>    }
+</span><span>}
+</span><span>
+</span><span>
+</span></code></pre>
 <h2 id="fullsource">fullSource</h2>
 <ul>
 <li>https://github.com/wonkwh/BlogShowcase/tree/feature/apply_micro</li>

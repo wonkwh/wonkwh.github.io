@@ -45,80 +45,80 @@
     <div itemprop="articleBody">
       <p>상속대신 프로토콜을 이용하여 StackViewController 구현방법</p>
 <span id="continue-reading"></span><h3 id="protocol-implementation">protocol implementation</h3>
-<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">protocol StackViewControllerProtocol: UIViewController {
-    var scrollView: UIScrollView { get set }
-    var stackView: UIStackView { get set }
-}
-
-extension StackViewControllerProtocol {
-    func add(_ child: UIViewController, size: CGSize) {
-        addChild(child)
-        stackView.addArrangedSubview(child.view)
-        child.didMove(toParent: self)
-        child.view.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            child.view.heightAnchor.constraint(equalToConstant: size.height),
-            child.view.widthAnchor.constraint(equalToConstant: size.width)
-            ])
-    }
-    func remove(_ child: UIViewController) {
-        guard child.parent != nil else {
-            return
-        }
-        child.willMove(toParent: nil)
-        stackView.removeArrangedSubview(child.view)
-        child.view.removeFromSuperview()
-        child.removeFromParent()
-    }
-    func setUpStackAndScrollView() {
-        view.addSubview(scrollView)
-        scrollView.addSubview(stackView)
-        setupConstraints()
-        stackView.axis = .vertical
-    }
-    private func setupConstraints() {
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            stackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            stackView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor)
-            ])
-    }
-}
-</code></pre>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#b48ead;">protocol</span><span> StackViewControllerProtocol: UIViewController {
+</span><span>    </span><span style="color:#b48ead;">var</span><span> scrollView: UIScrollView { </span><span style="color:#b48ead;">get set</span><span> }
+</span><span>    </span><span style="color:#b48ead;">var</span><span> stackView: UIStackView { </span><span style="color:#b48ead;">get set</span><span> }
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">extension</span><span> StackViewControllerProtocol {
+</span><span>    </span><span style="color:#b48ead;">func </span><span>add(_ child: UIViewController, size: CGSize) {
+</span><span>        addChild(child)
+</span><span>        stackView.addArrangedSubview(child.view)
+</span><span>        child.didMove(toParent: </span><span style="color:#b48ead;">self</span><span>)
+</span><span>        child.view.translatesAutoresizingMaskIntoConstraints = </span><span style="color:#b48ead;">false
+</span><span>        NSLayoutConstraint.activate([
+</span><span>            child.view.heightAnchor.constraint(equalToConstant: size.height),
+</span><span>            child.view.widthAnchor.constraint(equalToConstant: size.width)
+</span><span>            ])
+</span><span>    }
+</span><span>    </span><span style="color:#b48ead;">func </span><span>remove(_ child: UIViewController) {
+</span><span>        </span><span style="color:#b48ead;">guard</span><span> child.parent != </span><span style="color:#d08770;">nil </span><span style="color:#b48ead;">else</span><span> {
+</span><span>            </span><span style="color:#b48ead;">return
+</span><span>        }
+</span><span>        child.willMove(toParent: </span><span style="color:#d08770;">nil</span><span>)
+</span><span>        stackView.removeArrangedSubview(child.view)
+</span><span>        child.view.removeFromSuperview()
+</span><span>        child.removeFromParent()
+</span><span>    }
+</span><span>    </span><span style="color:#b48ead;">func </span><span>setUpStackAndScrollView() {
+</span><span>        view.addSubview(scrollView)
+</span><span>        scrollView.addSubview(stackView)
+</span><span>        setupConstraints()
+</span><span>        stackView.axis = .vertical
+</span><span>    }
+</span><span>    </span><span style="color:#b48ead;">private func </span><span>setupConstraints() {
+</span><span>        scrollView.translatesAutoresizingMaskIntoConstraints = </span><span style="color:#b48ead;">false
+</span><span>        stackView.translatesAutoresizingMaskIntoConstraints = </span><span style="color:#b48ead;">false
+</span><span>        NSLayoutConstraint.activate([
+</span><span>            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+</span><span>            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+</span><span>            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+</span><span>            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+</span><span>            stackView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+</span><span>            stackView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+</span><span>            stackView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+</span><span>            stackView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+</span><span>            stackView.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor)
+</span><span>            ])
+</span><span>    }
+</span><span>}
+</span></code></pre>
 <h3 id="protocol-composition">protocol composition</h3>
-<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">class ViewController: UIViewController, StackViewControllerProtocol {
-    var scrollView: UIScrollView = UIScrollView()
-    var stackView: UIStackView  = UIStackView()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        setUpStackAndScrollView()
-        
-        let vc1 = UIViewController()
-        vc1.view.backgroundColor = UIColor.orange
-
-        let vc2 = UIViewController()
-        vc2.view.backgroundColor = UIColor.purple
-
-        let vc3 = UIViewController()
-        vc3.view.backgroundColor = UIColor.blue
-
-        add(vc1, size: CGSize(width: UIScreen.main.bounds.width, height: 500))
-        add(vc2, size: CGSize(width: UIScreen.main.bounds.width, height: 500))
-        add(vc3, size: CGSize(width: UIScreen.main.bounds.width, height: 500))
-        
-    }
-}
-</code></pre>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#b48ead;">class</span><span> ViewController: UIViewController, StackViewControllerProtocol {
+</span><span>    </span><span style="color:#b48ead;">var</span><span> scrollView: UIScrollView = UIScrollView()
+</span><span>    </span><span style="color:#b48ead;">var</span><span> stackView: UIStackView  = UIStackView()
+</span><span>    
+</span><span>    </span><span style="color:#b48ead;">override func </span><span>viewDidLoad() {
+</span><span>        </span><span style="color:#b48ead;">super</span><span>.viewDidLoad()
+</span><span>        
+</span><span>        setUpStackAndScrollView()
+</span><span>        
+</span><span>        </span><span style="color:#b48ead;">let</span><span> vc1 = UIViewController()
+</span><span>        vc1.view.backgroundColor = UIColor.orange
+</span><span>
+</span><span>        </span><span style="color:#b48ead;">let</span><span> vc2 = UIViewController()
+</span><span>        vc2.view.backgroundColor = UIColor.purple
+</span><span>
+</span><span>        </span><span style="color:#b48ead;">let</span><span> vc3 = UIViewController()
+</span><span>        vc3.view.backgroundColor = UIColor.blue
+</span><span>
+</span><span>        add(vc1, size: CGSize(width: UIScreen.main.bounds.width, height: </span><span style="color:#d08770;">500</span><span>))
+</span><span>        add(vc2, size: CGSize(width: UIScreen.main.bounds.width, height: </span><span style="color:#d08770;">500</span><span>))
+</span><span>        add(vc3, size: CGSize(width: UIScreen.main.bounds.width, height: </span><span style="color:#d08770;">500</span><span>))
+</span><span>        
+</span><span>    }
+</span><span>}
+</span></code></pre>
 
     </div>
 

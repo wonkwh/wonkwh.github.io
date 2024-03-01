@@ -96,59 +96,59 @@
 <ul>
 <li>대부분 network는 다음메소드에서 발생</li>
 </ul>
-<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">  private func requestPrice()  {
-    let bitcoin = Coinbase.bitcoin.path
-    
-    &#x2F;&#x2F; 1. Make URL request
-    guard let url = URL(string: bitcoin) else { return }
-    var request = URLRequest(url: url)
-    request.cachePolicy = .reloadIgnoringCacheData
-    
-    &#x2F;&#x2F; 2. Make networking request
-    let task = URLSession.shared.dataTask(with: request) { data, _, error in
-      
-      &#x2F;&#x2F; 3. Check for errors
-      if let error = error {
-        print(&quot;Error received requesting Bitcoin price: \(error.localizedDescription)&quot;)
-        return
-      }
-      
-      &#x2F;&#x2F; 4. Parse the returned information
-      let decoder = JSONDecoder()
-
-      guard let data = data,
-            let response = try? decoder.decode(PriceResponse.self,
-                                               from: data) else { return }
-      
-      print(&quot;Price returned: \(response.data.amount)&quot;)
-      
-      &#x2F;&#x2F; 5. Update the UI with the parsed PriceResponse
-      DispatchQueue.main.async { [weak self] in
-        self?.updateLabel(price: response.data)
-      }
-    }
-</code></pre>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span>  </span><span style="color:#b48ead;">private func </span><span>requestPrice()  {
+</span><span>    </span><span style="color:#b48ead;">let</span><span> bitcoin = Coinbase.bitcoin.path
+</span><span>    
+</span><span>    </span><span style="color:#65737e;">// 1. Make URL request
+</span><span>    </span><span style="color:#b48ead;">guard let</span><span> url = URL(string: bitcoin) </span><span style="color:#b48ead;">else</span><span> { </span><span style="color:#b48ead;">return </span><span>}
+</span><span>    </span><span style="color:#b48ead;">var</span><span> request = URLRequest(url: url)
+</span><span>    request.cachePolicy = .reloadIgnoringCacheData
+</span><span>    
+</span><span>    </span><span style="color:#65737e;">// 2. Make networking request
+</span><span>    </span><span style="color:#b48ead;">let</span><span> task = URLSession.shared.dataTask(with: request) { data, _, error </span><span style="color:#b48ead;">in
+</span><span>      
+</span><span>      </span><span style="color:#65737e;">// 3. Check for errors
+</span><span>      </span><span style="color:#b48ead;">if let</span><span> error = error {
+</span><span>        print(</span><span style="color:#a3be8c;">&quot;Error received requesting Bitcoin price: </span><span>\(error.localizedDescription)</span><span style="color:#a3be8c;">&quot;</span><span>)
+</span><span>        </span><span style="color:#b48ead;">return
+</span><span>      }
+</span><span>      
+</span><span>      </span><span style="color:#65737e;">// 4. Parse the returned information
+</span><span>      </span><span style="color:#b48ead;">let</span><span> decoder = JSONDecoder()
+</span><span>
+</span><span>      </span><span style="color:#b48ead;">guard let</span><span> data = data,
+</span><span>            </span><span style="color:#b48ead;">let</span><span> response = </span><span style="color:#b48ead;">try</span><span>? decoder.decode(PriceResponse.</span><span style="color:#b48ead;">self</span><span>,
+</span><span>                                               from: data) </span><span style="color:#b48ead;">else</span><span> { </span><span style="color:#b48ead;">return</span><span> }
+</span><span>      
+</span><span>      print(</span><span style="color:#a3be8c;">&quot;Price returned: </span><span>\(response.data.amount)</span><span style="color:#a3be8c;">&quot;</span><span>)
+</span><span>      
+</span><span>      </span><span style="color:#65737e;">// 5. Update the UI with the parsed PriceResponse
+</span><span>      DispatchQueue.main.async { [</span><span style="color:#b48ead;">weak self</span><span>] </span><span style="color:#b48ead;">in
+</span><span>        </span><span style="color:#b48ead;">self</span><span>?.updateLabel(price: response.data)
+</span><span>      }
+</span><span>    }
+</span></code></pre>
 <ul>
 <li>json model 은 다음과 같다.</li>
 </ul>
-<pre data-lang="json" class="language-json "><code class="language-json" data-lang="json">{
-  &quot;data&quot;: {
-    &quot;base&quot;: &quot;BTC&quot;,
-    &quot;currency&quot;: &quot;USD&quot;,
-    &quot;amount&quot;: &quot;15840.01&quot;
-  }
-}
-</code></pre>
+<pre data-lang="json" style="background-color:#2b303b;color:#c0c5ce;" class="language-json "><code class="language-json" data-lang="json"><span>{
+</span><span>  &quot;</span><span style="color:#a3be8c;">data</span><span>&quot;: {
+</span><span>    &quot;</span><span style="color:#a3be8c;">base</span><span>&quot;: &quot;</span><span style="color:#a3be8c;">BTC</span><span>&quot;,
+</span><span>    &quot;</span><span style="color:#a3be8c;">currency</span><span>&quot;: &quot;</span><span style="color:#a3be8c;">USD</span><span>&quot;,
+</span><span>    &quot;</span><span style="color:#a3be8c;">amount</span><span>&quot;: &quot;</span><span style="color:#a3be8c;">15840.01</span><span>&quot;
+</span><span>  }
+</span><span>}
+</span></code></pre>
 <h3 id="formatting">Formatting</h3>
-<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">private func updateLabel(price: Price) {
-  guard let dollars = price.components().dollars,
-        let cents = price.components().cents,
-        let dollarAmount = standardFormatter.number(from: dollars) else { return }
-  
-  primary.text = dollarsDisplayFormatter.string(from: dollarAmount)
-  partial.text = &quot;.\(cents)&quot;
-}
-</code></pre>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#b48ead;">private func </span><span>updateLabel(price: Price) {
+</span><span>  </span><span style="color:#b48ead;">guard let</span><span> dollars = price.components().dollars,
+</span><span>        </span><span style="color:#b48ead;">let</span><span> cents = price.components().cents,
+</span><span>        </span><span style="color:#b48ead;">let</span><span> dollarAmount = standardFormatter.number(from: dollars) </span><span style="color:#b48ead;">else</span><span> { </span><span style="color:#b48ead;">return </span><span>}
+</span><span>  
+</span><span>  primary.text = dollarsDisplayFormatter.string(from: dollarAmount)
+</span><span>  partial.text = </span><span style="color:#a3be8c;">&quot;.</span><span>\(cents)</span><span style="color:#a3be8c;">&quot;
+</span><span>}
+</span></code></pre>
 <h2 id="extracting-dependencies">Extracting Dependencies</h2>
 <h3 id="extracting-networking-logic">Extracting Networking Logic</h3>
 <ul>
@@ -160,154 +160,154 @@
 </ul>
 </li>
 </ul>
-<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">import Foundation
-
-enum CoinBaseError: Swift.Error {
-  case networkFailure(Swift.Error)
-  case invalidUrl
-  case invalidData
-}
-
-public extension URLSession {
-  func dataTask(
-    with url: URLRequest,
-    handler: @escaping (Result&lt;Data, Swift.Error&gt;) -&gt; Void
-  ) -&gt; URLSessionDataTask {
-    dataTask(with: url) { data, _, error in
-      if let error = error {
-        handler(.failure(error))
-      } else {
-        handler(.success(data ?? Data()))
-      }
-    }
-  }
-}
-
-protocol Networking {
-  typealias CompletionHandler = (Result&lt;Data, CoinBaseError&gt;) -&gt; Void
-  func request(from: Endpoint, completion: @escaping CompletionHandler)
-}
-
-struct HTTPNetworking: Networking {
-  func request(from: Endpoint, completion: @escaping CompletionHandler) {
-    guard let url = URL(string: from.path) else { return }
-    let request = createRequest(from: url)
-    let task = createDataTask(from: request, completion: completion)
-    task.resume()
-  }
-
-  private func createRequest(from url: URL) -&gt; URLRequest {
-    var request = URLRequest(url: url)
-    request.cachePolicy = .reloadIgnoringCacheData
-    return request
-  }
-
-  private func createDataTask(
-    from request: URLRequest,
-    completion: @escaping CompletionHandler
-  ) -&gt; URLSessionDataTask {
-    return URLSession.shared.dataTask(with: request) { result in
-      switch result {
-      case .success(let data):
-        completion(.success(data))
-      case .failure(let error):
-        completion(.failure(.networkFailure(error)))
-      }
-    }
-  }
-}
-
-</code></pre>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#b48ead;">import </span><span>Foundation
+</span><span>
+</span><span style="color:#b48ead;">enum</span><span> CoinBaseError: Swift.Error {
+</span><span>  </span><span style="color:#b48ead;">case</span><span> networkFailure(Swift.Error)
+</span><span>  </span><span style="color:#b48ead;">case</span><span> invalidUrl
+</span><span>  </span><span style="color:#b48ead;">case</span><span> invalidData
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">public extension</span><span> URLSession {
+</span><span>  </span><span style="color:#b48ead;">func </span><span>dataTask(
+</span><span>    with url: URLRequest,
+</span><span>    handler: </span><span style="color:#b48ead;">@escaping</span><span> (Result&lt;Data, Swift.Error&gt;) -&gt; Void
+</span><span>  ) -&gt; URLSessionDataTask {
+</span><span>    dataTask(with: url) { data, _, error </span><span style="color:#b48ead;">in
+</span><span>      </span><span style="color:#b48ead;">if let</span><span> error = error {
+</span><span>        handler(.failure(error))
+</span><span>      } </span><span style="color:#b48ead;">else</span><span> {
+</span><span>        handler(.success(data ?? Data()))
+</span><span>      }
+</span><span>    }
+</span><span>  }
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">protocol</span><span> Networking {
+</span><span>  </span><span style="color:#b48ead;">typealias</span><span> CompletionHandler = (Result&lt;Data, CoinBaseError&gt;) -&gt; Void
+</span><span>  </span><span style="color:#b48ead;">func </span><span>request(from: Endpoint, completion: </span><span style="color:#b48ead;">@escaping</span><span> CompletionHandler)
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">struct</span><span> HTTPNetworking: Networking {
+</span><span>  </span><span style="color:#b48ead;">func </span><span>request(from: Endpoint, completion: </span><span style="color:#b48ead;">@escaping</span><span> CompletionHandler) {
+</span><span>    </span><span style="color:#b48ead;">guard let</span><span> url = URL(string: from.path) </span><span style="color:#b48ead;">else</span><span> { </span><span style="color:#b48ead;">return </span><span>}
+</span><span>    </span><span style="color:#b48ead;">let</span><span> request = createRequest(from: url)
+</span><span>    </span><span style="color:#b48ead;">let</span><span> task = createDataTask(from: request, completion: completion)
+</span><span>    task.resume()
+</span><span>  }
+</span><span>
+</span><span>  </span><span style="color:#b48ead;">private func </span><span>createRequest(from url: URL) -&gt; URLRequest {
+</span><span>    </span><span style="color:#b48ead;">var</span><span> request = URLRequest(url: url)
+</span><span>    request.cachePolicy = .reloadIgnoringCacheData
+</span><span>    </span><span style="color:#b48ead;">return</span><span> request
+</span><span>  }
+</span><span>
+</span><span>  </span><span style="color:#b48ead;">private func </span><span>createDataTask(
+</span><span>    from request: URLRequest,
+</span><span>    completion: </span><span style="color:#b48ead;">@escaping</span><span> CompletionHandler
+</span><span>  ) -&gt; URLSessionDataTask {
+</span><span>    </span><span style="color:#b48ead;">return</span><span> URLSession.shared.dataTask(with: request) { result </span><span style="color:#b48ead;">in
+</span><span>      </span><span style="color:#b48ead;">switch</span><span> result {
+</span><span>      </span><span style="color:#b48ead;">case </span><span>.success(</span><span style="color:#b48ead;">let</span><span> data):
+</span><span>        completion(.success(data))
+</span><span>      </span><span style="color:#b48ead;">case </span><span>.failure(</span><span style="color:#b48ead;">let</span><span> error):
+</span><span>        completion(.failure(.networkFailure(error)))
+</span><span>      }
+</span><span>    }
+</span><span>  }
+</span><span>}
+</span><span>
+</span></code></pre>
 <ul>
 <li><code>BitcoinViewController.swift</code> 의 requestPrice() 을 다음과 같이 수정</li>
 </ul>
-<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">
-  let networking = HTTPNetworking()
-  ...
-  
-  private func requestPrice()  {
-    networking.request(from: Coinbase.bitcoin) { result in
-      switch result {
-      case .success(let data):
-        &#x2F;&#x2F; 4. Parse the returned information
-        let decoder = JSONDecoder()
-        guard let response = try? decoder.decode(PriceResponse.self, from: data) else { return }
-        print(&quot;Price returned: \(response.data.amount)&quot;)
-
-        &#x2F;&#x2F; 5. Update the UI with the parsed PriceResponse
-        DispatchQueue.main.async { [weak self] in
-          self?.updateLabel(price: response.data)
-        }
-      case .failure(let error):
-        debugPrint(error.localizedDescription)
-      }
-    }
-  }
-</code></pre>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span>
+</span><span>  </span><span style="color:#b48ead;">let</span><span> networking = HTTPNetworking()
+</span><span>  ...
+</span><span>  
+</span><span>  </span><span style="color:#b48ead;">private func </span><span>requestPrice()  {
+</span><span>    networking.request(from: Coinbase.bitcoin) { result </span><span style="color:#b48ead;">in
+</span><span>      </span><span style="color:#b48ead;">switch</span><span> result {
+</span><span>      </span><span style="color:#b48ead;">case </span><span>.success(</span><span style="color:#b48ead;">let</span><span> data):
+</span><span>        </span><span style="color:#65737e;">// 4. Parse the returned information
+</span><span>        </span><span style="color:#b48ead;">let</span><span> decoder = JSONDecoder()
+</span><span>        </span><span style="color:#b48ead;">guard let</span><span> response = </span><span style="color:#b48ead;">try</span><span>? decoder.decode(PriceResponse.</span><span style="color:#b48ead;">self</span><span>, from: data) </span><span style="color:#b48ead;">else</span><span> { </span><span style="color:#b48ead;">return </span><span>}
+</span><span>        print(</span><span style="color:#a3be8c;">&quot;Price returned: </span><span>\(response.data.amount)</span><span style="color:#a3be8c;">&quot;</span><span>)
+</span><span>
+</span><span>        </span><span style="color:#65737e;">// 5. Update the UI with the parsed PriceResponse
+</span><span>        DispatchQueue.main.async { [</span><span style="color:#b48ead;">weak self</span><span>] </span><span style="color:#b48ead;">in
+</span><span>          </span><span style="color:#b48ead;">self</span><span>?.updateLabel(price: response.data)
+</span><span>        }
+</span><span>      </span><span style="color:#b48ead;">case </span><span>.failure(</span><span style="color:#b48ead;">let</span><span> error):
+</span><span>        debugPrint(error.localizedDescription)
+</span><span>      }
+</span><span>    }
+</span><span>  }
+</span></code></pre>
 <h3 id="extracting-parsing-logic">Extracting Parsing Logic</h3>
 <ul>
 <li><code>BitcoinPriceFetcher.swift</code> 파일을 생성</li>
 </ul>
-<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">
-import Foundation
-
-protocol PriceFetcher {
-  func fetch(response: @escaping (PriceResponse?) -&gt; Void)
-}
-
-struct BitcoinPriceFetcher: PriceFetcher {
-  let networking: Networking
-
-  &#x2F;&#x2F; 1. Initialize the fetcher with a networking object
-  init(networking: Networking) {
-    self.networking = networking
-  }
-
-  &#x2F;&#x2F; 2. Fetch data, returning a PriceResponse object if successful
-  func fetch(response: @escaping (PriceResponse?) -&gt; Void) {
-    networking.request(from: Coinbase.bitcoin) { result in
-      switch result {
-      case .success(let data):
-        &#x2F;&#x2F; Parse data into a model object.
-        let decoded = self.decodeJSON(type: PriceResponse.self, from: data)
-        if let decoded = decoded {
-          print(&quot;Price returned: \(decoded.data.amount)&quot;)
-        }
-        response(decoded)
-
-      case .failure(let error):
-        debugPrint(error.localizedDescription)
-        response(nil)
-      }
-    }
-  }
-
-  &#x2F;&#x2F; 3. Decode JSON into an object of type &#x27;T&#x27;
-  private func decodeJSON&lt;T: Decodable&gt;(type: T.Type, from: Data?) -&gt; T? {
-    let decoder = JSONDecoder()
-    guard let data = from,
-          let response = try? decoder.decode(type.self, from: data) else { return nil }
-
-    return response
-  }
-}
-
-</code></pre>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span>
+</span><span style="color:#b48ead;">import </span><span>Foundation
+</span><span>
+</span><span style="color:#b48ead;">protocol</span><span> PriceFetcher {
+</span><span>  </span><span style="color:#b48ead;">func </span><span>fetch(response: </span><span style="color:#b48ead;">@escaping</span><span> (PriceResponse?) -&gt; Void)
+</span><span>}
+</span><span>
+</span><span>struct BitcoinPriceFetcher: PriceFetcher {
+</span><span>  </span><span style="color:#b48ead;">let</span><span> networking: Networking
+</span><span>
+</span><span>  </span><span style="color:#65737e;">// 1. Initialize the fetcher with a networking object
+</span><span>  </span><span style="color:#b48ead;">init</span><span>(networking: Networking) {
+</span><span>    </span><span style="color:#b48ead;">self</span><span>.networking = networking
+</span><span>  }
+</span><span>
+</span><span>  </span><span style="color:#65737e;">// 2. Fetch data, returning a PriceResponse object if successful
+</span><span>  </span><span style="color:#b48ead;">func </span><span>fetch(response: </span><span style="color:#b48ead;">@escaping</span><span> (PriceResponse?) -&gt; Void) {
+</span><span>    networking.request(from: Coinbase.bitcoin) { result </span><span style="color:#b48ead;">in
+</span><span>      </span><span style="color:#b48ead;">switch</span><span> result {
+</span><span>      </span><span style="color:#b48ead;">case </span><span>.success(</span><span style="color:#b48ead;">let</span><span> data):
+</span><span>        </span><span style="color:#65737e;">// Parse data into a model object.
+</span><span>        </span><span style="color:#b48ead;">let</span><span> decoded = </span><span style="color:#b48ead;">self</span><span>.decodeJSON(type: PriceResponse.</span><span style="color:#b48ead;">self</span><span>, from: data)
+</span><span>        </span><span style="color:#b48ead;">if let</span><span> decoded = decoded {
+</span><span>          print(</span><span style="color:#a3be8c;">&quot;Price returned: </span><span>\(decoded.data.amount)</span><span style="color:#a3be8c;">&quot;</span><span>)
+</span><span>        }
+</span><span>        response(decoded)
+</span><span>
+</span><span>      </span><span style="color:#b48ead;">case </span><span>.failure(</span><span style="color:#b48ead;">let</span><span> error):
+</span><span>        debugPrint(error.localizedDescription)
+</span><span>        response(</span><span style="color:#d08770;">nil</span><span>)
+</span><span>      }
+</span><span>    }
+</span><span>  }
+</span><span>
+</span><span>  </span><span style="color:#65737e;">// 3. Decode JSON into an object of type &#39;T&#39;
+</span><span>  </span><span style="color:#b48ead;">private func </span><span>decodeJSON&lt;T: Decodable&gt;(type: T.</span><span style="color:#b48ead;">Type</span><span>, from: Data?) -&gt; T? {
+</span><span>    </span><span style="color:#b48ead;">let</span><span> decoder = JSONDecoder()
+</span><span>    </span><span style="color:#b48ead;">guard let</span><span> data = from,
+</span><span>          </span><span style="color:#b48ead;">let</span><span> response = </span><span style="color:#b48ead;">try</span><span>? decoder.decode(type.</span><span style="color:#b48ead;">self</span><span>, from: data) </span><span style="color:#b48ead;">else</span><span> { </span><span style="color:#b48ead;">return </span><span style="color:#d08770;">nil </span><span>}
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">return</span><span> response
+</span><span>  }
+</span><span>}
+</span><span>
+</span></code></pre>
 <ul>
 <li><code>BitcoinViewController.swift</code> 를 다음과 같이 수정</li>
 </ul>
-<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">  let fetcher = BitcoinPriceFetcher(networking: HTTPNetworking())
-  ...
-   private func requestPrice() {
-    fetcher.fetch { response in
-      guard let response = response else { return }
-
-      DispatchQueue.main.async { [weak self] in
-        self?.updateLabel(price: response.data)
-      }
-    }
-  }
-</code></pre>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span>  </span><span style="color:#b48ead;">let</span><span> fetcher = BitcoinPriceFetcher(networking: HTTPNetworking())
+</span><span>  ...
+</span><span>   </span><span style="color:#b48ead;">private func </span><span>requestPrice() {
+</span><span>    fetcher.fetch { response </span><span style="color:#b48ead;">in
+</span><span>      </span><span style="color:#b48ead;">guard let</span><span> response = response </span><span style="color:#b48ead;">else</span><span> { </span><span style="color:#b48ead;">return </span><span>}
+</span><span>
+</span><span>      DispatchQueue.main.async { [</span><span style="color:#b48ead;">weak self</span><span>] </span><span style="color:#b48ead;">in
+</span><span>        </span><span style="color:#b48ead;">self</span><span>?.updateLabel(price: response.data)
+</span><span>      }
+</span><span>    }
+</span><span>  }
+</span></code></pre>
 <ul>
 <li><code>PriveFetcher</code> protocol은  HTTP 요청이 아니더라도 모든 데이터소스에서 발생가능</li>
 <li>이는 UnitTest의 중요한 특징이 될 것</li>

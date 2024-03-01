@@ -51,125 +51,125 @@
 <p>–	swift pacakage로 install
 –	<code>http://github.com/pointfreeco/swift-composable-architecture</code> 추가 
 –	state, action, environment 추가 후 Reducer 추가</p>
-<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">import ComposableArchitecture
-struct AppState {
-        
-}
-enum AppAction {
-    
-}
-struct AppEnvironment {
-    
-}
-let appReducer = Reducer&lt;AppState, AppAction, AppEnvironment&gt; { state, action, _ in
-    switch action {
-    }
-}
-
-–	ContentView에 Store instance 추가 
-struct ContentView: View {
-    let store: Store&lt;AppState, AppAction&gt;
-    
-    var body: some View {
-        NavigationView {
-            List {
-                Text(&quot;Hello, World!&quot;)
-            }.navigationBarTitle(&quot;Todos&quot;)
-        }
-    }
-}
-</code></pre>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#b48ead;">import </span><span>ComposableArchitecture
+</span><span style="color:#b48ead;">struct</span><span> AppState {
+</span><span>        
+</span><span>}
+</span><span style="color:#b48ead;">enum</span><span> AppAction {
+</span><span>    
+</span><span>}
+</span><span style="color:#b48ead;">struct</span><span> AppEnvironment {
+</span><span>    
+</span><span>}
+</span><span style="color:#b48ead;">let</span><span> appReducer = Reducer&lt;AppState, AppAction, AppEnvironment&gt; { state, action, _ </span><span style="color:#b48ead;">in
+</span><span>    </span><span style="color:#b48ead;">switch</span><span> action {
+</span><span>    }
+</span><span>}
+</span><span>
+</span><span>–	ContentView에 Store instance 추가 
+</span><span style="color:#b48ead;">struct</span><span> ContentView: View {
+</span><span>    </span><span style="color:#b48ead;">let</span><span> store: Store&lt;AppState, AppAction&gt;
+</span><span>    
+</span><span>    </span><span style="color:#b48ead;">var</span><span> body: some View {
+</span><span>        NavigationView {
+</span><span>            List {
+</span><span>                Text(</span><span style="color:#a3be8c;">&quot;Hello, World!&quot;</span><span>)
+</span><span>            }.navigationBarTitle(</span><span style="color:#a3be8c;">&quot;Todos&quot;</span><span>)
+</span><span>        }
+</span><span>    }
+</span><span>}
+</span></code></pre>
 <p>–	ContentView_preview 와 sceneDelegate ContentView Constructor 변경</p>
-<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView(store: Store(
-                initialState: AppState(),
-                reducer: appReducer,
-                environment: AppEnvironment()
-            )
-        )
-    }
-}
-</code></pre>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#b48ead;">struct</span><span> ContentView_Previews: PreviewProvider {
+</span><span>    </span><span style="color:#b48ead;">static var</span><span> previews: some View {
+</span><span>        ContentView(store: Store(
+</span><span>                initialState: AppState(),
+</span><span>                reducer: appReducer,
+</span><span>                environment: AppEnvironment()
+</span><span>            )
+</span><span>        )
+</span><span>    }
+</span><span>}
+</span></code></pre>
 <h3 id="viewstore-cuga">ViewStore 추가</h3>
 <p>–	state에 domain data model을 추가 </p>
-<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">struct ToDo: Equatable, Identifiable {
-    var description = &quot;&quot;
-    let id: UUID
-    var isComplete = false
-}
-struct AppState: Equatable {
-    var todos: [ToDo]
-}
-</code></pre>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#b48ead;">struct</span><span> ToDo: Equatable, Identifiable {
+</span><span>    </span><span style="color:#b48ead;">var</span><span> description = </span><span style="color:#a3be8c;">&quot;&quot;
+</span><span>    </span><span style="color:#b48ead;">let</span><span> id: UUID
+</span><span>    </span><span style="color:#b48ead;">var</span><span> isComplete = </span><span style="color:#b48ead;">false
+</span><span>}
+</span><span style="color:#b48ead;">struct</span><span> AppState: Equatable {
+</span><span>    </span><span style="color:#b48ead;">var</span><span> todos: [ToDo]
+</span><span>}
+</span></code></pre>
 <p>–	view 에 WithViewStore 을 추가 </p>
-<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">    NavigationView {
-        WithViewStore(self.store) { viewStore in
-            List {
-                ForEach(viewStore.todos) { todo in
-                    Text(todo.description)
-                }
-            }.navigationBarTitle(&quot;Todos&quot;)
-        }
-    }
-</code></pre>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span>    NavigationView {
+</span><span>        WithViewStore(</span><span style="color:#b48ead;">self</span><span>.store) { viewStore </span><span style="color:#b48ead;">in
+</span><span>            List {
+</span><span>                ForEach(viewStore.todos) { todo </span><span style="color:#b48ead;">in
+</span><span>                    Text(todo.description)
+</span><span>                }
+</span><span>            }.navigationBarTitle(</span><span style="color:#a3be8c;">&quot;Todos&quot;</span><span>)
+</span><span>        }
+</span><span>    }
+</span></code></pre>
 <p>–	preview 에 dommy data를 AppState에  추가 </p>
-<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView(
-            store: Store(
-                initialState: AppState(todos: [
-                    ToDo(description: &quot;PointFree&quot;, id: UUID(), isComplete: false),
-                    ToDo(description: &quot;Udemy&quot;, id: UUID(), isComplete: false),
-                    ToDo(description: &quot;MoimApp&quot;, id: UUID(), isComplete: false),
-                ]),
-                reducer: appReducer,
-                environment: AppEnvironment()
-            )
-        )
-    }
-}
-</code></pre>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#b48ead;">struct</span><span> ContentView_Previews: PreviewProvider {
+</span><span>    </span><span style="color:#b48ead;">static var</span><span> previews: some View {
+</span><span>        ContentView(
+</span><span>            store: Store(
+</span><span>                initialState: AppState(todos: [
+</span><span>                    ToDo(description: </span><span style="color:#a3be8c;">&quot;PointFree&quot;</span><span>, id: UUID(), isComplete: </span><span style="color:#b48ead;">false</span><span>),
+</span><span>                    ToDo(description: </span><span style="color:#a3be8c;">&quot;Udemy&quot;</span><span>, id: UUID(), isComplete: </span><span style="color:#b48ead;">false</span><span>),
+</span><span>                    ToDo(description: </span><span style="color:#a3be8c;">&quot;MoimApp&quot;</span><span>, id: UUID(), isComplete: </span><span style="color:#b48ead;">false</span><span>),
+</span><span>                ]),
+</span><span>                reducer: appReducer,
+</span><span>                environment: AppEnvironment()
+</span><span>            )
+</span><span>        )
+</span><span>    }
+</span><span>}
+</span></code></pre>
 <h3 id="view-ui-byeongyeong">View UI 변경</h3>
 <p>–	ListView에 체크마크 버튼을 추가하고 isComplete 속성에 따라 foregroundColor를 추가 
 –	preview의 속성을 변경하면서 제대로 되는지 확인 할수 있다. </p>
-<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">    List {
-        ForEach(viewStore.todos) { todo in
-            HStack {
-                Button(action: {}) {
-                    Image(systemName: todo.isComplete ? &quot;checkmark.square&quot;: &quot;square&quot;)
-                }
-                TextField(&quot;Untitled todo&quot;, text: .constant(todo.description))
-            }.foregroundColor(todo.isComplete ? .gray : nil)
-        }
-    }.navigationBarTitle(&quot;Todos&quot;)
-</code></pre>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span>    List {
+</span><span>        ForEach(viewStore.todos) { todo </span><span style="color:#b48ead;">in
+</span><span>            HStack {
+</span><span>                Button(action: {}) {
+</span><span>                    Image(systemName: todo.isComplete ? </span><span style="color:#a3be8c;">&quot;checkmark.square&quot;</span><span>: </span><span style="color:#a3be8c;">&quot;square&quot;</span><span>)
+</span><span>                }
+</span><span>                TextField(</span><span style="color:#a3be8c;">&quot;Untitled todo&quot;</span><span>, text: .constant(todo.description))
+</span><span>            }.foregroundColor(todo.isComplete ? .gray : </span><span style="color:#d08770;">nil</span><span>)
+</span><span>        }
+</span><span>    }.navigationBarTitle(</span><span style="color:#a3be8c;">&quot;Todos&quot;</span><span>)
+</span></code></pre>
 <h3 id="action-cuga">Action 추가</h3>
 <ul>
 <li>UI action을 <code>AppAction</code> enum 에 추가한다. </li>
 </ul>
-<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">    enum AppAction {
-        case todoCheckboxTapped(index: Int)
-        case todoTextFieldChanged(index: Int, text: String)
-    }
-
-</code></pre>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span>    </span><span style="color:#b48ead;">enum</span><span> AppAction {
+</span><span>        </span><span style="color:#b48ead;">case</span><span> todoCheckboxTapped(index: Int)
+</span><span>        </span><span style="color:#b48ead;">case</span><span> todoTextFieldChanged(index: Int, text: String)
+</span><span>    }
+</span><span>
+</span></code></pre>
 <ul>
 <li><code>Reducer</code> 에 해당 Action 구현</li>
 </ul>
-<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">let appReducer = Reducer&lt;AppState, AppAction, AppEnvironment&gt; { state, action, _ in
-    switch action {
-        
-    case .todoCheckboxTapped(index: let index):
-        state.todos[index].isComplete.toggle()
-        return .none
-    case .todoTextFieldChanged(index: let index, text: let text):
-        state.todos[index].description = text
-        return .none
-    }
-}
-
-</code></pre>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#b48ead;">let</span><span> appReducer = Reducer&lt;AppState, AppAction, AppEnvironment&gt; { state, action, _ </span><span style="color:#b48ead;">in
+</span><span>    </span><span style="color:#b48ead;">switch</span><span> action {
+</span><span>        
+</span><span>    </span><span style="color:#b48ead;">case </span><span>.todoCheckboxTapped(index: </span><span style="color:#b48ead;">let</span><span> index):
+</span><span>        state.todos[index].isComplete.toggle()
+</span><span>        </span><span style="color:#b48ead;">return </span><span>.</span><span style="color:#b48ead;">none
+</span><span>    </span><span style="color:#b48ead;">case </span><span>.todoTextFieldChanged(index: </span><span style="color:#b48ead;">let</span><span> index, text: </span><span style="color:#b48ead;">let</span><span> text):
+</span><span>        state.todos[index].description = text
+</span><span>        </span><span style="color:#b48ead;">return </span><span>.</span><span style="color:#b48ead;">none
+</span><span>    }
+</span><span>}
+</span><span>
+</span></code></pre>
 <ul>
 <li><code>ContentView</code>에 해당 Control Event에 Action send
 <ul>
@@ -179,72 +179,72 @@ struct AppState: Equatable {
 </ul>
 </li>
 </ul>
-<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">        ForEach(Array(viewStore.todos.enumerated()), id: \.element.id) { index, todo in
-            HStack {
-                Button(action: {
-                    viewStore.send(.todoCheckboxTapped(index: index))
-                }) {
-                    Image(systemName: todo.isComplete ? &quot;checkmark.square&quot;: &quot;square&quot;)
-                }.buttonStyle(PlainButtonStyle())
-
-                TextField(&quot;Untitled todo&quot;, text: viewStore.binding(
-                  get: { $0.todos[index].description },
-                  send: { .todoTextFieldChanged(index: index, text: $0) }
-                ))
-            }.foregroundColor(todo.isComplete ? .gray : nil)
-        }
-</code></pre>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span>        ForEach(Array(viewStore.todos.enumerated()), id: \.element.id) { index, todo </span><span style="color:#b48ead;">in
+</span><span>            HStack {
+</span><span>                Button(action: {
+</span><span>                    viewStore.send(.todoCheckboxTapped(index: index))
+</span><span>                }) {
+</span><span>                    Image(systemName: todo.isComplete ? </span><span style="color:#a3be8c;">&quot;checkmark.square&quot;</span><span>: </span><span style="color:#a3be8c;">&quot;square&quot;</span><span>)
+</span><span>                }.buttonStyle(PlainButtonStyle())
+</span><span>
+</span><span>                TextField(</span><span style="color:#a3be8c;">&quot;Untitled todo&quot;</span><span>, text: viewStore.binding(
+</span><span>                  </span><span style="color:#b48ead;">get</span><span>: { $</span><span style="color:#d08770;">0</span><span>.todos[index].description },
+</span><span>                  send: { .todoTextFieldChanged(index: index, text: $</span><span style="color:#d08770;">0</span><span>) }
+</span><span>                ))
+</span><span>            }.foregroundColor(todo.isComplete ? .gray : </span><span style="color:#d08770;">nil</span><span>)
+</span><span>        }
+</span></code></pre>
 <h3 id="debugging">Debugging</h3>
 <ul>
 <li><code>Reducer</code> 에 <code>debug()</code> 추가</li>
 </ul>
-<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">let appReducer = Reducer&lt;AppState, AppAction, Void&gt; { state, action, _ in
-  ...
-}
-.debug()
-</code></pre>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#b48ead;">let</span><span> appReducer = Reducer&lt;AppState, AppAction, Void&gt; { state, action, _ </span><span style="color:#b48ead;">in
+</span><span>  ...
+</span><span>}
+</span><span>.debug()
+</span></code></pre>
 <ul>
 <li>혹은 <code>SceneDelegate</code> , <code>ContentView_Previews</code>에 contentView instance에 reducer에 reducer paramter에 debug()를 추가 </li>
 </ul>
-<pre data-lang="swift" class="language-swift "><code class="language-swift" data-lang="swift">     let contentView = ContentView(store: Store(
-                initialState: AppState(todos: [
-                    ToDo(description: &quot;PointFree&quot;, id: UUID(), isComplete: true),
-                    ToDo(description: &quot;Udemy&quot;, id: UUID(), isComplete: false),
-                    ToDo(description: &quot;MoimApp&quot;, id: UUID(), isComplete: false),
-                ]),
-                reducer: appReducer.debug(),
-                environment: AppEnvironment()
-            )
-        )
-
-</code></pre>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span>     </span><span style="color:#b48ead;">let</span><span> contentView = ContentView(store: Store(
+</span><span>                initialState: AppState(todos: [
+</span><span>                    ToDo(description: </span><span style="color:#a3be8c;">&quot;PointFree&quot;</span><span>, id: UUID(), isComplete: </span><span style="color:#b48ead;">true</span><span>),
+</span><span>                    ToDo(description: </span><span style="color:#a3be8c;">&quot;Udemy&quot;</span><span>, id: UUID(), isComplete: </span><span style="color:#b48ead;">false</span><span>),
+</span><span>                    ToDo(description: </span><span style="color:#a3be8c;">&quot;MoimApp&quot;</span><span>, id: UUID(), isComplete: </span><span style="color:#b48ead;">false</span><span>),
+</span><span>                ]),
+</span><span>                reducer: appReducer.debug(),
+</span><span>                environment: AppEnvironment()
+</span><span>            )
+</span><span>        )
+</span><span>
+</span></code></pre>
 <ul>
 <li>결과는 다음과 같은 로그를 console에 뿌려준다. </li>
 </ul>
-<pre><code>AppAction.todoCheckboxTapped(
-    index: 1
-  )
-  AppState(
-    todos: [
-      ToDo(
-        description: &quot;PointFree&quot;,
-        id: 2CA87ACF-3868-4B1F-9D95-D25C03FB6B02,
-        isComplete: true
-      ),
-      ToDo(
-        description: &quot;Udemy&quot;,
-        id: EB6738F4-B644-40B1-9519-8C7050FB55B3,
-−       isComplete: false
-+       isComplete: true
-      ),
-      ToDo(
-        description: &quot;MoimApp&quot;,
-        id: 95E6E5BF-6FB1-430E-8444-B1B137369066,
-        isComplete: false
-      ),
-    ]
-  )
-</code></pre>
+<pre style="background-color:#2b303b;color:#c0c5ce;"><code><span>AppAction.todoCheckboxTapped(
+</span><span>    index: 1
+</span><span>  )
+</span><span>  AppState(
+</span><span>    todos: [
+</span><span>      ToDo(
+</span><span>        description: &quot;PointFree&quot;,
+</span><span>        id: 2CA87ACF-3868-4B1F-9D95-D25C03FB6B02,
+</span><span>        isComplete: true
+</span><span>      ),
+</span><span>      ToDo(
+</span><span>        description: &quot;Udemy&quot;,
+</span><span>        id: EB6738F4-B644-40B1-9519-8C7050FB55B3,
+</span><span>−       isComplete: false
+</span><span>+       isComplete: true
+</span><span>      ),
+</span><span>      ToDo(
+</span><span>        description: &quot;MoimApp&quot;,
+</span><span>        id: 95E6E5BF-6FB1-430E-8444-B1B137369066,
+</span><span>        isComplete: false
+</span><span>      ),
+</span><span>    ]
+</span><span>  )
+</span></code></pre>
 
     </div>
 
