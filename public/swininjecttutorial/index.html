@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+      <!-- Enable responsiveness on mobile devices-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+      <title></title>
+
+      
+
+      
+          <link rel="stylesheet" href="https://wonkwh.github.io/site.css">
+      
+
+      
+      
+    </head>
+
+    <body class="hack dark main container">
+        
+
+<article itemscope itemtype="http://schema.org/BlogPosting">
+    <header>
+        <h1 itemprop="headline">Swinject Tutorial for iOS</h1>
+        <span class="muted">
+    <svg style="margin-bottom:-3px" class="i-clock" viewBox="0 0 32 32"
+         width="16" height="16" fill="none" stroke="currentcolor"
+         stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
+        <circle cx="16" cy="16" r="14"/>
+        <path d="M16 8 L16 16 20 20"/>
+    </svg>
+    <span>5 minute read</span>
+    <svg style="margin-bottom: -3px" class="i-edit" viewBox="0 0 32 32"
+         width="16" height="16" fill="none" stroke="currentcolor"
+         stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
+        <path d="M30 7 L25 2 5 22 3 29 10 27 Z M21 6 L26 11 Z M5 22 L10 27 Z"/>
+    </svg>
+
+    Published: 2024-02-22
+</span>
+    </header>
+    <div itemprop="articleBody">
+      <ul>
+<li>원문: https://www.kodeco.com/17-swinject-tutorial-for-ios-getting-started</li>
+<li>이 튜토리얼에서는 Swift로 작성된 의존성 주입 프레임워크인 Swinject를 통해 의존성 주입(DI)의 개념에 대해 알아본다</li>
+</ul>
+<span id="continue-reading"></span>
+<ul>
+<li>비트코인의 현재 가격을 표시하는 <a href="https://github.com/wonkwh/BlogShowcase/tree/develop/BitcoinAdventurer">BitcoinAdventure</a> 라는 작은 iOS 애플리케이션을 개선하는 방식으로 진행</li>
+<li>튜토리얼을 진행하면서 앱을 리팩터링하고 그 과정에서 단위 테스트를 추가.</li>
+</ul>
+<h2 id="dependancy-injection">Dependancy Injection</h2>
+<ul>
+<li>종속성 주입 (Dependancy Injection) 은 코드 자체 대신 다른 객체에서 종속성을 제공하도록 코드를 구성하는 접근 방식..</li>
+<li>이렇게 코드를 정리하면 테스트 및 리팩토링할 수 있는 느슨하게 결합된(loosely-coupled) 구성 요소로 구성된 코드베이스가 생성.</li>
+<li>타사 라이브러리 없이도 의존성 주입을 구현할 수 있지만, 널리 사용되는 패턴인 의존성 주입(DI) 컨테이너 (DI Container) 를 사용 하는 Swinject 를 사용</li>
+<li>이러한 유형의 패턴은 코드 복잡성이 증가하더라도 종속성 해결을 단순하게 유지합니다.</li>
+</ul>
+<h2 id="jongsogseong-juibi-pilyohan-iyu">종속성 주입이 필요한 이유</h2>
+<ul>
+<li>의존성 주입은 제어의 역전(<strong>Inversion of Control</strong>) 이라는 원칙에 의존.</li>
+<li>주요 개념은 일부 종속성이 필요한 코드가 자체적으로 종속성을 생성하지 않고 이러한 종속성을 제공하는 제어를 더 높은 추상화로 위임</li>
+<li>이러한 종속성은 일반적으로 객체의 이니셜라이저로 전달</li>
+<li>이는 일반적인 계단식 객체 생성의 반대되는 접근 방식, 즉 반전된 접근 방식</li>
+<li>객체 A가 객체 B를 생성하고, 객체 C를 생성하는 식</li>
+<li>실용적인 관점에서 볼 때, 제어 반전의 주요 이점은 코드 변경이 격리된 상태로 유지</li>
+<li>의존성 주입 컨테이너는 객체에 대한 종속성을 제공하는 방법을 알고 있는 객체를 제공함으로써 제어의 역전 원칙을 지원</li>
+<li>컨테이너에 필요한 객체를 요청하기만 하면 됨</li>
+</ul>
+<h2 id="sijaghagi">시작하기</h2>
+<ul>
+<li>앱이 실행되면 화면에 비트코인의 현재 가격이 표시</li>
+<li>새로 고침을 탭하면 최신 데이터를 검색하기 위해 HTTP 요청</li>
+<li>코인베이스 API는 약 30초마다 새로운 비트코인 가격을 제공.</li>
+<li>현재 오류 가 발생
+<ul>
+<li><em>Swinject: Resolution failed. Expected registration:</em></li>
+</ul>
+</li>
+<li>모든 네트워킹 및 구문 분석 로직은 <code>BitcoinViewController.swift</code></li>
+<li>현재 코드 상태로는 뷰 레이어가 기본 로직 및 종속성과 매우 밀접하게 연결</li>
+<li>UIViewController 수명 주기와 독립적으로 로직을 테스트하기 어렵다</li>
+</ul>
+<h2 id="diwa-keopeulring">DI와 커플링</h2>
+<ul>
+<li><code>BitcoinViewController.swift</code> 의 코드는 크게 세 가지를 담당
+<ul>
+<li>Networking, Parsing, Formatting</li>
+</ul>
+</li>
+</ul>
+<h3 id="networking-and-parsing">Networking and Parsing</h3>
+<ul>
+<li>대부분 network는 다음메소드에서 발생</li>
+</ul>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span>  </span><span style="color:#b48ead;">private func </span><span>requestPrice()  {
+</span><span>    </span><span style="color:#b48ead;">let</span><span> bitcoin = Coinbase.bitcoin.path
+</span><span>    
+</span><span>    </span><span style="color:#65737e;">// 1. Make URL request
+</span><span>    </span><span style="color:#b48ead;">guard let</span><span> url = URL(string: bitcoin) </span><span style="color:#b48ead;">else</span><span> { </span><span style="color:#b48ead;">return </span><span>}
+</span><span>    </span><span style="color:#b48ead;">var</span><span> request = URLRequest(url: url)
+</span><span>    request.cachePolicy = .reloadIgnoringCacheData
+</span><span>    
+</span><span>    </span><span style="color:#65737e;">// 2. Make networking request
+</span><span>    </span><span style="color:#b48ead;">let</span><span> task = URLSession.shared.dataTask(with: request) { data, _, error </span><span style="color:#b48ead;">in
+</span><span>      
+</span><span>      </span><span style="color:#65737e;">// 3. Check for errors
+</span><span>      </span><span style="color:#b48ead;">if let</span><span> error = error {
+</span><span>        print(</span><span style="color:#a3be8c;">&quot;Error received requesting Bitcoin price: </span><span>\(error.localizedDescription)</span><span style="color:#a3be8c;">&quot;</span><span>)
+</span><span>        </span><span style="color:#b48ead;">return
+</span><span>      }
+</span><span>      
+</span><span>      </span><span style="color:#65737e;">// 4. Parse the returned information
+</span><span>      </span><span style="color:#b48ead;">let</span><span> decoder = JSONDecoder()
+</span><span>
+</span><span>      </span><span style="color:#b48ead;">guard let</span><span> data = data,
+</span><span>            </span><span style="color:#b48ead;">let</span><span> response = </span><span style="color:#b48ead;">try</span><span>? decoder.decode(PriceResponse.</span><span style="color:#b48ead;">self</span><span>,
+</span><span>                                               from: data) </span><span style="color:#b48ead;">else</span><span> { </span><span style="color:#b48ead;">return</span><span> }
+</span><span>      
+</span><span>      print(</span><span style="color:#a3be8c;">&quot;Price returned: </span><span>\(response.data.amount)</span><span style="color:#a3be8c;">&quot;</span><span>)
+</span><span>      
+</span><span>      </span><span style="color:#65737e;">// 5. Update the UI with the parsed PriceResponse
+</span><span>      DispatchQueue.main.async { [</span><span style="color:#b48ead;">weak self</span><span>] </span><span style="color:#b48ead;">in
+</span><span>        </span><span style="color:#b48ead;">self</span><span>?.updateLabel(price: response.data)
+</span><span>      }
+</span><span>    }
+</span></code></pre>
+<ul>
+<li>json model 은 다음과 같다.</li>
+</ul>
+<pre data-lang="json" style="background-color:#2b303b;color:#c0c5ce;" class="language-json "><code class="language-json" data-lang="json"><span>{
+</span><span>  &quot;</span><span style="color:#a3be8c;">data</span><span>&quot;: {
+</span><span>    &quot;</span><span style="color:#a3be8c;">base</span><span>&quot;: &quot;</span><span style="color:#a3be8c;">BTC</span><span>&quot;,
+</span><span>    &quot;</span><span style="color:#a3be8c;">currency</span><span>&quot;: &quot;</span><span style="color:#a3be8c;">USD</span><span>&quot;,
+</span><span>    &quot;</span><span style="color:#a3be8c;">amount</span><span>&quot;: &quot;</span><span style="color:#a3be8c;">15840.01</span><span>&quot;
+</span><span>  }
+</span><span>}
+</span></code></pre>
+<h3 id="formatting">Formatting</h3>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#b48ead;">private func </span><span>updateLabel(price: Price) {
+</span><span>  </span><span style="color:#b48ead;">guard let</span><span> dollars = price.components().dollars,
+</span><span>        </span><span style="color:#b48ead;">let</span><span> cents = price.components().cents,
+</span><span>        </span><span style="color:#b48ead;">let</span><span> dollarAmount = standardFormatter.number(from: dollars) </span><span style="color:#b48ead;">else</span><span> { </span><span style="color:#b48ead;">return </span><span>}
+</span><span>  
+</span><span>  primary.text = dollarsDisplayFormatter.string(from: dollarAmount)
+</span><span>  partial.text = </span><span style="color:#a3be8c;">&quot;.</span><span>\(cents)</span><span style="color:#a3be8c;">&quot;
+</span><span>}
+</span></code></pre>
+<h2 id="extracting-dependencies">Extracting Dependencies</h2>
+<h3 id="extracting-networking-logic">Extracting Networking Logic</h3>
+<ul>
+<li><code>Dependencies</code> folder 생성</li>
+<li><code>HttpNetworking.swift</code>
+<ul>
+<li>원문 article의 소스를 swift5, result type 사용하여 수정하였다.</li>
+<li>Result type 사용법은 <a href="https://www.swiftbysundell.com/basics/result/">The Result Type | Swift by Sundell</a> 요기를 참조하어 수정함.</li>
+</ul>
+</li>
+</ul>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#b48ead;">import </span><span>Foundation
+</span><span>
+</span><span style="color:#b48ead;">enum</span><span> CoinBaseError: Swift.Error {
+</span><span>  </span><span style="color:#b48ead;">case</span><span> networkFailure(Swift.Error)
+</span><span>  </span><span style="color:#b48ead;">case</span><span> invalidUrl
+</span><span>  </span><span style="color:#b48ead;">case</span><span> invalidData
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">public extension</span><span> URLSession {
+</span><span>  </span><span style="color:#b48ead;">func </span><span>dataTask(
+</span><span>    with url: URLRequest,
+</span><span>    handler: </span><span style="color:#b48ead;">@escaping</span><span> (Result&lt;Data, Swift.Error&gt;) -&gt; Void
+</span><span>  ) -&gt; URLSessionDataTask {
+</span><span>    dataTask(with: url) { data, _, error </span><span style="color:#b48ead;">in
+</span><span>      </span><span style="color:#b48ead;">if let</span><span> error = error {
+</span><span>        handler(.failure(error))
+</span><span>      } </span><span style="color:#b48ead;">else</span><span> {
+</span><span>        handler(.success(data ?? Data()))
+</span><span>      }
+</span><span>    }
+</span><span>  }
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">protocol</span><span> Networking {
+</span><span>  </span><span style="color:#b48ead;">typealias</span><span> CompletionHandler = (Result&lt;Data, CoinBaseError&gt;) -&gt; Void
+</span><span>  </span><span style="color:#b48ead;">func </span><span>request(from: Endpoint, completion: </span><span style="color:#b48ead;">@escaping</span><span> CompletionHandler)
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">struct</span><span> HTTPNetworking: Networking {
+</span><span>  </span><span style="color:#b48ead;">func </span><span>request(from: Endpoint, completion: </span><span style="color:#b48ead;">@escaping</span><span> CompletionHandler) {
+</span><span>    </span><span style="color:#b48ead;">guard let</span><span> url = URL(string: from.path) </span><span style="color:#b48ead;">else</span><span> { </span><span style="color:#b48ead;">return </span><span>}
+</span><span>    </span><span style="color:#b48ead;">let</span><span> request = createRequest(from: url)
+</span><span>    </span><span style="color:#b48ead;">let</span><span> task = createDataTask(from: request, completion: completion)
+</span><span>    task.resume()
+</span><span>  }
+</span><span>
+</span><span>  </span><span style="color:#b48ead;">private func </span><span>createRequest(from url: URL) -&gt; URLRequest {
+</span><span>    </span><span style="color:#b48ead;">var</span><span> request = URLRequest(url: url)
+</span><span>    request.cachePolicy = .reloadIgnoringCacheData
+</span><span>    </span><span style="color:#b48ead;">return</span><span> request
+</span><span>  }
+</span><span>
+</span><span>  </span><span style="color:#b48ead;">private func </span><span>createDataTask(
+</span><span>    from request: URLRequest,
+</span><span>    completion: </span><span style="color:#b48ead;">@escaping</span><span> CompletionHandler
+</span><span>  ) -&gt; URLSessionDataTask {
+</span><span>    </span><span style="color:#b48ead;">return</span><span> URLSession.shared.dataTask(with: request) { result </span><span style="color:#b48ead;">in
+</span><span>      </span><span style="color:#b48ead;">switch</span><span> result {
+</span><span>      </span><span style="color:#b48ead;">case </span><span>.success(</span><span style="color:#b48ead;">let</span><span> data):
+</span><span>        completion(.success(data))
+</span><span>      </span><span style="color:#b48ead;">case </span><span>.failure(</span><span style="color:#b48ead;">let</span><span> error):
+</span><span>        completion(.failure(.networkFailure(error)))
+</span><span>      }
+</span><span>    }
+</span><span>  }
+</span><span>}
+</span><span>
+</span></code></pre>
+<ul>
+<li><code>BitcoinViewController.swift</code> 의 requestPrice() 을 다음과 같이 수정</li>
+</ul>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span>
+</span><span>  </span><span style="color:#b48ead;">let</span><span> networking = HTTPNetworking()
+</span><span>  ...
+</span><span>  
+</span><span>  </span><span style="color:#b48ead;">private func </span><span>requestPrice()  {
+</span><span>    networking.request(from: Coinbase.bitcoin) { result </span><span style="color:#b48ead;">in
+</span><span>      </span><span style="color:#b48ead;">switch</span><span> result {
+</span><span>      </span><span style="color:#b48ead;">case </span><span>.success(</span><span style="color:#b48ead;">let</span><span> data):
+</span><span>        </span><span style="color:#65737e;">// 4. Parse the returned information
+</span><span>        </span><span style="color:#b48ead;">let</span><span> decoder = JSONDecoder()
+</span><span>        </span><span style="color:#b48ead;">guard let</span><span> response = </span><span style="color:#b48ead;">try</span><span>? decoder.decode(PriceResponse.</span><span style="color:#b48ead;">self</span><span>, from: data) </span><span style="color:#b48ead;">else</span><span> { </span><span style="color:#b48ead;">return </span><span>}
+</span><span>        print(</span><span style="color:#a3be8c;">&quot;Price returned: </span><span>\(response.data.amount)</span><span style="color:#a3be8c;">&quot;</span><span>)
+</span><span>
+</span><span>        </span><span style="color:#65737e;">// 5. Update the UI with the parsed PriceResponse
+</span><span>        DispatchQueue.main.async { [</span><span style="color:#b48ead;">weak self</span><span>] </span><span style="color:#b48ead;">in
+</span><span>          </span><span style="color:#b48ead;">self</span><span>?.updateLabel(price: response.data)
+</span><span>        }
+</span><span>      </span><span style="color:#b48ead;">case </span><span>.failure(</span><span style="color:#b48ead;">let</span><span> error):
+</span><span>        debugPrint(error.localizedDescription)
+</span><span>      }
+</span><span>    }
+</span><span>  }
+</span></code></pre>
+<h3 id="extracting-parsing-logic">Extracting Parsing Logic</h3>
+<ul>
+<li><code>BitcoinPriceFetcher.swift</code> 파일을 생성</li>
+</ul>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span>
+</span><span style="color:#b48ead;">import </span><span>Foundation
+</span><span>
+</span><span style="color:#b48ead;">protocol</span><span> PriceFetcher {
+</span><span>  </span><span style="color:#b48ead;">func </span><span>fetch(response: </span><span style="color:#b48ead;">@escaping</span><span> (PriceResponse?) -&gt; Void)
+</span><span>}
+</span><span>
+</span><span>struct BitcoinPriceFetcher: PriceFetcher {
+</span><span>  </span><span style="color:#b48ead;">let</span><span> networking: Networking
+</span><span>
+</span><span>  </span><span style="color:#65737e;">// 1. Initialize the fetcher with a networking object
+</span><span>  </span><span style="color:#b48ead;">init</span><span>(networking: Networking) {
+</span><span>    </span><span style="color:#b48ead;">self</span><span>.networking = networking
+</span><span>  }
+</span><span>
+</span><span>  </span><span style="color:#65737e;">// 2. Fetch data, returning a PriceResponse object if successful
+</span><span>  </span><span style="color:#b48ead;">func </span><span>fetch(response: </span><span style="color:#b48ead;">@escaping</span><span> (PriceResponse?) -&gt; Void) {
+</span><span>    networking.request(from: Coinbase.bitcoin) { result </span><span style="color:#b48ead;">in
+</span><span>      </span><span style="color:#b48ead;">switch</span><span> result {
+</span><span>      </span><span style="color:#b48ead;">case </span><span>.success(</span><span style="color:#b48ead;">let</span><span> data):
+</span><span>        </span><span style="color:#65737e;">// Parse data into a model object.
+</span><span>        </span><span style="color:#b48ead;">let</span><span> decoded = </span><span style="color:#b48ead;">self</span><span>.decodeJSON(type: PriceResponse.</span><span style="color:#b48ead;">self</span><span>, from: data)
+</span><span>        </span><span style="color:#b48ead;">if let</span><span> decoded = decoded {
+</span><span>          print(</span><span style="color:#a3be8c;">&quot;Price returned: </span><span>\(decoded.data.amount)</span><span style="color:#a3be8c;">&quot;</span><span>)
+</span><span>        }
+</span><span>        response(decoded)
+</span><span>
+</span><span>      </span><span style="color:#b48ead;">case </span><span>.failure(</span><span style="color:#b48ead;">let</span><span> error):
+</span><span>        debugPrint(error.localizedDescription)
+</span><span>        response(</span><span style="color:#d08770;">nil</span><span>)
+</span><span>      }
+</span><span>    }
+</span><span>  }
+</span><span>
+</span><span>  </span><span style="color:#65737e;">// 3. Decode JSON into an object of type &#39;T&#39;
+</span><span>  </span><span style="color:#b48ead;">private func </span><span>decodeJSON&lt;T: Decodable&gt;(type: T.</span><span style="color:#b48ead;">Type</span><span>, from: Data?) -&gt; T? {
+</span><span>    </span><span style="color:#b48ead;">let</span><span> decoder = JSONDecoder()
+</span><span>    </span><span style="color:#b48ead;">guard let</span><span> data = from,
+</span><span>          </span><span style="color:#b48ead;">let</span><span> response = </span><span style="color:#b48ead;">try</span><span>? decoder.decode(type.</span><span style="color:#b48ead;">self</span><span>, from: data) </span><span style="color:#b48ead;">else</span><span> { </span><span style="color:#b48ead;">return </span><span style="color:#d08770;">nil </span><span>}
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">return</span><span> response
+</span><span>  }
+</span><span>}
+</span><span>
+</span></code></pre>
+<ul>
+<li><code>BitcoinViewController.swift</code> 를 다음과 같이 수정</li>
+</ul>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span>  </span><span style="color:#b48ead;">let</span><span> fetcher = BitcoinPriceFetcher(networking: HTTPNetworking())
+</span><span>  ...
+</span><span>   </span><span style="color:#b48ead;">private func </span><span>requestPrice() {
+</span><span>    fetcher.fetch { response </span><span style="color:#b48ead;">in
+</span><span>      </span><span style="color:#b48ead;">guard let</span><span> response = response </span><span style="color:#b48ead;">else</span><span> { </span><span style="color:#b48ead;">return </span><span>}
+</span><span>
+</span><span>      DispatchQueue.main.async { [</span><span style="color:#b48ead;">weak self</span><span>] </span><span style="color:#b48ead;">in
+</span><span>        </span><span style="color:#b48ead;">self</span><span>?.updateLabel(price: response.data)
+</span><span>      }
+</span><span>    }
+</span><span>  }
+</span></code></pre>
+<ul>
+<li><code>PriveFetcher</code> protocol은  HTTP 요청이 아니더라도 모든 데이터소스에서 발생가능</li>
+<li>이는 UnitTest의 중요한 특징이 될 것</li>
+</ul>
+<blockquote>
+<p>part 1 끝
+to be continue</p>
+</blockquote>
+<hr />
+<ul>
+<li>tag: #swift, #uikit, #dependancy_injection, #protocol, #design_pattern</li>
+</ul>
+
+    </div>
+
+    
+        <footer>
+            <hr>
+            <p>
+                
+                    Published by Kwanghyun Won
+                
+                
+                
+                    and tagged
+                    
+                        <a href="https://wonkwh.github.io/tags/swift/">swift</a>
+                        
+                            
+                                
+                                    ,
+                                
+                            
+                        
+                    
+                        <a href="https://wonkwh.github.io/tags/uikit/">uikit</a>
+                        
+                            
+                                
+                                    ,
+                                
+                            
+                        
+                    
+                        <a href="https://wonkwh.github.io/tags/dependancy-injection/">dependancy_injection</a>
+                        
+                            
+                                
+                                    ,
+                                
+                            
+                        
+                    
+                        <a href="https://wonkwh.github.io/tags/protocol/">protocol</a>
+                        
+                            
+                                
+                                    and
+                                
+                            
+                        
+                    
+                        <a href="https://wonkwh.github.io/tags/design-pattern/">design_pattern</a>
+                        
+                            
+                        
+                    
+                
+            </p>
+        </footer>
+    
+</article>
+
+
+    </body>
+
+</html>

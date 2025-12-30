@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title> - swiftui</title>
+    <link rel="self" type="application/atom+xml" href="https://wonkwh.github.io/tags/swiftui/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://wonkwh.github.io"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2020-11-27T00:00:00+00:00</updated>
+    <id>https://wonkwh.github.io/tags/swiftui/atom.xml</id>
+    <entry xml:lang="en">
+        <title>SwiftUI Custom View Modifiers</title>
+        <published>2020-11-27T00:00:00+00:00</published>
+        <updated>2020-11-27T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://wonkwh.github.io/swiftuicustomviewmodifiers/"/>
+        <id>https://wonkwh.github.io/swiftuicustomviewmodifiers/</id>
+        
+        <summary type="html">&lt;p&gt;SwiftUI에서 ViewModifier 를 이용하여 Custom View를 만드는 방법&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>integrating swiftui with uikit</title>
+        <published>2020-09-14T00:00:00+00:00</published>
+        <updated>2020-09-14T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://wonkwh.github.io/integratingswiftuiwithuikit/"/>
+        <id>https://wonkwh.github.io/integratingswiftuiwithuikit/</id>
+        
+        <summary type="html">&lt;p&gt;UIKit 에서 SwiftUI View 를 호출하는 방법&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>swift composable architecture part_1</title>
+        <published>2020-04-14T00:00:00+00:00</published>
+        <updated>2020-04-14T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://wonkwh.github.io/swift-composable-architecture-part1/"/>
+        <id>https://wonkwh.github.io/swift-composable-architecture-part1/</id>
+        
+        <content type="html" xml:base="https://wonkwh.github.io/swift-composable-architecture-part1/">&lt;h1 id=&quot;swift-composable-archtecture-part1&quot;&gt;swift-composable-archtecture-part1&lt;&#x2F;h1&gt;
+&lt;p&gt;–	https:&#x2F;&#x2F;github.com&#x2F;pointfreeco&#x2F;swift-composable-architecture#installation
+–	https:&#x2F;&#x2F;www.pointfree.co&#x2F;collections&#x2F;composable-architecture&#x2F;a-tour-of-the-composable-architecture&#x2F;ep100-a-tour-of-the-composable-architecture-part-1&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;todo-example&quot;&gt;todo example&lt;&#x2F;h2&gt;
+&lt;h3 id=&quot;junbi-jageob&quot;&gt;준비 작업&lt;&#x2F;h3&gt;
+&lt;p&gt;–	swift pacakage로 install
+–	&lt;code&gt;http:&#x2F;&#x2F;github.com&#x2F;pointfreeco&#x2F;swift-composable-architecture&lt;&#x2F;code&gt; 추가 
+–	state, action, environment 추가 후 Reducer 추가&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;swift&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-swift &quot;&gt;&lt;code class=&quot;language-swift&quot; data-lang=&quot;swift&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;ComposableArchitecture
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span&gt; AppState {
+&lt;&#x2F;span&gt;&lt;span&gt;        
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;enum&lt;&#x2F;span&gt;&lt;span&gt; AppAction {
+&lt;&#x2F;span&gt;&lt;span&gt;    
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span&gt; AppEnvironment {
+&lt;&#x2F;span&gt;&lt;span&gt;    
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; appReducer = Reducer&amp;lt;AppState, AppAction, AppEnvironment&amp;gt; { state, action, _ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;in
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;switch&lt;&#x2F;span&gt;&lt;span&gt; action {
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;–	ContentView에 Store instance 추가 
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span&gt; ContentView: View {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; store: Store&amp;lt;AppState, AppAction&amp;gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;var&lt;&#x2F;span&gt;&lt;span&gt; body: some View {
+&lt;&#x2F;span&gt;&lt;span&gt;        NavigationView {
+&lt;&#x2F;span&gt;&lt;span&gt;            List {
+&lt;&#x2F;span&gt;&lt;span&gt;                Text(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;quot;Hello, World!&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;            }.navigationBarTitle(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;quot;Todos&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;        }
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;–	ContentView_preview 와 sceneDelegate ContentView Constructor 변경&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;swift&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-swift &quot;&gt;&lt;code class=&quot;language-swift&quot; data-lang=&quot;swift&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span&gt; ContentView_Previews: PreviewProvider {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;static var&lt;&#x2F;span&gt;&lt;span&gt; previews: some View {
+&lt;&#x2F;span&gt;&lt;span&gt;        ContentView(store: Store(
+&lt;&#x2F;span&gt;&lt;span&gt;                initialState: AppState(),
+&lt;&#x2F;span&gt;&lt;span&gt;                reducer: appReducer,
+&lt;&#x2F;span&gt;&lt;span&gt;                environment: AppEnvironment()
+&lt;&#x2F;span&gt;&lt;span&gt;            )
+&lt;&#x2F;span&gt;&lt;span&gt;        )
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;viewstore-cuga&quot;&gt;ViewStore 추가&lt;&#x2F;h3&gt;
+&lt;p&gt;–	state에 domain data model을 추가 &lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;swift&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-swift &quot;&gt;&lt;code class=&quot;language-swift&quot; data-lang=&quot;swift&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span&gt; ToDo: Equatable, Identifiable {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;var&lt;&#x2F;span&gt;&lt;span&gt; description = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;quot;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; id: UUID
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;var&lt;&#x2F;span&gt;&lt;span&gt; isComplete = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;false
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span&gt; AppState: Equatable {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;var&lt;&#x2F;span&gt;&lt;span&gt; todos: [ToDo]
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;–	view 에 WithViewStore 을 추가 &lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;swift&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-swift &quot;&gt;&lt;code class=&quot;language-swift&quot; data-lang=&quot;swift&quot;&gt;&lt;span&gt;    NavigationView {
+&lt;&#x2F;span&gt;&lt;span&gt;        WithViewStore(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;self&lt;&#x2F;span&gt;&lt;span&gt;.store) { viewStore &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;in
+&lt;&#x2F;span&gt;&lt;span&gt;            List {
+&lt;&#x2F;span&gt;&lt;span&gt;                ForEach(viewStore.todos) { todo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;in
+&lt;&#x2F;span&gt;&lt;span&gt;                    Text(todo.description)
+&lt;&#x2F;span&gt;&lt;span&gt;                }
+&lt;&#x2F;span&gt;&lt;span&gt;            }.navigationBarTitle(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;quot;Todos&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;        }
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;–	preview 에 dommy data를 AppState에  추가 &lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;swift&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-swift &quot;&gt;&lt;code class=&quot;language-swift&quot; data-lang=&quot;swift&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;struct&lt;&#x2F;span&gt;&lt;span&gt; ContentView_Previews: PreviewProvider {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;static var&lt;&#x2F;span&gt;&lt;span&gt; previews: some View {
+&lt;&#x2F;span&gt;&lt;span&gt;        ContentView(
+&lt;&#x2F;span&gt;&lt;span&gt;            store: Store(
+&lt;&#x2F;span&gt;&lt;span&gt;                initialState: AppState(todos: [
+&lt;&#x2F;span&gt;&lt;span&gt;                    ToDo(description: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;quot;PointFree&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;, id: UUID(), isComplete: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;false&lt;&#x2F;span&gt;&lt;span&gt;),
+&lt;&#x2F;span&gt;&lt;span&gt;                    ToDo(description: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;quot;Udemy&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;, id: UUID(), isComplete: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;false&lt;&#x2F;span&gt;&lt;span&gt;),
+&lt;&#x2F;span&gt;&lt;span&gt;                    ToDo(description: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;quot;MoimApp&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;, id: UUID(), isComplete: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;false&lt;&#x2F;span&gt;&lt;span&gt;),
+&lt;&#x2F;span&gt;&lt;span&gt;                ]),
+&lt;&#x2F;span&gt;&lt;span&gt;                reducer: appReducer,
+&lt;&#x2F;span&gt;&lt;span&gt;                environment: AppEnvironment()
+&lt;&#x2F;span&gt;&lt;span&gt;            )
+&lt;&#x2F;span&gt;&lt;span&gt;        )
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;view-ui-byeongyeong&quot;&gt;View UI 변경&lt;&#x2F;h3&gt;
+&lt;p&gt;–	ListView에 체크마크 버튼을 추가하고 isComplete 속성에 따라 foregroundColor를 추가 
+–	preview의 속성을 변경하면서 제대로 되는지 확인 할수 있다. &lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;swift&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-swift &quot;&gt;&lt;code class=&quot;language-swift&quot; data-lang=&quot;swift&quot;&gt;&lt;span&gt;    List {
+&lt;&#x2F;span&gt;&lt;span&gt;        ForEach(viewStore.todos) { todo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;in
+&lt;&#x2F;span&gt;&lt;span&gt;            HStack {
+&lt;&#x2F;span&gt;&lt;span&gt;                Button(action: {}) {
+&lt;&#x2F;span&gt;&lt;span&gt;                    Image(systemName: todo.isComplete ? &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;quot;checkmark.square&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;quot;square&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;                }
+&lt;&#x2F;span&gt;&lt;span&gt;                TextField(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;quot;Untitled todo&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;, text: .constant(todo.description))
+&lt;&#x2F;span&gt;&lt;span&gt;            }.foregroundColor(todo.isComplete ? .gray : &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;nil&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;        }
+&lt;&#x2F;span&gt;&lt;span&gt;    }.navigationBarTitle(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;quot;Todos&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;action-cuga&quot;&gt;Action 추가&lt;&#x2F;h3&gt;
+&lt;ul&gt;
+&lt;li&gt;UI action을 &lt;code&gt;AppAction&lt;&#x2F;code&gt; enum 에 추가한다. &lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;pre data-lang=&quot;swift&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-swift &quot;&gt;&lt;code class=&quot;language-swift&quot; data-lang=&quot;swift&quot;&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;enum&lt;&#x2F;span&gt;&lt;span&gt; AppAction {
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;case&lt;&#x2F;span&gt;&lt;span&gt; todoCheckboxTapped(index: Int)
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;case&lt;&#x2F;span&gt;&lt;span&gt; todoTextFieldChanged(index: Int, text: String)
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Reducer&lt;&#x2F;code&gt; 에 해당 Action 구현&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;pre data-lang=&quot;swift&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-swift &quot;&gt;&lt;code class=&quot;language-swift&quot; data-lang=&quot;swift&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; appReducer = Reducer&amp;lt;AppState, AppAction, AppEnvironment&amp;gt; { state, action, _ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;in
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;switch&lt;&#x2F;span&gt;&lt;span&gt; action {
+&lt;&#x2F;span&gt;&lt;span&gt;        
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;case &lt;&#x2F;span&gt;&lt;span&gt;.todoCheckboxTapped(index: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; index):
+&lt;&#x2F;span&gt;&lt;span&gt;        state.todos[index].isComplete.toggle()
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;none
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;case &lt;&#x2F;span&gt;&lt;span&gt;.todoTextFieldChanged(index: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; index, text: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; text):
+&lt;&#x2F;span&gt;&lt;span&gt;        state.todos[index].description = text
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;return &lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;none
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ContentView&lt;&#x2F;code&gt;에 해당 Control Event에 Action send
+&lt;ul&gt;
+&lt;li&gt;Index를 Foreach에 추가하려면 다음과 같이 추가 &lt;&#x2F;li&gt;
+&lt;li&gt;`ForEach(Array(viewStore.todos.enumerated()), id: .element.id)&lt;&#x2F;li&gt;
+&lt;li&gt;추후 &lt;code&gt;ForEachStore&lt;&#x2F;code&gt; 로 변경&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;pre data-lang=&quot;swift&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-swift &quot;&gt;&lt;code class=&quot;language-swift&quot; data-lang=&quot;swift&quot;&gt;&lt;span&gt;        ForEach(Array(viewStore.todos.enumerated()), id: \.element.id) { index, todo &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;in
+&lt;&#x2F;span&gt;&lt;span&gt;            HStack {
+&lt;&#x2F;span&gt;&lt;span&gt;                Button(action: {
+&lt;&#x2F;span&gt;&lt;span&gt;                    viewStore.send(.todoCheckboxTapped(index: index))
+&lt;&#x2F;span&gt;&lt;span&gt;                }) {
+&lt;&#x2F;span&gt;&lt;span&gt;                    Image(systemName: todo.isComplete ? &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;quot;checkmark.square&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;quot;square&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;                }.buttonStyle(PlainButtonStyle())
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;                TextField(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;quot;Untitled todo&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;, text: viewStore.binding(
+&lt;&#x2F;span&gt;&lt;span&gt;                  &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;get&lt;&#x2F;span&gt;&lt;span&gt;: { $&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;.todos[index].description },
+&lt;&#x2F;span&gt;&lt;span&gt;                  send: { .todoTextFieldChanged(index: index, text: $&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;) }
+&lt;&#x2F;span&gt;&lt;span&gt;                ))
+&lt;&#x2F;span&gt;&lt;span&gt;            }.foregroundColor(todo.isComplete ? .gray : &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d08770;&quot;&gt;nil&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;        }
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;h3 id=&quot;debugging&quot;&gt;Debugging&lt;&#x2F;h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Reducer&lt;&#x2F;code&gt; 에 &lt;code&gt;debug()&lt;&#x2F;code&gt; 추가&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;pre data-lang=&quot;swift&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-swift &quot;&gt;&lt;code class=&quot;language-swift&quot; data-lang=&quot;swift&quot;&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; appReducer = Reducer&amp;lt;AppState, AppAction, Void&amp;gt; { state, action, _ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;in
+&lt;&#x2F;span&gt;&lt;span&gt;  ...
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;.debug()
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;ul&gt;
+&lt;li&gt;혹은 &lt;code&gt;SceneDelegate&lt;&#x2F;code&gt; , &lt;code&gt;ContentView_Previews&lt;&#x2F;code&gt;에 contentView instance에 reducer에 reducer paramter에 debug()를 추가 &lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;pre data-lang=&quot;swift&quot; style=&quot;background-color:#2b303b;color:#c0c5ce;&quot; class=&quot;language-swift &quot;&gt;&lt;code class=&quot;language-swift&quot; data-lang=&quot;swift&quot;&gt;&lt;span&gt;     &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; contentView = ContentView(store: Store(
+&lt;&#x2F;span&gt;&lt;span&gt;                initialState: AppState(todos: [
+&lt;&#x2F;span&gt;&lt;span&gt;                    ToDo(description: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;quot;PointFree&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;, id: UUID(), isComplete: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;true&lt;&#x2F;span&gt;&lt;span&gt;),
+&lt;&#x2F;span&gt;&lt;span&gt;                    ToDo(description: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;quot;Udemy&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;, id: UUID(), isComplete: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;false&lt;&#x2F;span&gt;&lt;span&gt;),
+&lt;&#x2F;span&gt;&lt;span&gt;                    ToDo(description: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#a3be8c;&quot;&gt;&amp;quot;MoimApp&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;, id: UUID(), isComplete: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#b48ead;&quot;&gt;false&lt;&#x2F;span&gt;&lt;span&gt;),
+&lt;&#x2F;span&gt;&lt;span&gt;                ]),
+&lt;&#x2F;span&gt;&lt;span&gt;                reducer: appReducer.debug(),
+&lt;&#x2F;span&gt;&lt;span&gt;                environment: AppEnvironment()
+&lt;&#x2F;span&gt;&lt;span&gt;            )
+&lt;&#x2F;span&gt;&lt;span&gt;        )
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;ul&gt;
+&lt;li&gt;결과는 다음과 같은 로그를 console에 뿌려준다. &lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;pre style=&quot;background-color:#2b303b;color:#c0c5ce;&quot;&gt;&lt;code&gt;&lt;span&gt;AppAction.todoCheckboxTapped(
+&lt;&#x2F;span&gt;&lt;span&gt;    index: 1
+&lt;&#x2F;span&gt;&lt;span&gt;  )
+&lt;&#x2F;span&gt;&lt;span&gt;  AppState(
+&lt;&#x2F;span&gt;&lt;span&gt;    todos: [
+&lt;&#x2F;span&gt;&lt;span&gt;      ToDo(
+&lt;&#x2F;span&gt;&lt;span&gt;        description: &amp;quot;PointFree&amp;quot;,
+&lt;&#x2F;span&gt;&lt;span&gt;        id: 2CA87ACF-3868-4B1F-9D95-D25C03FB6B02,
+&lt;&#x2F;span&gt;&lt;span&gt;        isComplete: true
+&lt;&#x2F;span&gt;&lt;span&gt;      ),
+&lt;&#x2F;span&gt;&lt;span&gt;      ToDo(
+&lt;&#x2F;span&gt;&lt;span&gt;        description: &amp;quot;Udemy&amp;quot;,
+&lt;&#x2F;span&gt;&lt;span&gt;        id: EB6738F4-B644-40B1-9519-8C7050FB55B3,
+&lt;&#x2F;span&gt;&lt;span&gt;−       isComplete: false
+&lt;&#x2F;span&gt;&lt;span&gt;+       isComplete: true
+&lt;&#x2F;span&gt;&lt;span&gt;      ),
+&lt;&#x2F;span&gt;&lt;span&gt;      ToDo(
+&lt;&#x2F;span&gt;&lt;span&gt;        description: &amp;quot;MoimApp&amp;quot;,
+&lt;&#x2F;span&gt;&lt;span&gt;        id: 95E6E5BF-6FB1-430E-8444-B1B137369066,
+&lt;&#x2F;span&gt;&lt;span&gt;        isComplete: false
+&lt;&#x2F;span&gt;&lt;span&gt;      ),
+&lt;&#x2F;span&gt;&lt;span&gt;    ]
+&lt;&#x2F;span&gt;&lt;span&gt;  )
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+</content>
+        
+    </entry>
+</feed>
