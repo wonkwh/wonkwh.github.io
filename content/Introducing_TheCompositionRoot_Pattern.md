@@ -2,11 +2,9 @@
 +++
 title = "Introducing the Composition Root Pattern in a Swift Codebase"
 date = 2024-11-15
-categories = ["dependancyInjection"]
 
 [taxonomies]
-tags = ["dependancyInjection","compositionRoot"]
-
+tags = ["swift","uikit", "composition_root", "dependancy_injection", "protocol", "design_pattern"]
 +++
 Swift code에서의 Composition Root 패턴 적용
 <!-- more -->

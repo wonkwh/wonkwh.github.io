@@ -31,7 +31,7 @@
         <lastmod>2019-11-27</lastmod>
     </url>
     <url>
-        <loc>https://wonkwh.github.io/fundamentalsoftypedrivencode/</loc>
+        <loc>https://wonkwh.github.io/fundamentals-of-typedrivencode-part1/</loc>
         <lastmod>2024-10-25</lastmod>
     </url>
     <url>
@@ -47,7 +47,7 @@
         <lastmod>2019-12-06</lastmod>
     </url>
     <url>
-        <loc>https://wonkwh.github.io/introducingthecompositionrootpattern/</loc>
+        <loc>https://wonkwh.github.io/introducing-thecompositionroot-pattern/</loc>
         <lastmod>2024-11-15</lastmod>
     </url>
     <url>
@@ -113,16 +113,13 @@
         <loc>https://wonkwh.github.io/tags/combine/</loc>
     </url>
     <url>
-        <loc>https://wonkwh.github.io/tags/compositionroot/</loc>
+        <loc>https://wonkwh.github.io/tags/composition-root/</loc>
     </url>
     <url>
         <loc>https://wonkwh.github.io/tags/custom-view/</loc>
     </url>
     <url>
         <loc>https://wonkwh.github.io/tags/dependancy-injection/</loc>
-    </url>
-    <url>
-        <loc>https://wonkwh.github.io/tags/dependancyinjection/</loc>
     </url>
     <url>
         <loc>https://wonkwh.github.io/tags/design-pattern/</loc>
