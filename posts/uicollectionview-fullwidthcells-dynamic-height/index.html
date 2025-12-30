@@ -1,0 +1,234 @@
+<!doctype html><html dir=auto lang=en><head><meta charset=utf-8><meta content="IE=edge" http-equiv=X-UA-Compatible><meta content="width=device-width,initial-scale=1,shrink-to-fit=no" name=viewport><meta content="index, follow" name=robots><title>UICollectionView, full width cells, allow autolayout dynamic height</title><meta content="keyword1, keyword2, keyword3" name=keywords><meta name=description><meta content=cydave name=author><link href=https://wonkwh.github.io/posts/uicollectionview-fullwidthcells-dynamic-height/ rel=canonical><link href=https://wonkwh.github.io/css/includes/scroll-bar.css rel=stylesheet><link href=https://wonkwh.github.io/css/styles.css rel=stylesheet><link href=https://wonkwh.github.io/css/override.css rel=stylesheet><link href=https://wonkwh.github.io/atom.xml rel=alternate title=RSS type=application/atom+xml><noscript><style>#theme-toggle,.top-link{display:none}</style> <style>@media (prefers-color-scheme:dark){:root{--theme:#1d1e20;--entry:#2e2e33;--primary:#dadadb;--secondary:#9b9c9d;--tertiary:#414244;--content:#c4c4c5;--hljs-bg:#2e2e33;--code-bg:#37383e;--border:#333}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style></noscript><body id=top><script>if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }</script><header class=header><nav class=nav><div class=logo><a title="Kei's KnowledgeBage (Alt + H)" accesskey=h href=https://wonkwh.github.io> Kei's KnowledgeBage </a><div class=logo-switches><button title="(Alt + T)" accesskey=t id=theme-toggle><svg viewbox="0 0 24 24" fill=none height=18 id=moon stroke=currentColor stroke-linecap=round stroke-linejoin=round stroke-width=2 width=24 xmlns=http://www.w3.org/2000/svg><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg> <svg viewbox="0 0 24 24" fill=none height=18 id=sun stroke=currentColor stroke-linecap=round stroke-linejoin=round stroke-width=2 width=24 xmlns=http://www.w3.org/2000/svg><circle cx=12 cy=12 r=5></circle><line x1=12 x2=12 y1=1 y2=3></line><line x1=12 x2=12 y1=21 y2=23></line><line x1=4.22 x2=5.64 y1=4.22 y2=5.64></line><line x1=18.36 x2=19.78 y1=18.36 y2=19.78></line><line x1=1 x2=3 y1=12 y2=12></line><line x1=21 x2=23 y1=12 y2=12></line><line x1=4.22 x2=5.64 y1=19.78 y2=18.36></line><line x1=18.36 x2=19.78 y1=5.64 y2=4.22></line></svg></button><ul class=lang-switch><li></ul></div></div><ul id=menu><li><a href=https://wonkwh.github.io/archive title=Archive> <span>Archive</span> </a><li><a href=https://wonkwh.github.io/tags title=Tags> <span>Tags</span> </a><li><a href=https://wonkwh.github.io/search title=Search> <span>Search</span> </a><li><a href=https://github.com/wonkwh target=_blank title=Github> <span>Github</span> <svg viewbox="0 0 24 24" fill=none height=12 shape-rendering=geometricPrecision stroke=currentColor stroke-linecap=round stroke-linejoin=round stroke-width=2.5 width=12><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path><path d="M15 3h6v6"></path><path d="M10 14L21 3"></path></svg> </a></ul></nav></header><main class=main><article class=post-single><header class=post-header><div class=breadcrumbs><a href=https://wonkwh.github.io>Home</a> »  <a href=https://wonkwh.github.io/posts/>Posts</a> »  <a href=https://wonkwh.github.io/posts/uicollectionview-fullwidthcells-dynamic-height/>UICollectionView, full width cells, allow autolayout dynamic height</a></div><h1 class=post-title>UICollectionView, full width cells, allow autolayout dynamic height</h1><div class=post-meta><span title="2020-02-27 00:00:00 +0000">2020-02-27</span> · 1 min · cydave</div></header><div class=toc><details><summary title="(Alt + C)" accesskey=c><span class=details>Table of Contents</span></summary> <div class=inner><ul><li><a aria-label="CollectionView 기반의 ListController" href=#collectionview-gibanyi-listcontroller>CollectionView 기반의 ListController</a><li><a aria-label=Solution href=#solution>Solution</a><li><a aria-label=참조 href=#camjo>참조</a></ul></div></details></div><div class=post-content><p>CollectionView 를 이용해 tableview와 유사한 ListView를 사용하면서 tableview의 dynamic height와 같이 autolayout 기반의 dynamic height를 구현하는 코드</p><span id=continue-reading></span><h3 id=collectionview-gibanyi-listcontroller>CollectionView 기반의 ListController<a aria-hidden=true class=anchor hidden href=#collectionview-gibanyi-listcontroller>#</a></h3><pre class=language-swift data-lang=swift style=color:#c0c5ce;background-color:#2b303b><code class=language-swift data-lang=swift><span style=color:#b48ead>import </span><span>UIKit
+</span><span>
+</span><span style=color:#b48ead>extension</span><span> UIView {
+</span><span>    </span><span style=color:#b48ead>func </span><span>insect(by insect: UIEdgeInsets) {
+</span><span>        </span><span style=color:#b48ead>guard let</span><span> superview = superview </span><span style=color:#b48ead>else</span><span> {
+</span><span>            </span><span style=color:#b48ead>return
+</span><span>        }
+</span><span>
+</span><span>        translatesAutoresizingMaskIntoConstraints = </span><span style=color:#b48ead>false
+</span><span>
+</span><span>        leadingAnchor.constraint(equalTo: superview.leadingAnchor, constant: insect.</span><span style=color:#b48ead>left</span><span>).isActive = </span><span style=color:#b48ead>true
+</span><span>        trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: -insect.</span><span style=color:#b48ead>right</span><span>).isActive = </span><span style=color:#b48ead>true
+</span><span>        topAnchor.constraint(equalTo: superview.topAnchor, constant: insect.top).isActive = </span><span style=color:#b48ead>true
+</span><span>        bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: -insect.bottom).isActive = </span><span style=color:#b48ead>true
+</span><span>    }
+</span><span>}
+</span><span style=color:#b48ead>class</span><span> ListCell: UICollectionViewCell {
+</span><span>    </span><span style=color:#b48ead>let</span><span> titleLabel: UILabel = {
+</span><span>        </span><span style=color:#b48ead>let</span><span> label = UILabel()
+</span><span>        label.text = </span><span style=color:#a3be8c>"App Section Title"
+</span><span>        label.font = UIFont.preferredFont(forTextStyle: .body)
+</span><span>        label.numberOfLines = </span><span style=color:#d08770>0
+</span><span>        label.textColor = .black
+</span><span>        </span><span style=color:#b48ead>return</span><span> label
+</span><span>    }()
+</span><span>
+</span><span>
+</span><span>    </span><span style=color:#b48ead>override init</span><span>(frame: CGRect) {
+</span><span>        </span><span style=color:#b48ead>super</span><span>.</span><span style=color:#b48ead>init</span><span>(frame: frame)
+</span><span>        contentView.backgroundColor = .green
+</span><span>        contentView.addSubview(titleLabel)
+</span><span>        titleLabel.insect(by: .</span><span style=color:#b48ead>init</span><span>(top: </span><span style=color:#d08770>5</span><span>, </span><span style=color:#b48ead>left</span><span>: </span><span style=color:#d08770>5</span><span>, bottom: </span><span style=color:#d08770>5</span><span>, </span><span style=color:#b48ead>right</span><span>: </span><span style=color:#d08770>5</span><span>))
+</span><span>    }
+</span><span>
+</span><span>    </span><span style=color:#b48ead>required init</span><span>?(coder: NSCoder) {
+</span><span>        fatalError(</span><span style=color:#a3be8c>"init(coder:) has not been implemented"</span><span>)
+</span><span>    }
+</span><span>}
+</span><span>
+</span><span style=color:#b48ead>let</span><span> items = [
+</span><span>        </span><span style=color:#a3be8c>"Lorem ipsum dolor sit amet."</span><span>,
+</span><span>        </span><span style=color:#a3be8c>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris. Lorem ipsum dolor sit amet, consectetur adipiscing elit."</span><span>,
+</span><span>        </span><span style=color:#a3be8c>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."</span><span>,
+</span><span>        </span><span style=color:#a3be8c>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt."</span><span>,
+</span><span>        </span><span style=color:#a3be8c>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."</span><span>,
+</span><span>        </span><span style=color:#a3be8c>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt."</span><span>,
+</span><span>        </span><span style=color:#a3be8c>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."</span><span>,
+</span><span>        </span><span style=color:#a3be8c>"Lorem ipsum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris."
+</span><span>]
+</span><span>
+</span><span style=color:#b48ead>class</span><span> ListController: UIViewController {
+</span><span>    </span><span style=color:#b48ead>lazy var</span><span> collectionView: UICollectionView = {
+</span><span>        </span><span style=color:#b48ead>let</span><span> layout = UICollectionViewFlowLayout()
+</span><span>        layout.scrollDirection = .vertical
+</span><span>        </span><span style=color:#65737e>//layout.itemSize = .init(width: self.view.frame.width, height: 80)
+</span><span>        layout.sectionInset = .</span><span style=color:#b48ead>init</span><span>(top: </span><span style=color:#d08770>12</span><span>, </span><span style=color:#b48ead>left</span><span>: </span><span style=color:#d08770>0</span><span>, bottom: </span><span style=color:#d08770>0</span><span>, </span><span style=color:#b48ead>right</span><span>: </span><span style=color:#d08770>0</span><span>)
+</span><span>        </span><span style=color:#b48ead>let</span><span> view = UICollectionView(frame: .zero, collectionViewLayout: layout)
+</span><span>        view.backgroundColor = .white
+</span><span>        view.register(ListCell.</span><span style=color:#b48ead>self</span><span>, forCellWithReuseIdentifier: </span><span style=color:#a3be8c>"ListCell"</span><span>)
+</span><span>        view.dataSource = </span><span style=color:#b48ead>self
+</span><span>        view.delegate = </span><span style=color:#b48ead>self
+</span><span>        view.alwaysBounceVertical = </span><span style=color:#b48ead>true
+</span><span>        view.translatesAutoresizingMaskIntoConstraints = </span><span style=color:#b48ead>false
+</span><span>        </span><span style=color:#b48ead>return</span><span> view
+</span><span>    }()
+</span><span>
+</span><span>    </span><span style=color:#b48ead>override func </span><span>viewDidLoad() {
+</span><span>        </span><span style=color:#b48ead>super</span><span>.viewDidLoad()
+</span><span>        </span><span style=color:#65737e>//navigationController?.navigationBar.prefersLargeTitles = true
+</span><span>        navigationItem.title = </span><span style=color:#a3be8c>"ListController"
+</span><span>        view.addSubview(collectionView)
+</span><span>
+</span><span>        NSLayoutConstraint.activate([
+</span><span>            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+</span><span>            collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+</span><span>            collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+</span><span>            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+</span><span>        ])
+</span><span>
+</span><span>    }
+</span><span>}
+</span><span>
+</span><span style=color:#65737e>// MARK: - UICollectionViewDataSource
+</span><span style=color:#b48ead>extension</span><span> ListController: UICollectionViewDataSource {
+</span><span>    </span><span style=color:#b48ead>func </span><span>collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+</span><span>        </span><span style=color:#b48ead>return </span><span style=color:#d08770>8
+</span><span>    }
+</span><span>
+</span><span>    </span><span style=color:#b48ead>func </span><span>collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+</span><span>        </span><span style=color:#b48ead>let</span><span> cell = collectionView.dequeueReusableCell(withReuseIdentifier: </span><span style=color:#a3be8c>"ListCell"</span><span>, </span><span style=color:#b48ead>for</span><span>: indexPath) as! ListCell
+</span><span>        cell.titleLabel.text = items[indexPath.item]
+</span><span>        </span><span style=color:#b48ead>return</span><span> cell
+</span><span>    }
+</span><span>}
+</span><span>
+</span><span style=color:#b48ead>extension</span><span> ListController: UICollectionViewDelegateFlowLayout {
+</span><span>    </span><span style=color:#b48ead>func </span><span>collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+</span><span>        </span><span style=color:#b48ead>return </span><span>.</span><span style=color:#b48ead>init</span><span>(width: </span><span style=color:#b48ead>self</span><span>.view.frame.width, height: </span><span style=color:#d08770>80</span><span>)
+</span><span>    }
+</span><span>}
+</span><span>
+</span></code></pre><ul><li><code>UICollectionViewDelegateFlowLayout</code> 의 sizeForItemAt method를 오버라이드하여 width를 full width로 설정하면 된다.<li>하지만 height를 위와 같이 80으로 고정하면 contents내용에 따라 동적으로 height를 구성하기 꽤 빡시다. <img alt=no_dynamic_height src=https://user-images.githubusercontent.com/911787/75467624-493c1c80-59cf-11ea-8c3e-8c472f142319.png></ul><h3 id=solution>Solution<a aria-hidden=true class=anchor hidden href=#solution>#</a></h3><ul><li>참조 링크를 보면 꽤 다양한 방법들이 존재하나 가장 심플한 방법<li><code>UICollectionViewDelegateFlowLayout</code> 관련 코드를 삭제</ul><pre class=language-swift data-lang=swift style=color:#c0c5ce;background-color:#2b303b><code class=language-swift data-lang=swift><span>    </span><span style=color:#b48ead>lazy var</span><span> collectionView: UICollectionView = {
+</span><span>        </span><span style=color:#b48ead>let</span><span> layout = UICollectionViewFlowLayout()
+</span><span>        ...
+</span><span>        view.delegate = </span><span style=color:#b48ead>self </span><span style=color:#65737e>// 요 라인만 삭제
+</span><span>        ...
+</span><span>    }()
+</span><span>
+</span><span>...
+</span><span style=color:#b48ead>extension</span><span> ListController: UICollectionViewDelegateFlowLayout {
+</span><span>    </span><span style=color:#b48ead>func </span><span>collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+</span><span>        </span><span style=color:#b48ead>return </span><span>.</span><span style=color:#b48ead>init</span><span>(width: </span><span style=color:#b48ead>self</span><span>.view.frame.width, height: </span><span style=color:#d08770>80</span><span>)
+</span><span>    }
+</span><span>}
+</span></code></pre><ul><li>다음 코드를 추가 <ul><li><p>ListCell 에 width anchor를 추가한다.</p> <pre class=language-swift data-lang=swift style=color:#c0c5ce;background-color:#2b303b><code class=language-swift data-lang=swift><span style=color:#b48ead>class</span><span> ListCell: UICollectionViewCell {
+</span><span>    ...
+</span><span>  </span><span style=color:#b48ead>override init</span><span>(frame: CGRect) {
+</span><span>      </span><span style=color:#b48ead>super</span><span>.</span><span style=color:#b48ead>init</span><span>(frame: frame)
+</span><span>      contentView.backgroundColor = .green
+</span><span>      contentView.addSubview(titleLabel)
+</span><span>      </span><span style=color:#65737e>//하단 라인 추가
+</span><span>      titleLabel.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.size.width - </span><span style=color:#d08770>10</span><span>).isActive = </span><span style=color:#b48ead>true
+</span><span>      titleLabel.insect(by: .</span><span style=color:#b48ead>init</span><span>(top: </span><span style=color:#d08770>5</span><span>, </span><span style=color:#b48ead>left</span><span>: </span><span style=color:#d08770>5</span><span>, bottom: </span><span style=color:#d08770>5</span><span>, </span><span style=color:#b48ead>right</span><span>: </span><span style=color:#d08770>5</span><span>))
+</span><span>  }
+</span><span>
+</span><span>}
+</span><span>...
+</span></code></pre><li><p>ListController 에 <code>itemSize</code> ,<code>estimatedItemSize</code> 를 추가</p> <pre class=language-swift data-lang=swift style=color:#c0c5ce;background-color:#2b303b><code class=language-swift data-lang=swift><span style=color:#b48ead>lazy var</span><span> collectionView: UICollectionView = {
+</span><span>    </span><span style=color:#b48ead>let</span><span> layout = UICollectionViewFlowLayout()
+</span><span>    ...
+</span><span>    </span><span style=color:#65737e>// 하단 두라인 추가
+</span><span>
+</span><span>    layout.itemSize = UICollectionViewFlowLayout.automaticSize
+</span><span>    layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+</span><span>
+</span><span>    ...
+</span><span>}()
+</span><span>...
+</span></code></pre> <p><img alt=dynamic_height src=https://user-images.githubusercontent.com/911787/75467646-50632a80-59cf-11ea-9023-5f233f0ce146.png></p></ul></ul><h3 id=camjo>참조<a aria-hidden=true class=anchor hidden href=#camjo>#</a></h3><ul><li><a href=https://stackoverflow.com/questions/44187881/uicollectionview-full-width-cells-allow-autolayout-dynamic-height>https://stackoverflow.com/questions/44187881/uicollectionview-full-width-cells-allow-autolayout-dynamic-height</a></ul></div><footer class=post-footer><ul class=post-tags><li><a href=https://wonkwh.github.io/tags/swift/>swift</a><li><a href=https://wonkwh.github.io/tags/uikit/>uikit</a><li><a href=https://wonkwh.github.io/tags/uicollectionview/>uicollectionview</a><li><a href=https://wonkwh.github.io/tags/autolayout/>autolayout</a></ul><nav class=paginav><a class=prev href=https://wonkwh.github.io/apple-log/> <span class=title>« Prev</span> <br> <span>usage-official-swift-log</span> </a><a class=next href=https://wonkwh.github.io/posts/buildingbetterviews/> <span class=title>Next »</span> <br> <span>Building Better View</span> </a></nav></footer></article></main><footer class=footer><span>© 2025 <a href=https://wonkwh.github.io>cydave</a></span><span> Powered by <a rel="noopener noreferrer" href=https://www.getzola.org/ target=_blank>Zola</a> & <a href=https://github.com/cydave/zola-theme-papermod rel=noopener target=_blank>PaperMod</a> </span></footer><a aria-label="go to top" title="Go to Top (Alt + G)" accesskey=g class=top-link href=#top id=top-link> <svg viewbox="0 0 12 6" fill=currentColor xmlns=http://www.w3.org/2000/svg><path d="M12 6H0l6-6z"/></svg> </a><script>let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });</script><script>var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };</script><script>document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })</script><script>document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                var content = codeblock.textContent;
+                if(codeblock.firstChild.tagName == 'TABLE') {
+                    content = Array(...codeblock.firstChild.getElementsByTagName('span')).map((span) => { return span.textContent; }).join('');
+                }
+                navigator.clipboard.writeText(content);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            // td containing LineNos
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            // table containing LineNos and code
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            // code blocks not having highlight as parent class
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });</script>

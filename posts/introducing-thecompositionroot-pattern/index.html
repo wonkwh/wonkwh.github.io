@@ -1,0 +1,234 @@
+<!doctype html><html dir=auto lang=en><head><meta charset=utf-8><meta content="IE=edge" http-equiv=X-UA-Compatible><meta content="width=device-width,initial-scale=1,shrink-to-fit=no" name=viewport><meta content="index, follow" name=robots><title>Introducing the Composition Root Pattern in a Swift Codebase</title><meta content="keyword1, keyword2, keyword3" name=keywords><meta name=description><meta content=cydave name=author><link href=https://wonkwh.github.io/posts/introducing-thecompositionroot-pattern/ rel=canonical><link href=https://wonkwh.github.io/css/includes/scroll-bar.css rel=stylesheet><link href=https://wonkwh.github.io/css/styles.css rel=stylesheet><link href=https://wonkwh.github.io/css/override.css rel=stylesheet><link href=https://wonkwh.github.io/atom.xml rel=alternate title=RSS type=application/atom+xml><noscript><style>#theme-toggle,.top-link{display:none}</style> <style>@media (prefers-color-scheme:dark){:root{--theme:#1d1e20;--entry:#2e2e33;--primary:#dadadb;--secondary:#9b9c9d;--tertiary:#414244;--content:#c4c4c5;--hljs-bg:#2e2e33;--code-bg:#37383e;--border:#333}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style></noscript><body id=top><script>if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }</script><header class=header><nav class=nav><div class=logo><a title="Kei's KnowledgeBage (Alt + H)" accesskey=h href=https://wonkwh.github.io> Kei's KnowledgeBage </a><div class=logo-switches><button title="(Alt + T)" accesskey=t id=theme-toggle><svg viewbox="0 0 24 24" fill=none height=18 id=moon stroke=currentColor stroke-linecap=round stroke-linejoin=round stroke-width=2 width=24 xmlns=http://www.w3.org/2000/svg><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg> <svg viewbox="0 0 24 24" fill=none height=18 id=sun stroke=currentColor stroke-linecap=round stroke-linejoin=round stroke-width=2 width=24 xmlns=http://www.w3.org/2000/svg><circle cx=12 cy=12 r=5></circle><line x1=12 x2=12 y1=1 y2=3></line><line x1=12 x2=12 y1=21 y2=23></line><line x1=4.22 x2=5.64 y1=4.22 y2=5.64></line><line x1=18.36 x2=19.78 y1=18.36 y2=19.78></line><line x1=1 x2=3 y1=12 y2=12></line><line x1=21 x2=23 y1=12 y2=12></line><line x1=4.22 x2=5.64 y1=19.78 y2=18.36></line><line x1=18.36 x2=19.78 y1=5.64 y2=4.22></line></svg></button><ul class=lang-switch><li></ul></div></div><ul id=menu><li><a href=https://wonkwh.github.io/archive title=Archive> <span>Archive</span> </a><li><a href=https://wonkwh.github.io/tags title=Tags> <span>Tags</span> </a><li><a href=https://wonkwh.github.io/search title=Search> <span>Search</span> </a><li><a href=https://github.com/wonkwh target=_blank title=Github> <span>Github</span> <svg viewbox="0 0 24 24" fill=none height=12 shape-rendering=geometricPrecision stroke=currentColor stroke-linecap=round stroke-linejoin=round stroke-width=2.5 width=12><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path><path d="M15 3h6v6"></path><path d="M10 14L21 3"></path></svg> </a></ul></nav></header><main class=main><article class=post-single><header class=post-header><div class=breadcrumbs><a href=https://wonkwh.github.io>Home</a> »  <a href=https://wonkwh.github.io/posts/>Posts</a> »  <a href=https://wonkwh.github.io/posts/introducing-thecompositionroot-pattern/>Introducing the Composition Root Pattern in a Swift Codebase</a></div><h1 class=post-title>Introducing the Composition Root Pattern in a Swift Codebase</h1><div class=post-meta><span title="2024-11-15 00:00:00 +0000">2024-11-15</span> · 7 min · cydave</div></header><div class=toc><details><summary title="(Alt + C)" accesskey=c><span class=details>Table of Contents</span></summary> <div class=inner><ul><li><a aria-label="Introduction to Dependency Injection" href=#introduction-to-dependency-injection>Introduction to Dependency Injection</a><li><a aria-label="Building the Dependency Graph" href=#building-the-dependency-graph>Building the Dependency Graph</a><li><a aria-label="The Composition Root Pattern Enters the Room" href=#the-composition-root-pattern-enters-the-room>The Composition Root Pattern Enters the Room</a> <ul><li><a aria-label="Using the Composition Root in an iOS App" href=#using-the-composition-root-in-an-ios-app>Using the Composition Root in an iOS App</a></ul><li><a aria-label="Sharing State Between Objects" href=#sharing-state-between-objects>Sharing State Between Objects</a><li><a aria-label="커지는 컴포지션 루트 처리하기" href=#keojineun-keompojisyeon-ruteu-ceorihagi>커지는 컴포지션 루트 처리하기</a><li><a aria-label="마무리 생각" href=#mamuri-saenggag>마무리 생각</a><li><a aria-label="추가 레퍼런스" href=#cuga-repeoreonseu>추가 레퍼런스</a></ul></div></details></div><div class=post-content><p><code>CompositionRoot</code> 를 SwiftCodeBase 에 적용하기</p><span id=continue-reading></span><ul><li>원글: https://simonbs.dev/posts/introducing-the-composition-root-pattern-in-a-swift-codebase/</ul><h2 id=introduction-to-dependency-injection>Introduction to Dependency Injection<a aria-hidden=true class=anchor hidden href=#introduction-to-dependency-injection>#</a></h2><ul><li><p>2022년 초, 저는 Swift에서 의존성 주입에 대한 다양한 접근 방식을 탐색하다가 <a href=https://blog.ploeh.dk/>Mark Seemann</a>이 <a href=https://www.amazon.com/gp/product/1935182501>.NET의 의존성 주입</a>에서 소개한 Composition Root 패턴을 접하게 되었습니다.</p><li><p>그 이후로 여러 Swift 코드베이스에 Composition Root 패턴을 도입했고 매우 유용하다는 것을 알게 되었습니다.</p><li><p>이 글에서는 Swift 코드베이스에 컴포지션 루트를 도입하고 iOS 프로젝트에서 사용하는 방법을 살펴보겠습니다. 먼저 의존성 주입에 대한 간략한 개요를 살펴보겠습니다.</p><li><p>의존성 주입은 객체가 직접 종속성을 생성하지 않고 외부 소스에서 종속 객체를 객체에 전달하는 디자인 패턴입니다.</p><li><p>Consider the following <code>MovieService</code> type that loads movies and stores them in a <code>MovieRepository</code>.</p> <pre class=language-swift data-lang=swift style=color:#c0c5ce;background-color:#2b303b><code class=language-swift data-lang=swift><span>  </span><span style=color:#b48ead>struct</span><span> MovieRepository {
+</span><span>    </span><span style=color:#b48ead>func </span><span>add(_ movie: Movie) {
+</span><span>    ...
+</span><span>    }
+</span><span>  }
+</span><span>  
+</span><span>  </span><span style=color:#b48ead>struct</span><span> MovieService {
+</span><span>    </span><span style=color:#b48ead>let</span><span> repository = MovieRepository()
+</span><span>  
+</span><span>    </span><span style=color:#b48ead>func </span><span>loadMovies() {
+</span><span>    ...
+</span><span>    }
+</span><span>  }
+</span><span>  ```
+</span><span>
+</span></code></pre><li><p><code>MovieService</code> 는 초기화 시 생성되는 <code>MovieRepository</code>에 대한 종속성을 가집니다. 이 두 유형 간의 긴밀한 결합은 코드를 단위 테스트할 때 문제를 일으킬 수 있습니다. 예를 들어, <code>MovieRepository</code>는 영화를 디스크에 저장할 수 있는데, 이는 단위 테스트에서 바람직하지 않을 수 있습니다.</p><li><p>다음과 같이 코드를 수정하여 컴포넌트를 분리할 수 있습니다:</p><li><p>코드베이스를 세 가지 변경했습니다:</p> <ul><li><ol><li><code>영화 저장소</code> 프로토콜을 추가했습니다.</ol><li><ol start=2><li>이전 <code>MovieRepository</code> 구현의 이름을 <code>DiskMovieRepository</code>로 변경하여 이제 <code>MovieRepository</code> 프로토콜을 준수합니다.</ol><li><ol start=3><li>이제 <code>MovieService</code>는 구체적인 구현이 아닌 <code>MovieRepository</code> 프로토콜에 의존합니다.</ol></ul><li><p>이러한 변경 사항을 적용하면 아래와 같이 <code>MovieService</code>를 사용할 수 있습니다:</p><li></ul><pre class=language-swift data-lang=swift style=color:#c0c5ce;background-color:#2b303b><code class=language-swift data-lang=swift><span> </span><span style=color:#b48ead>let</span><span> repository = DiskMovieRepository()
+</span><span> </span><span style=color:#b48ead>let</span><span> service = MovieService(repository: repository)
+</span></code></pre><ul><li>이제 리포지토리는 생성자를 통해 서비스에 주입되고 있습니다. 이렇게 하면 <code>MovieService</code>에 어떤 종속성이 있는지 명확히 알 수 있고 다양한 요구 사항을 수용하기 위해 리포지토리 구현을 쉽게 바꿀 수 있습니다. 예를 들어 단위 테스트를 실행할 때 동영상을 메모리에 저장하는 저장소를 사용하고 싶을 수 있습니다.<li>이 글에서는 이니셜라이저를 통해 종속성을 주입하는 이니셜라이저 주입에 초점을 맞추고 있습니다. 메서드 주입과 프로퍼티 주입이라는 다른 유형의 의존성 주입도 있다는 점에 주목할 필요가 있습니다.</ul><h2 id=building-the-dependency-graph>Building the Dependency Graph<a aria-hidden=true class=anchor hidden href=#building-the-dependency-graph>#</a></h2><ul><li><p>이니셜라이저를 통해 종속성을 주입할 때는 기본적으로 각 노드가 종속성을 나타내는 객체 그래프를 만듭니다. 이전 예시를 확장하여 이를 설명해 보겠습니다.</p> <pre class=language-swift data-lang=swift style=color:#c0c5ce;background-color:#2b303b><code class=language-swift data-lang=swift><span style=color:#b48ead>class</span><span> WatchlistViewController: UIViewController {
+</span><span>  </span><span style=color:#b48ead>init</span><span>(userService: UserService, movieService: MovieService) {
+</span><span>  ...
+</span><span>  }
+</span><span>}
+</span><span>
+</span><span style=color:#b48ead>struct</span><span> UserService {
+</span><span>  </span><span style=color:#b48ead>let</span><span> networkClient: NetworkClient
+</span><span>}
+</span><span>
+</span><span style=color:#b48ead>struct</span><span> MovieService {
+</span><span>  </span><span style=color:#b48ead>let</span><span> repository: MovieRepository
+</span><span>  </span><span style=color:#b48ead>let</span><span> networkClient: NetworkClient
+</span><span>}
+</span></code></pre> <ul><li><p><code>WatchlistViewController</code> 는 두 개의 종속성을 가지고 있고, 그 종속성에는 다시 자체 종속성이 있기 때문에 여기서는 객체 그래프를 다루고 있습니다. 아래 그림과 같이 그래프를 그릴 수 있습니다. <img alt src=https://simonbs.dev/images/posts/introducing-the-composition-root-pattern-in-a-swift-codebase/dependency-graph.png></p><li><p>이니셜라이저를 통해 종속성을 주입해야 하므로 이러한 종속성을 생성하기 위해 외부 소스에 의존하지만 외부 소스에도 종속성이 있을 수 있으므로 종속성 그래프가 커지고 질문이 생깁니다:</p></ul></ul><blockquote><p>How do we construct this graph and where in our codebase do we do it? 이 그래프를 어떻게 구성하고 코드베이스의 어디에서 구성해야 할까요?</blockquote><ul><li><a href=https://github.com/Swinject/Swinject>많은</a> <a href=https://github.com/square/Cleanse>오픈 소스</a> <a href=https://github.com/uber/needle>Swift</a> <a href=https://github.com/hmlongco/Factory>프레임워크</a> <a href=https://github.com/pointfreeco/swift-dependencies>그 주소</a> <a href=https://github.com/scribd/Weaver>이러한 질문</a> 등이 있습니다.<li>이러한 프레임워크 중 일부는 컴파일 타임에 의존성을 제공하는 것을 잊어버리면 런타임 오류가 발생할 수 있는 변형된 의존성 주입을 사용합니다.<li>실제로 SwiftUI의 <code>@EnvironmentObject</code>도 동일한 동작을 보일 수 있습니다.</ul><p>다음 SwiftUI view 를 보면:<pre class=language-swift data-lang=swift style=color:#c0c5ce;background-color:#2b303b><code class=language-swift data-lang=swift><span style=color:#b48ead>struct</span><span> ContentView: View {
+</span><span style=color:#b48ead>@EnvironmentObject var</span><span> movieService: MovieService
+</span><span>
+</span><span style=color:#b48ead>var</span><span> body: some View {
+</span><span>  Text(</span><span style=color:#a3be8c>"</span><span>\(movieService.count) </span><span style=color:#a3be8c>movies"</span><span>)
+</span><span>}
+</span><span>}
+</span></code></pre><ul><li><code>ContentView</code>는 뷰의 조상 중 하나에 <code>environmentObject()</code> 뷰 수정자를 사용하여 삽입해야 하는 <code>MovieService</code>에 대한 종속성을 가지고 있습니다. 그러나 이를 잊어버리면 런타임에 다음과 같은 오류가 발생합니다:</ul><blockquote><p>Fatal error: No ObservableObject of type MovieService found. A View.environmentObject(_:) for MovieService may be missing as an ancestor of this view</blockquote><ul><li>이러한 런타임 오류와 그에 따른 앱 충돌은 잘못 설계된 의존성 주입 전략의 결과이므로 피해야 합니다.<li>대신 런타임 오류보다 컴파일 타임 오류를 우선시하는 방식으로 코드를 설계하는 것을 목표로 해야 합니다.<li>또한 종속성 주입 전략을 선택하는 것은 아키텍처적 결정이며, 코드베이스에서 외부 프레임워크에 대한 강력한 종속성을 생성할 수 있으므로 이를 위해 타사 프레임워크에 의존하지 않는 것을 선호합니다.</ul><h2 id=the-composition-root-pattern-enters-the-room>The Composition Root Pattern Enters the Room<a aria-hidden=true class=anchor hidden href=#the-composition-root-pattern-enters-the-room>#</a></h2><ul><li><a href=https://blog.ploeh.dk/>마크 시만</a>은 자신의 저서 <a href=https://www.amazon.com/gp/product/1935182501>.NET의 의존성 주입</a>에서 객체 그래프를 어디에 구성할지에 대한 질문에 답하기 위해 컴포지션 루트를 사용할 것을 제안합니다. 책 제목에 '.NET'이 들어간다고 해서 겁먹지 마세요. 이 패턴을 Swift 😊에 적용하기 위한 것이니까요.<li>컴포지션 루트는 컴포넌트에 주입되는 모든 종속성을 생성하는 역할을 합니다. 이를 위해 'CompositionRoot'라는 열거형을 만들고 각 종속성을 정적 프로퍼티로 나열하면 됩니다. 객체에 종속성이 있을 때마다 해당 프로퍼티를 참조할 수 있습니다.</ul><pre class=language-swift data-lang=swift style=color:#c0c5ce;background-color:#2b303b><code class=language-swift data-lang=swift><span style=color:#b48ead>enum</span><span> CompositionRoot {
+</span><span style=color:#b48ead>static var</span><span> watchlistViewController: WatchlistViewController {
+</span><span>  WatchlistViewController(
+</span><span>    userService: userService,
+</span><span>    movieService: movieService
+</span><span>  )
+</span><span>}
+</span><span>
+</span><span style=color:#b48ead>private static var</span><span> userService: UserService {
+</span><span>  UserService(networkClient: networkClient)
+</span><span>}
+</span><span>
+</span><span style=color:#b48ead>private static var</span><span> movieService: MovieService {
+</span><span>  MovieService(
+</span><span>    repository: movieRepository, 
+</span><span>    networkClient: networkClient
+</span><span>  )
+</span><span>}
+</span><span>
+</span><span style=color:#b48ead>private static var</span><span> movieRepository: MovieRepository {
+</span><span>  DiskMovieRepository()
+</span><span>}
+</span><span>
+</span><span style=color:#b48ead>private static var</span><span> networkClient: NetworkClient {
+</span><span>  NetworkClient()
+</span><span>}
+</span><span>}
+</span></code></pre><ul><li><code>CompositionRoot</code> 열거형은 엔트리 포인트가 열거형 자체인 객체 그래프를 표현합니다.<li>이 컴포지션 루트는 매우 작기 때문에 프로덕션에서 컴포지션 루트를 사용하는 예시를 보고 싶다면 <a href=https://shape.dk/>Shape</a>에서 개발한 <a href=https://github.com/shapehq/tartelet/blob/main/Tartelet/Sources/CompositionRoot.swift#L29>앱에서 이 컴포지션 루트 보기</a>를 참고하세요.<li>이제 <code>CompositionRoot</code> 를 배치하고 객체 그래프가 어떻게 구성되는지 지정했으므로 이제 '컴포지션 루트' 유형을 사용하여 객체의 인스턴스를 생성하고 종속성을 연결할 수 있습니다.</ul><h3 id=using-the-composition-root-in-an-ios-app>Using the Composition Root in an iOS App<a aria-hidden=true class=anchor hidden href=#using-the-composition-root-in-an-ios-app>#</a></h3><ul><li><a href=https://blog.ploeh.dk/2011/07/28/CompositionRoot/>Seemann</a>에 따르면 객체 그래프는 애플리케이션의 진입점에 최대한 가깝게 구성해야 합니다. 이는 이니셜라이저를 통해 종속성을 제공하기 위해 외부 소스에 의존하는 객체의 당연한 결과입니다.<li>iOS 앱에서는 <code>AppDelegate</code>와 씬 델리게이트를 애플리케이션의 엔트리 포인트로 간주할 수 있습니다. 즉, 각 장면 델리게이트가 그 자체로 엔트리 포인트이기 때문에 하나의 엔트리 포인트가 없을 수도 있습니다.<li><code>WatchlistViewController</code>의 인스턴스를 표시하는 장면이 필요하다고 가정해 봅시다. 대부분의 경우 씬의 루트 뷰 컨트롤러는 UINavigationController의 인스턴스이므로 <code>CompositionRoot</code>를 수정하여 <code>UINavigationController</code>의 인스턴스를 노출합니다.</ul><pre class=language-swift data-lang=swift style=color:#c0c5ce;background-color:#2b303b><code class=language-swift data-lang=swift><span style=color:#b48ead>enum</span><span> CompositionRoot {
+</span><span style=color:#b48ead>static var</span><span> rootViewController: UIViewController {
+</span><span>  UINavigationController(
+</span><span>    rootViewController: watchlistViewController
+</span><span>  )
+</span><span>}
+</span><span>
+</span><span>...
+</span><span>}
+</span></code></pre><ul><li><code>컴포지션 루트</code>가 루트 뷰 컨트롤러를 노출하면 이제 남은 작업은 씬 델리게이트에서 <code>rootViewController</code> 프로퍼티를 참조하는 것뿐입니다.</ul><pre class=language-swift data-lang=swift style=color:#c0c5ce;background-color:#2b303b><code class=language-swift data-lang=swift><span style=color:#b48ead>class</span><span> SceneDelegate: UIResponder, UIWindowSceneDelegate {
+</span><span style=color:#b48ead>func </span><span>scene(
+</span><span>  _ scene: UIScene, 
+</span><span>  willConnectTo session: UISceneSession, 
+</span><span>  options connectionOptions: UIScene.ConnectionOptions
+</span><span>) {
+</span><span>  </span><span style=color:#b48ead>let</span><span> windowScene = scene as! UIWindowScene
+</span><span>  window = UIWindow(windowScene: windowScene)
+</span><span>  window?.rootViewController = CompositionRoot.rootViewController
+</span><span>  window?.makeKeyAndVisible()
+</span><span>}
+</span><span>}
+</span></code></pre><h2 id=sharing-state-between-objects>Sharing State Between Objects<a aria-hidden=true class=anchor hidden href=#sharing-state-between-objects>#</a></h2><ul><li><code>컴포지션 루트</code>는 종속성을 참조할 때마다 새로운 인스턴스를 생성합니다.<li>아래 코드를 살펴보면 <code>userService</code> 및 <code>movieService</code> 프로퍼티가 반환하는 서비스에 각각 고유한 <code>NetworkClient</code> 인스턴스가 있음을 알 수 있습니다.<li>이는 <code>네트워크 클라이언트</code>가 접근 시 새 인스턴스를 생성하는 게터로만 구현되어 있기 때문입니다.</ul><pre class=language-swift data-lang=swift style=color:#c0c5ce;background-color:#2b303b><code class=language-swift data-lang=swift><span style=color:#b48ead>enum</span><span> CompositionRoot {
+</span><span>...
+</span><span>
+</span><span style=color:#b48ead>private static var</span><span> userService: UserService {
+</span><span>  UserService(networkClient: networkClient)
+</span><span>}
+</span><span>
+</span><span style=color:#b48ead>private static var</span><span> movieService: MovieService {
+</span><span>  MovieService(
+</span><span>    repository: movieRepository, 
+</span><span>    networkClient: networkClient
+</span><span>  )
+</span><span>}
+</span><span>
+</span><span style=color:#b48ead>private static var</span><span> networkClient: NetworkClient {
+</span><span>  NetworkClient()
+</span><span>}
+</span><span>
+</span><span>...
+</span><span>}
+</span></code></pre><ul><li>이 동작은 대부분의 경우 객체를 일시적으로 사용할 수 있으므로 바람직합니다. 필요할 때 생성하고 가능한 한 빨리 폐기하면 됩니다.<li>그러나 두 종속성 간에 상태를 공유해야 할 때는 이 접근 방식이 작동하지 않습니다.<li>네트워크 요청을 큐에 대기시키는 사용자 정의 로직이 있고 객체가 <code>NetworkClient</code>의 인스턴스를 공유해야 하는 시나리오를 상상해 봅시다.<li>이 경우 <code>CompositionRoot</code>의 <code>networkClient</code> 속성을 변경하여 인스턴스를 생성하고 저장하여 속성을 참조할 때마다 동일한 인스턴스를 반환하도록 할 것입니다. 다행히도 이 작업은 <code>networkClient</code>를 상수로 만드는 것만큼이나 간단합니다.</ul><pre class=language-swift data-lang=swift style=color:#c0c5ce;background-color:#2b303b><code class=language-swift data-lang=swift><span style=color:#b48ead>enum</span><span> CompositionRoot {
+</span><span>...
+</span><span>
+</span><span style=color:#b48ead>private static let</span><span> networkClient = NetworkClient()
+</span><span>
+</span><span>...
+</span><span>}
+</span></code></pre><h2 id=keojineun-keompojisyeon-ruteu-ceorihagi>커지는 컴포지션 루트 처리하기<a aria-hidden=true class=anchor hidden href=#keojineun-keompojisyeon-ruteu-ceorihagi>#</a></h2><ul><li><p>컴포지션 루트 패턴의 적응에 대해 논의할 때 사람들이 주로 우려하는 것 중 하나는 시간이 지남에 따라 <code>CompositionRoot</code> 열거형이 너무 커질 수 있다는 것입니다.</p><li><p>이는 타당한 우려이며, 이를 해결하기 위해 이를 별도의 파일로 분할하여 각 파일마다 <code>CompositionRoot</code>에 extension를 추가할 수 있습니다.</p><li><p>일반적으로 이러한 확장은 객체 그래프에서 앱의 특정 도메인이나 기능과 관련된 부분을 다룹니다.</p><li><p>예를 들어, 앱의 영화 도메인과 관련된 모든 객체를 포함하는 <code>Movies</code> 열거형을 추가하는 extension를 <code>CompositionRoot</code>에 생성할 수 있습니다.</p> <pre class=language-swift data-lang=swift style=color:#c0c5ce;background-color:#2b303b><code class=language-swift data-lang=swift><span style=color:#65737e>/// 📄 CompositionRoot+Movies.swift
+</span><span style=color:#b48ead>extension</span><span> CompositionRoot {
+</span><span style=color:#b48ead>enum</span><span> Movies {
+</span><span>  </span><span style=color:#b48ead>func </span><span>moviesService(networkClient: NetworkClient) {
+</span><span>    MovieService(
+</span><span>      repository: movieRepository, 
+</span><span>      networkClient: networkClient
+</span><span>    )
+</span><span>  }
+</span><span>  
+</span><span>  </span><span style=color:#b48ead>private static var</span><span> movieRepository: MovieRepository {
+</span><span>    DiskMovieRepository()
+</span><span>  }
+</span><span>}
+</span><span>}
+</span></code></pre> <ul><li>오브젝트는 여전히 <code>CompositionRoot</code>를 직접 사용해야 하므로 <code>MovieService</code>를 노출하고 <code>NetworkClient</code>의 공유 인스턴스를 사용하도록 합니다.</ul> <pre class=language-swift data-lang=swift style=color:#c0c5ce;background-color:#2b303b><code class=language-swift data-lang=swift><span style=color:#65737e>/// 📄 CompositionRoot.swift
+</span><span style=color:#b48ead>enum</span><span> CompositionRoot {
+</span><span>...
+</span><span>
+</span><span style=color:#b48ead>var</span><span> movieService: MovieService {
+</span><span>  Movies.movieService(networkClient: networkClient)
+</span><span>}
+</span><span>
+</span><span style=color:#b48ead>private static let</span><span> networkClient = NetworkClient()
+</span><span>}
+</span></code></pre></ul><h2 id=mamuri-saenggag>마무리 생각<a aria-hidden=true class=anchor hidden href=#mamuri-saenggag>#</a></h2><ul><li>2022년 초부터 저는 대부분의 부업 프로젝트에 컴포지션 루트 패턴을 도입했고, <a href=https://shape.dk/>Shape</a>에서 일하고 있는 몇몇 프로젝트에도 도입했습니다.<li>의존성 주입과 컴포지션 루트 패턴을 도입하면 컴포넌트가 덜 긴밀하게 결합되어 단위 테스트가 더 쉬워집니다. 예를 들어, <code>MovieService</code>를 단위 테스트하려면 <code>MovieRepository</code>의 모의 구현을 생성하고 <code>MovieService</code>를 초기화할 때 이를 전달하기만 하면 됩니다.<li>또한, [Medium]에서 설명한 전략(https://medium.engineering/evolution-of-the-medium-ios-app-architecture-8b6090f4508e)을 사용하여 컴포넌트를 자체 Swift 패키지로 옮기면 호스트 앱을 매우 얇게 만들 수 있습니다.<li>제 프로젝트에 컴포지션 루트 패턴을 도입한 후, 메인 타깃에는 보통 앱 델리게이트, 씬 델리게이트, 컴포지션 루트만 거의 포함되지 않는다는 것을 알게 되었습니다.<li>메인 타깃에 코드가 거의 포함되어 있지 않다는 것은 프로젝트에 <em>Dev Apps</em> 를 도입하기 위한 훌륭한 설정이 있다는 것을 의미합니다. 개발자 앱(https://medium.com/airbnb-engineering/designing-for-productivity-in-a-large-scale-ios-application-9376a430a0bf)은 개발자가 개발 중에 특정 기능을 반복할 때 사용하는 앱입니다.<li>이러한 앱은 앱의 특정 부분으로 실행되고 메인 타겟보다 적은 코드를 포함하므로 컴파일 시간이 단축되므로 개발 중 반복 작업을 더 빠르게 수행할 수 있습니다.<li>개발 앱 빌드는 <a href=https://github.com/yonaskolb/XcodeGen>XcodeGen</a>을 사용하여 Xcode 프로젝트에 새 대상을 추가하고 앱을 구성하는 컴포지션 루트를 추가하는 것만으로 간단해집니다.<li>이 포스팅을 읽고 Swift 코드베이스에 컴포지션 루트를 도입하는 것이 궁금하다면, 제가 일하면서 작업하고 최근에 오픈소스화한 앱인 <a href=https://github.com/shapehq/tartelet>Tartelet 앱</a>의 <a href=https://github.com/shapehq/tartelet/blob/main/Tartelet/Sources/CompositionRoot.swift>CompositionRoot.swift</a> 파일을 살펴볼 수 있습니다.</ul><h2 id=cuga-repeoreonseu>추가 레퍼런스<a aria-hidden=true class=anchor hidden href=#cuga-repeoreonseu>#</a></h2><ul><li><a href="https://www.youtube.com/watch?v=bmIW1skJQFo">Swift Connection 2023 - Simon B. Støvring. - Achieving Loose Coupling with Pure Dependency Injection - YouTube</a> <ul><li><a href=https://github.com/shapehq/CoffeeShopsExample>GitHub - shapehq/CoffeeShopsExample: Example project showing how Dependency Injection along with the Composition Root pattern can be introduced in a SwiftUI codebase.</a><li>위 글은 쓴 저자의 #dependancyInjection , #compositionRoot 에 대한 컨퍼런스 와 해당 자료...</ul><li>https://www.youtube.com/watch?v=lx3-KDRORyo&list=PLQ_uTU3EyV1TsXYHGaB11Y4-owo5sHQwY <ul><li>#dependancyInjection 에 대한 youtube playlist</ul></ul></div><footer class=post-footer><ul class=post-tags><li><a href=https://wonkwh.github.io/tags/swift/>swift</a><li><a href=https://wonkwh.github.io/tags/uikit/>uikit</a><li><a href=https://wonkwh.github.io/tags/composition-root/>composition_root</a><li><a href=https://wonkwh.github.io/tags/dependancy-injection/>dependancy_injection</a><li><a href=https://wonkwh.github.io/tags/protocol/>protocol</a><li><a href=https://wonkwh.github.io/tags/design-pattern/>design_pattern</a></ul><nav class=paginav><a class=prev href=https://wonkwh.github.io/posts/fundamentals-of-typedrivencode-part1/> <span class=title>« Prev</span> <br> <span>Fundamentals of type-driven code part1</span> </a></nav></footer></article></main><footer class=footer><span>© 2025 <a href=https://wonkwh.github.io>cydave</a></span><span> Powered by <a rel="noopener noreferrer" href=https://www.getzola.org/ target=_blank>Zola</a> & <a href=https://github.com/cydave/zola-theme-papermod rel=noopener target=_blank>PaperMod</a> </span></footer><a aria-label="go to top" title="Go to Top (Alt + G)" accesskey=g class=top-link href=#top id=top-link> <svg viewbox="0 0 12 6" fill=currentColor xmlns=http://www.w3.org/2000/svg><path d="M12 6H0l6-6z"/></svg> </a><script>let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });</script><script>var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };</script><script>document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })</script><script>document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                var content = codeblock.textContent;
+                if(codeblock.firstChild.tagName == 'TABLE') {
+                    content = Array(...codeblock.firstChild.getElementsByTagName('span')).map((span) => { return span.textContent; }).join('');
+                }
+                navigator.clipboard.writeText(content);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            // td containing LineNos
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            // table containing LineNos and code
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            // code blocks not having highlight as parent class
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });</script>

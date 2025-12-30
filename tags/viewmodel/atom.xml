@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title> - viewModel</title>
+    <link rel="self" type="application/atom+xml" href="https://wonkwh.github.io/tags/viewmodel/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://wonkwh.github.io"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2020-03-15T00:00:00+00:00</updated>
+    <id>https://wonkwh.github.io/tags/viewmodel/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Building Better View</title>
+        <published>2020-03-15T00:00:00+00:00</published>
+        <updated>2020-03-15T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              cydave
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://wonkwh.github.io/posts/buildingbetterviews/"/>
+        <id>https://wonkwh.github.io/posts/buildingbetterviews/</id>
+        
+        <summary type="html">&lt;p&gt;Model, ViewModel 을 view로 보여주어야 할떄 &lt;code&gt;viewData protocol&lt;&#x2F;code&gt; 을 이용하여 일관적으로 view를 configure 하는 방법&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;original article
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https:&#x2F;&#x2F;www.fabisevi.ch&#x2F;2019&#x2F;12&#x2F;26&#x2F;building-better-views-part-i&#x2F;&quot;&gt;Building better view&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;</summary>
+        
+    </entry>
+</feed>
