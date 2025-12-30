@@ -1,5 +1,5 @@
 +++
-title = "Reuable Protocol"
+title = "Fundamentals of type-driven code"
 date = 2024-10-25
 categories = ["type"]
 
