@@ -1,5 +1,5 @@
 +++
-title = "Fundamentals of type-driven code"
+title = "Fundamentals of type-driven code part1"
 date = 2024-10-25
 categories = ["type"]
 

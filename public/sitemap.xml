@@ -47,6 +47,10 @@
         <lastmod>2019-12-06</lastmod>
     </url>
     <url>
+        <loc>https://wonkwh.github.io/introducingthecompositionrootpattern/</loc>
+        <lastmod>2024-11-15</lastmod>
+    </url>
+    <url>
         <loc>https://wonkwh.github.io/page/1/</loc>
     </url>
     <url>
@@ -109,10 +113,16 @@
         <loc>https://wonkwh.github.io/tags/combine/</loc>
     </url>
     <url>
+        <loc>https://wonkwh.github.io/tags/compositionroot/</loc>
+    </url>
+    <url>
         <loc>https://wonkwh.github.io/tags/custom-view/</loc>
     </url>
     <url>
         <loc>https://wonkwh.github.io/tags/dependancy-injection/</loc>
+    </url>
+    <url>
+        <loc>https://wonkwh.github.io/tags/dependancyinjection/</loc>
     </url>
     <url>
         <loc>https://wonkwh.github.io/tags/design-pattern/</loc>
