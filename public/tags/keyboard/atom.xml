@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title> - keyboard</title>
+    <link rel="self" type="application/atom+xml" href="https://wonkwh.github.io/tags/keyboard/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://wonkwh.github.io"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2019-11-28T00:00:00+00:00</updated>
+    <id>https://wonkwh.github.io/tags/keyboard/atom.xml</id>
+    <entry xml:lang="en">
+        <title>inputAccessoryView SafeLayoutGuide fix</title>
+        <published>2019-11-28T00:00:00+00:00</published>
+        <updated>2019-11-28T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              cydave
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://wonkwh.github.io/posts/inputaccessaryview-in-safearea-bug/"/>
+        <id>https://wonkwh.github.io/posts/inputaccessaryview-in-safearea-bug/</id>
+        
+        <summary type="html">&lt;p&gt;keyboard 위에 추가 뷰를 만들려면 NotificationHandler로 직접 콘트롤해도 되지만 &lt;code&gt;inputAccessoryView&lt;&#x2F;code&gt; 를 override해서 view를 재정의해주면 간단하다
+하지만 iphone x 이상 safelayout 을 인식하지 못하는 문제가 있다 이를 해결하기 위한 코드&lt;&#x2F;p&gt;</summary>
+        
+    </entry>
+</feed>

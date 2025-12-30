@@ -1,0 +1,244 @@
+<!doctype html><html dir=auto lang=en><head><meta charset=utf-8><meta content="IE=edge" http-equiv=X-UA-Compatible><meta content="width=device-width,initial-scale=1,shrink-to-fit=no" name=viewport><meta content="index, follow" name=robots><title>swift composable architecture part_1</title><meta content="keyword1, keyword2, keyword3" name=keywords><meta name=description><meta content=cydave name=author><link href=https://wonkwh.github.io/posts/swift-composable-architecture-part1/ rel=canonical><link href=https://wonkwh.github.io/css/includes/scroll-bar.css rel=stylesheet><link href=https://wonkwh.github.io/css/styles.css rel=stylesheet><link href=https://wonkwh.github.io/css/override.css rel=stylesheet><link href=https://wonkwh.github.io/atom.xml rel=alternate title=RSS type=application/atom+xml><noscript><style>#theme-toggle,.top-link{display:none}</style> <style>@media (prefers-color-scheme:dark){:root{--theme:#1d1e20;--entry:#2e2e33;--primary:#dadadb;--secondary:#9b9c9d;--tertiary:#414244;--content:#c4c4c5;--hljs-bg:#2e2e33;--code-bg:#37383e;--border:#333}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style></noscript><body id=top><script>if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }</script><header class=header><nav class=nav><div class=logo><a title="Kei's KnowledgeBage (Alt + H)" accesskey=h href=https://wonkwh.github.io> Kei's KnowledgeBage </a><div class=logo-switches><button title="(Alt + T)" accesskey=t id=theme-toggle><svg viewbox="0 0 24 24" fill=none height=18 id=moon stroke=currentColor stroke-linecap=round stroke-linejoin=round stroke-width=2 width=24 xmlns=http://www.w3.org/2000/svg><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg> <svg viewbox="0 0 24 24" fill=none height=18 id=sun stroke=currentColor stroke-linecap=round stroke-linejoin=round stroke-width=2 width=24 xmlns=http://www.w3.org/2000/svg><circle cx=12 cy=12 r=5></circle><line x1=12 x2=12 y1=1 y2=3></line><line x1=12 x2=12 y1=21 y2=23></line><line x1=4.22 x2=5.64 y1=4.22 y2=5.64></line><line x1=18.36 x2=19.78 y1=18.36 y2=19.78></line><line x1=1 x2=3 y1=12 y2=12></line><line x1=21 x2=23 y1=12 y2=12></line><line x1=4.22 x2=5.64 y1=19.78 y2=18.36></line><line x1=18.36 x2=19.78 y1=5.64 y2=4.22></line></svg></button><ul class=lang-switch><li></ul></div></div><ul id=menu><li><a href=https://wonkwh.github.io/archive title=Archive> <span>Archive</span> </a><li><a href=https://wonkwh.github.io/tags title=Tags> <span>Tags</span> </a><li><a href=https://wonkwh.github.io/search title=Search> <span>Search</span> </a><li><a href=https://github.com/wonkwh target=_blank title=Github> <span>Github</span> <svg viewbox="0 0 24 24" fill=none height=12 shape-rendering=geometricPrecision stroke=currentColor stroke-linecap=round stroke-linejoin=round stroke-width=2.5 width=12><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path><path d="M15 3h6v6"></path><path d="M10 14L21 3"></path></svg> </a></ul></nav></header><main class=main><article class=post-single><header class=post-header><div class=breadcrumbs><a href=https://wonkwh.github.io>Home</a> »  <a href=https://wonkwh.github.io/posts/>Posts</a> »  <a href=https://wonkwh.github.io/posts/swift-composable-architecture-part1/>swift composable architecture part_1</a></div><h1 class=post-title>swift composable architecture part_1</h1><div class=post-meta><span title="2020-04-14 00:00:00 +0000">2020-04-14</span> · 1 min · cydave</div></header><div class=toc><details><summary title="(Alt + C)" accesskey=c><span class=details>Table of Contents</span></summary> <div class=inner><ul><li><a aria-label=swift-composable-archtecture-part1 href=#swift-composable-archtecture-part1>swift-composable-archtecture-part1</a> <ul><li><a aria-label="todo example" href=#todo-example>todo example</a> <ul><li><a aria-label="준비 작업" href=#junbi-jageob>준비 작업</a><li><a aria-label="ViewStore 추가" href=#viewstore-cuga>ViewStore 추가</a><li><a aria-label="View UI 변경" href=#view-ui-byeongyeong>View UI 변경</a><li><a aria-label="Action 추가" href=#action-cuga>Action 추가</a><li><a aria-label=Debugging href=#debugging>Debugging</a></ul></ul></ul></div></details></div><div class=post-content><h1 id=swift-composable-archtecture-part1>swift-composable-archtecture-part1<a aria-hidden=true class=anchor hidden href=#swift-composable-archtecture-part1>#</a></h1><p>– https://github.com/pointfreeco/swift-composable-architecture#installation – https://www.pointfree.co/collections/composable-architecture/a-tour-of-the-composable-architecture/ep100-a-tour-of-the-composable-architecture-part-1<h2 id=todo-example>todo example<a aria-hidden=true class=anchor hidden href=#todo-example>#</a></h2><h3 id=junbi-jageob>준비 작업<a aria-hidden=true class=anchor hidden href=#junbi-jageob>#</a></h3><p>– swift pacakage로 install – <code>http://github.com/pointfreeco/swift-composable-architecture</code> 추가 – state, action, environment 추가 후 Reducer 추가<pre class=language-swift data-lang=swift style=color:#c0c5ce;background-color:#2b303b><code class=language-swift data-lang=swift><span style=color:#b48ead>import </span><span>ComposableArchitecture
+</span><span style=color:#b48ead>struct</span><span> AppState {
+</span><span>        
+</span><span>}
+</span><span style=color:#b48ead>enum</span><span> AppAction {
+</span><span>    
+</span><span>}
+</span><span style=color:#b48ead>struct</span><span> AppEnvironment {
+</span><span>    
+</span><span>}
+</span><span style=color:#b48ead>let</span><span> appReducer = Reducer&lt;AppState, AppAction, AppEnvironment> { state, action, _ </span><span style=color:#b48ead>in
+</span><span>    </span><span style=color:#b48ead>switch</span><span> action {
+</span><span>    }
+</span><span>}
+</span><span>
+</span><span>–	ContentView에 Store instance 추가 
+</span><span style=color:#b48ead>struct</span><span> ContentView: View {
+</span><span>    </span><span style=color:#b48ead>let</span><span> store: Store&lt;AppState, AppAction>
+</span><span>    
+</span><span>    </span><span style=color:#b48ead>var</span><span> body: some View {
+</span><span>        NavigationView {
+</span><span>            List {
+</span><span>                Text(</span><span style=color:#a3be8c>"Hello, World!"</span><span>)
+</span><span>            }.navigationBarTitle(</span><span style=color:#a3be8c>"Todos"</span><span>)
+</span><span>        }
+</span><span>    }
+</span><span>}
+</span></code></pre><p>– ContentView_preview 와 sceneDelegate ContentView Constructor 변경<pre class=language-swift data-lang=swift style=color:#c0c5ce;background-color:#2b303b><code class=language-swift data-lang=swift><span style=color:#b48ead>struct</span><span> ContentView_Previews: PreviewProvider {
+</span><span>    </span><span style=color:#b48ead>static var</span><span> previews: some View {
+</span><span>        ContentView(store: Store(
+</span><span>                initialState: AppState(),
+</span><span>                reducer: appReducer,
+</span><span>                environment: AppEnvironment()
+</span><span>            )
+</span><span>        )
+</span><span>    }
+</span><span>}
+</span></code></pre><h3 id=viewstore-cuga>ViewStore 추가<a aria-hidden=true class=anchor hidden href=#viewstore-cuga>#</a></h3><p>– state에 domain data model을 추가<pre class=language-swift data-lang=swift style=color:#c0c5ce;background-color:#2b303b><code class=language-swift data-lang=swift><span style=color:#b48ead>struct</span><span> ToDo: Equatable, Identifiable {
+</span><span>    </span><span style=color:#b48ead>var</span><span> description = </span><span style=color:#a3be8c>""
+</span><span>    </span><span style=color:#b48ead>let</span><span> id: UUID
+</span><span>    </span><span style=color:#b48ead>var</span><span> isComplete = </span><span style=color:#b48ead>false
+</span><span>}
+</span><span style=color:#b48ead>struct</span><span> AppState: Equatable {
+</span><span>    </span><span style=color:#b48ead>var</span><span> todos: [ToDo]
+</span><span>}
+</span></code></pre><p>– view 에 WithViewStore 을 추가<pre class=language-swift data-lang=swift style=color:#c0c5ce;background-color:#2b303b><code class=language-swift data-lang=swift><span>    NavigationView {
+</span><span>        WithViewStore(</span><span style=color:#b48ead>self</span><span>.store) { viewStore </span><span style=color:#b48ead>in
+</span><span>            List {
+</span><span>                ForEach(viewStore.todos) { todo </span><span style=color:#b48ead>in
+</span><span>                    Text(todo.description)
+</span><span>                }
+</span><span>            }.navigationBarTitle(</span><span style=color:#a3be8c>"Todos"</span><span>)
+</span><span>        }
+</span><span>    }
+</span></code></pre><p>– preview 에 dommy data를 AppState에 추가<pre class=language-swift data-lang=swift style=color:#c0c5ce;background-color:#2b303b><code class=language-swift data-lang=swift><span style=color:#b48ead>struct</span><span> ContentView_Previews: PreviewProvider {
+</span><span>    </span><span style=color:#b48ead>static var</span><span> previews: some View {
+</span><span>        ContentView(
+</span><span>            store: Store(
+</span><span>                initialState: AppState(todos: [
+</span><span>                    ToDo(description: </span><span style=color:#a3be8c>"PointFree"</span><span>, id: UUID(), isComplete: </span><span style=color:#b48ead>false</span><span>),
+</span><span>                    ToDo(description: </span><span style=color:#a3be8c>"Udemy"</span><span>, id: UUID(), isComplete: </span><span style=color:#b48ead>false</span><span>),
+</span><span>                    ToDo(description: </span><span style=color:#a3be8c>"MoimApp"</span><span>, id: UUID(), isComplete: </span><span style=color:#b48ead>false</span><span>),
+</span><span>                ]),
+</span><span>                reducer: appReducer,
+</span><span>                environment: AppEnvironment()
+</span><span>            )
+</span><span>        )
+</span><span>    }
+</span><span>}
+</span></code></pre><h3 id=view-ui-byeongyeong>View UI 변경<a aria-hidden=true class=anchor hidden href=#view-ui-byeongyeong>#</a></h3><p>– ListView에 체크마크 버튼을 추가하고 isComplete 속성에 따라 foregroundColor를 추가 – preview의 속성을 변경하면서 제대로 되는지 확인 할수 있다.<pre class=language-swift data-lang=swift style=color:#c0c5ce;background-color:#2b303b><code class=language-swift data-lang=swift><span>    List {
+</span><span>        ForEach(viewStore.todos) { todo </span><span style=color:#b48ead>in
+</span><span>            HStack {
+</span><span>                Button(action: {}) {
+</span><span>                    Image(systemName: todo.isComplete ? </span><span style=color:#a3be8c>"checkmark.square"</span><span>: </span><span style=color:#a3be8c>"square"</span><span>)
+</span><span>                }
+</span><span>                TextField(</span><span style=color:#a3be8c>"Untitled todo"</span><span>, text: .constant(todo.description))
+</span><span>            }.foregroundColor(todo.isComplete ? .gray : </span><span style=color:#d08770>nil</span><span>)
+</span><span>        }
+</span><span>    }.navigationBarTitle(</span><span style=color:#a3be8c>"Todos"</span><span>)
+</span></code></pre><h3 id=action-cuga>Action 추가<a aria-hidden=true class=anchor hidden href=#action-cuga>#</a></h3><ul><li>UI action을 <code>AppAction</code> enum 에 추가한다.</ul><pre class=language-swift data-lang=swift style=color:#c0c5ce;background-color:#2b303b><code class=language-swift data-lang=swift><span>    </span><span style=color:#b48ead>enum</span><span> AppAction {
+</span><span>        </span><span style=color:#b48ead>case</span><span> todoCheckboxTapped(index: Int)
+</span><span>        </span><span style=color:#b48ead>case</span><span> todoTextFieldChanged(index: Int, text: String)
+</span><span>    }
+</span><span>
+</span></code></pre><ul><li><code>Reducer</code> 에 해당 Action 구현</ul><pre class=language-swift data-lang=swift style=color:#c0c5ce;background-color:#2b303b><code class=language-swift data-lang=swift><span style=color:#b48ead>let</span><span> appReducer = Reducer&lt;AppState, AppAction, AppEnvironment> { state, action, _ </span><span style=color:#b48ead>in
+</span><span>    </span><span style=color:#b48ead>switch</span><span> action {
+</span><span>        
+</span><span>    </span><span style=color:#b48ead>case </span><span>.todoCheckboxTapped(index: </span><span style=color:#b48ead>let</span><span> index):
+</span><span>        state.todos[index].isComplete.toggle()
+</span><span>        </span><span style=color:#b48ead>return </span><span>.</span><span style=color:#b48ead>none
+</span><span>    </span><span style=color:#b48ead>case </span><span>.todoTextFieldChanged(index: </span><span style=color:#b48ead>let</span><span> index, text: </span><span style=color:#b48ead>let</span><span> text):
+</span><span>        state.todos[index].description = text
+</span><span>        </span><span style=color:#b48ead>return </span><span>.</span><span style=color:#b48ead>none
+</span><span>    }
+</span><span>}
+</span><span>
+</span></code></pre><ul><li><code>ContentView</code>에 해당 Control Event에 Action send <ul><li>Index를 Foreach에 추가하려면 다음과 같이 추가<li>`ForEach(Array(viewStore.todos.enumerated()), id: .element.id)<li>추후 <code>ForEachStore</code> 로 변경</ul></ul><pre class=language-swift data-lang=swift style=color:#c0c5ce;background-color:#2b303b><code class=language-swift data-lang=swift><span>        ForEach(Array(viewStore.todos.enumerated()), id: \.element.id) { index, todo </span><span style=color:#b48ead>in
+</span><span>            HStack {
+</span><span>                Button(action: {
+</span><span>                    viewStore.send(.todoCheckboxTapped(index: index))
+</span><span>                }) {
+</span><span>                    Image(systemName: todo.isComplete ? </span><span style=color:#a3be8c>"checkmark.square"</span><span>: </span><span style=color:#a3be8c>"square"</span><span>)
+</span><span>                }.buttonStyle(PlainButtonStyle())
+</span><span>
+</span><span>                TextField(</span><span style=color:#a3be8c>"Untitled todo"</span><span>, text: viewStore.binding(
+</span><span>                  </span><span style=color:#b48ead>get</span><span>: { $</span><span style=color:#d08770>0</span><span>.todos[index].description },
+</span><span>                  send: { .todoTextFieldChanged(index: index, text: $</span><span style=color:#d08770>0</span><span>) }
+</span><span>                ))
+</span><span>            }.foregroundColor(todo.isComplete ? .gray : </span><span style=color:#d08770>nil</span><span>)
+</span><span>        }
+</span></code></pre><h3 id=debugging>Debugging<a aria-hidden=true class=anchor hidden href=#debugging>#</a></h3><ul><li><code>Reducer</code> 에 <code>debug()</code> 추가</ul><pre class=language-swift data-lang=swift style=color:#c0c5ce;background-color:#2b303b><code class=language-swift data-lang=swift><span style=color:#b48ead>let</span><span> appReducer = Reducer&lt;AppState, AppAction, Void> { state, action, _ </span><span style=color:#b48ead>in
+</span><span>  ...
+</span><span>}
+</span><span>.debug()
+</span></code></pre><ul><li>혹은 <code>SceneDelegate</code> , <code>ContentView_Previews</code>에 contentView instance에 reducer에 reducer paramter에 debug()를 추가</ul><pre class=language-swift data-lang=swift style=color:#c0c5ce;background-color:#2b303b><code class=language-swift data-lang=swift><span>     </span><span style=color:#b48ead>let</span><span> contentView = ContentView(store: Store(
+</span><span>                initialState: AppState(todos: [
+</span><span>                    ToDo(description: </span><span style=color:#a3be8c>"PointFree"</span><span>, id: UUID(), isComplete: </span><span style=color:#b48ead>true</span><span>),
+</span><span>                    ToDo(description: </span><span style=color:#a3be8c>"Udemy"</span><span>, id: UUID(), isComplete: </span><span style=color:#b48ead>false</span><span>),
+</span><span>                    ToDo(description: </span><span style=color:#a3be8c>"MoimApp"</span><span>, id: UUID(), isComplete: </span><span style=color:#b48ead>false</span><span>),
+</span><span>                ]),
+</span><span>                reducer: appReducer.debug(),
+</span><span>                environment: AppEnvironment()
+</span><span>            )
+</span><span>        )
+</span><span>
+</span></code></pre><ul><li>결과는 다음과 같은 로그를 console에 뿌려준다.</ul><pre style=color:#c0c5ce;background-color:#2b303b><code><span>AppAction.todoCheckboxTapped(
+</span><span>    index: 1
+</span><span>  )
+</span><span>  AppState(
+</span><span>    todos: [
+</span><span>      ToDo(
+</span><span>        description: "PointFree",
+</span><span>        id: 2CA87ACF-3868-4B1F-9D95-D25C03FB6B02,
+</span><span>        isComplete: true
+</span><span>      ),
+</span><span>      ToDo(
+</span><span>        description: "Udemy",
+</span><span>        id: EB6738F4-B644-40B1-9519-8C7050FB55B3,
+</span><span>−       isComplete: false
+</span><span>+       isComplete: true
+</span><span>      ),
+</span><span>      ToDo(
+</span><span>        description: "MoimApp",
+</span><span>        id: 95E6E5BF-6FB1-430E-8444-B1B137369066,
+</span><span>        isComplete: false
+</span><span>      ),
+</span><span>    ]
+</span><span>  )
+</span></code></pre></div><footer class=post-footer><ul class=post-tags><li><a href=https://wonkwh.github.io/tags/swift/>swift</a><li><a href=https://wonkwh.github.io/tags/tca/>tca</a><li><a href=https://wonkwh.github.io/tags/swiftui/>swiftui</a><li><a href=https://wonkwh.github.io/tags/combine/>combine</a><li><a href=https://wonkwh.github.io/tags/pointfree/>pointfree</a></ul><nav class=paginav><a class=prev href=https://wonkwh.github.io/swift-composable-architecture-part1/> <span class=title>« Prev</span> <br> <span>swift composable architecture part_1</span> </a><a class=next href=https://wonkwh.github.io/posts/integratingswiftuiwithuikit/> <span class=title>Next »</span> <br> <span>integrating swiftui with uikit</span> </a></nav></footer></article></main><footer class=footer><span>© 2025 <a href=https://wonkwh.github.io>cydave</a></span><span> Powered by <a rel="noopener noreferrer" href=https://www.getzola.org/ target=_blank>Zola</a> & <a href=https://github.com/cydave/zola-theme-papermod rel=noopener target=_blank>PaperMod</a> </span></footer><a aria-label="go to top" title="Go to Top (Alt + G)" accesskey=g class=top-link href=#top id=top-link> <svg viewbox="0 0 12 6" fill=currentColor xmlns=http://www.w3.org/2000/svg><path d="M12 6H0l6-6z"/></svg> </a><script>let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });</script><script>var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };</script><script>document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })</script><script>document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                var content = codeblock.textContent;
+                if(codeblock.firstChild.tagName == 'TABLE') {
+                    content = Array(...codeblock.firstChild.getElementsByTagName('span')).map((span) => { return span.textContent; }).join('');
+                }
+                navigator.clipboard.writeText(content);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            // td containing LineNos
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            // table containing LineNos and code
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            // code blocks not having highlight as parent class
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });</script>

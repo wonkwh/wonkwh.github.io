@@ -1,10 +1,9 @@
 +++
 title = "fluid interface effect"
 date = 2019-11-27
-category = "uikit"
 
 [taxonomies]
-tags = ["swift","uikit", "animation", "wwdc"]
+tags = ["swift","UIKit", "animation", "wwdc"]
 +++
 
 wwdc2018 세션중 하나인 [Designing Fluid Interfaces](https://developer.apple.com/videos/play/wwdc2018/803/) 를 직접 구현한 opensource중 button 구현에 대해 정리

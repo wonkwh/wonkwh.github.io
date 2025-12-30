@@ -1,0 +1,137 @@
+<!doctype html><html dir=auto lang=en><head><meta charset=utf-8><meta content="IE=edge" http-equiv=X-UA-Compatible><meta content="width=device-width,initial-scale=1,shrink-to-fit=no" name=viewport><meta content="index, follow" name=robots><title>Intrinsic Content Size</title><meta content="keyword1, keyword2, keyword3" name=keywords><meta name=description><meta content=cydave name=author><link href=https://wonkwh.github.io/posts/intrinsiccontentsize/ rel=canonical><link href=https://wonkwh.github.io/css/includes/scroll-bar.css rel=stylesheet><link href=https://wonkwh.github.io/css/styles.css rel=stylesheet><link href=https://wonkwh.github.io/css/override.css rel=stylesheet><link href=https://wonkwh.github.io/atom.xml rel=alternate title=RSS type=application/atom+xml><noscript><style>#theme-toggle,.top-link{display:none}</style> <style>@media (prefers-color-scheme:dark){:root{--theme:#1d1e20;--entry:#2e2e33;--primary:#dadadb;--secondary:#9b9c9d;--tertiary:#414244;--content:#c4c4c5;--hljs-bg:#2e2e33;--code-bg:#37383e;--border:#333}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style></noscript><body id=top><script>if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }</script><header class=header><nav class=nav><div class=logo><a title="Kei's KnowledgeBage (Alt + H)" accesskey=h href=https://wonkwh.github.io> Kei's KnowledgeBage </a><div class=logo-switches><button title="(Alt + T)" accesskey=t id=theme-toggle><svg viewbox="0 0 24 24" fill=none height=18 id=moon stroke=currentColor stroke-linecap=round stroke-linejoin=round stroke-width=2 width=24 xmlns=http://www.w3.org/2000/svg><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg> <svg viewbox="0 0 24 24" fill=none height=18 id=sun stroke=currentColor stroke-linecap=round stroke-linejoin=round stroke-width=2 width=24 xmlns=http://www.w3.org/2000/svg><circle cx=12 cy=12 r=5></circle><line x1=12 x2=12 y1=1 y2=3></line><line x1=12 x2=12 y1=21 y2=23></line><line x1=4.22 x2=5.64 y1=4.22 y2=5.64></line><line x1=18.36 x2=19.78 y1=18.36 y2=19.78></line><line x1=1 x2=3 y1=12 y2=12></line><line x1=21 x2=23 y1=12 y2=12></line><line x1=4.22 x2=5.64 y1=19.78 y2=18.36></line><line x1=18.36 x2=19.78 y1=5.64 y2=4.22></line></svg></button><ul class=lang-switch><li></ul></div></div><ul id=menu><li><a href=https://wonkwh.github.io/archive title=Archive> <span>Archive</span> </a><li><a href=https://wonkwh.github.io/tags title=Tags> <span>Tags</span> </a><li><a href=https://wonkwh.github.io/search title=Search> <span>Search</span> </a><li><a href=https://github.com/wonkwh target=_blank title=Github> <span>Github</span> <svg viewbox="0 0 24 24" fill=none height=12 shape-rendering=geometricPrecision stroke=currentColor stroke-linecap=round stroke-linejoin=round stroke-width=2.5 width=12><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path><path d="M15 3h6v6"></path><path d="M10 14L21 3"></path></svg> </a></ul></nav></header><main class=main><article class=post-single><header class=post-header><div class=breadcrumbs><a href=https://wonkwh.github.io>Home</a> »  <a href=https://wonkwh.github.io/posts/>Posts</a> »  <a href=https://wonkwh.github.io/posts/intrinsiccontentsize/>Intrinsic Content Size</a></div><h1 class=post-title>Intrinsic Content Size</h1><div class=post-meta><span title="2019-12-06 00:00:00 +0000">2019-12-06</span> · 1 min · cydave</div></header><div class=toc><details><summary title="(Alt + C)" accesskey=c><span class=details>Table of Contents</span></summary> <div class=inner><ul><li><a aria-label="참조 video course" href=#camjo-video-course>참조 video course</a><li><a aria-label="sample code" href=#sample-code>sample code</a><li><a aria-label=참조 href=#camjo>참조</a></ul></div></details></div><div class=post-content><p><code>Intrinsic Content Size</code> 를 이용하여 심플하게 UILabel 등의 UI를 구성하는 방법</p><span id=continue-reading></span><h3 id=camjo-video-course>참조 video course<a aria-hidden=true class=anchor hidden href=#camjo-video-course>#</a></h3><h3 id=sample-code>sample code<a aria-hidden=true class=anchor hidden href=#sample-code>#</a></h3><pre class=language-swift data-lang=swift style=color:#c0c5ce;background-color:#2b303b><code class=language-swift data-lang=swift><span style=color:#65737e>//
+</span><span style=color:#65737e>//  BadgeView.swift
+</span><span style=color:#65737e>//  DesignKit-iOS
+</span><span style=color:#65737e>//
+</span><span style=color:#65737e>//  Created by kwanghyun.won on 2019/12/05.
+</span><span style=color:#65737e>//  Copyright © 2019 Vingle. All rights reserved.
+</span><span style=color:#65737e>//
+</span><span>
+</span><span style=color:#b48ead>import </span><span>UIKit
+</span><span>
+</span><span style=color:#b48ead>open class</span><span> BadgeLabel: UILabel {
+</span><span>    </span><span style=color:#b48ead>open override var</span><span> intrinsicContentSize: CGSize {
+</span><span>        </span><span style=color:#b48ead>let</span><span> originalContentsSize = </span><span style=color:#b48ead>super</span><span>.intrinsicContentSize
+</span><span>        </span><span style=color:#b48ead>return</span><span> CGSize(width: originalContentsSize.width + </span><span style=color:#d08770>11</span><span>, linearity: originalContentsSize. + </span><span style=color:#d08770>5</span><span>.</span><span style=color:#d08770>5</span><span>)
+</span><span>    }
+</span><span>
+</span><span>    </span><span style=color:#b48ead>public override init</span><span>(frame: CGRect) {
+</span><span>        </span><span style=color:#b48ead>super</span><span>.</span><span style=color:#b48ead>init</span><span>(frame: frame)
+</span><span>
+</span><span>        backgroundColor = Colors.primary.withAlphaComponent(</span><span style=color:#d08770>0</span><span>.</span><span style=color:#d08770>9</span><span>)
+</span><span>        textColor = .white
+</span><span>        textAlignment = .center
+</span><span>        font = Fonts.caption
+</span><span>        translatesAutoresizingMaskIntoConstraints = </span><span style=color:#b48ead>false
+</span><span>    }
+</span><span>
+</span><span>    </span><span style=color:#b48ead>open override func </span><span>layoutSubviews() {
+</span><span>        </span><span style=color:#b48ead>super</span><span>.layoutSubviews()
+</span><span>        </span><span style=color:#b48ead>if let</span><span> count = text?.count {
+</span><span>            </span><span style=color:#b48ead>if</span><span> count == </span><span style=color:#d08770>1</span><span> {
+</span><span>                frame.size = .</span><span style=color:#b48ead>init</span><span>(width: </span><span style=color:#d08770>20</span><span>, : </span><span style=color:#d08770>20</span><span>)
+</span><span>            }
+</span><span>        }
+</span><span>        
+</span><span>        setCorner(</span><span style=color:#d08770>10</span><span>.</span><span style=color:#d08770>0</span><span>)
+</span><span>    }
+</span><span>
+</span><span>    </span><span style=color:#b48ead>required public init</span><span>?(coder: NSCoder) {
+</span><span>        fatalError(</span><span style=color:#a3be8c>"init(coder:) has not been implemented"</span><span>)
+</span><span>    }
+</span><span>}
+</span></code></pre><blockquote><p>사전적의미: intrinsic Content Size : 본질적인 컨텐츠 크기</blockquote><ul><li>위와 같이 <code>UILabel</code>의 서브클래스 BadgeLabel 에서 <code>intrinsicContentSize</code> 을 재정의하여 view의 사이즈를 의 영역을 재정의한다.<li><code>instrinsicContentSize</code>에 영향을 미치는 뷰의 속성 또는 컨텐츠가 바뀔때 <code>invalidateIntrinsicContentSize()</code> 를 호출해야한다. (이 메서드에서 오토레이아웃이 사이즈 제약조건이 다시 업데이트됨)</ul><h2 id=camjo>참조<a aria-hidden=true class=anchor hidden href=#camjo>#</a></h2><ul><li><a href=https://developer.apple.com/documentation/uikit/uiview/1622600-intrinsiccontentsize>apple doc</a><li><a href=https://magi82.github.io/ios-intrinsicContentSize/>ios intrinsicContentSize에 대해서 알아보기</a><li><a href=https://medium.com/@vialyx/import-uikit-what-is-intrinsic-content-size-20ae302f21f3>iOS UIKit: What is intrinsic content size</a></ul><hr><ul><li>tag: #uikit, #uilabel, #IntrinsicContentSize, #customView</ul></div><footer class=post-footer><ul class=post-tags><li><a href=https://wonkwh.github.io/tags/uikit/>UIKit</a><li><a href=https://wonkwh.github.io/tags/uilabel/>UILabel</a></ul><nav class=paginav><a class=prev href=https://wonkwh.github.io/posts/inputaccessaryview-in-safearea-bug/> <span class=title>« Prev</span> <br> <span>inputAccessoryView SafeLayoutGuide fix</span> </a><a class=next href=https://wonkwh.github.io/posts/apple-log/> <span class=title>Next »</span> <br> <span>usage-official-swift-log</span> </a></nav></footer></article></main><footer class=footer><span>© 2025 <a href=https://wonkwh.github.io>cydave</a></span><span> Powered by <a rel="noopener noreferrer" href=https://www.getzola.org/ target=_blank>Zola</a> & <a href=https://github.com/cydave/zola-theme-papermod rel=noopener target=_blank>PaperMod</a> </span></footer><a aria-label="go to top" title="Go to Top (Alt + G)" accesskey=g class=top-link href=#top id=top-link> <svg viewbox="0 0 12 6" fill=currentColor xmlns=http://www.w3.org/2000/svg><path d="M12 6H0l6-6z"/></svg> </a><script>let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });</script><script>var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };</script><script>document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })</script><script>document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                var content = codeblock.textContent;
+                if(codeblock.firstChild.tagName == 'TABLE') {
+                    content = Array(...codeblock.firstChild.getElementsByTagName('span')).map((span) => { return span.textContent; }).join('');
+                }
+                navigator.clipboard.writeText(content);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            // td containing LineNos
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            // table containing LineNos and code
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            // code blocks not having highlight as parent class
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });</script>

@@ -1,17 +1,14 @@
 {% extends "index.html" %}
-
-{% block content %}
-    {% block header %}
-        {{ super() }}
-    {% endblock header %}
-
+{% block main %}
+<header class="page-header">
     <h1>Tags</h1>
+</header>
 
-    {% if terms %}
-        <ul>
-            {% for term in terms %}
-                <li><a href="{{ term.permalink | safe }}">{{ term.name }}</a> ({{ term.pages | length }})</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-{% endblock content %}
+<ul class="terms-tags">
+    {% for term in terms %}
+    <li>
+        <a href="{{ term.permalink }}">{{ term.name }} <sup><strong><sup>{{ term.page_count }}</sup></strong></sup> </a>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

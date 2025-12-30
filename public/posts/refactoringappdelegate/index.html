@@ -1,0 +1,247 @@
+<!doctype html><html dir=auto lang=en><head><meta charset=utf-8><meta content="IE=edge" http-equiv=X-UA-Compatible><meta content="width=device-width,initial-scale=1,shrink-to-fit=no" name=viewport><meta content="index, follow" name=robots><title>Refactoring Massive App Delegate</title><meta content="keyword1, keyword2, keyword3" name=keywords><meta name=description><meta content=cydave name=author><link href=https://wonkwh.github.io/posts/refactoringappdelegate/ rel=canonical><link href=https://wonkwh.github.io/css/includes/scroll-bar.css rel=stylesheet><link href=https://wonkwh.github.io/css/styles.css rel=stylesheet><link href=https://wonkwh.github.io/css/override.css rel=stylesheet><link href=https://wonkwh.github.io/atom.xml rel=alternate title=RSS type=application/atom+xml><noscript><style>#theme-toggle,.top-link{display:none}</style> <style>@media (prefers-color-scheme:dark){:root{--theme:#1d1e20;--entry:#2e2e33;--primary:#dadadb;--secondary:#9b9c9d;--tertiary:#414244;--content:#c4c4c5;--hljs-bg:#2e2e33;--code-bg:#37383e;--border:#333}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style></noscript><body id=top><script>if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }</script><header class=header><nav class=nav><div class=logo><a title="Kei's KnowledgeBage (Alt + H)" accesskey=h href=https://wonkwh.github.io> Kei's KnowledgeBage </a><div class=logo-switches><button title="(Alt + T)" accesskey=t id=theme-toggle><svg viewbox="0 0 24 24" fill=none height=18 id=moon stroke=currentColor stroke-linecap=round stroke-linejoin=round stroke-width=2 width=24 xmlns=http://www.w3.org/2000/svg><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg> <svg viewbox="0 0 24 24" fill=none height=18 id=sun stroke=currentColor stroke-linecap=round stroke-linejoin=round stroke-width=2 width=24 xmlns=http://www.w3.org/2000/svg><circle cx=12 cy=12 r=5></circle><line x1=12 x2=12 y1=1 y2=3></line><line x1=12 x2=12 y1=21 y2=23></line><line x1=4.22 x2=5.64 y1=4.22 y2=5.64></line><line x1=18.36 x2=19.78 y1=18.36 y2=19.78></line><line x1=1 x2=3 y1=12 y2=12></line><line x1=21 x2=23 y1=12 y2=12></line><line x1=4.22 x2=5.64 y1=19.78 y2=18.36></line><line x1=18.36 x2=19.78 y1=5.64 y2=4.22></line></svg></button><ul class=lang-switch><li></ul></div></div><ul id=menu><li><a href=https://wonkwh.github.io/archive title=Archive> <span>Archive</span> </a><li><a href=https://wonkwh.github.io/tags title=Tags> <span>Tags</span> </a><li><a href=https://wonkwh.github.io/search title=Search> <span>Search</span> </a><li><a href=https://github.com/wonkwh target=_blank title=Github> <span>Github</span> <svg viewbox="0 0 24 24" fill=none height=12 shape-rendering=geometricPrecision stroke=currentColor stroke-linecap=round stroke-linejoin=round stroke-width=2.5 width=12><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path><path d="M15 3h6v6"></path><path d="M10 14L21 3"></path></svg> </a></ul></nav></header><main class=main><article class=post-single><header class=post-header><div class=breadcrumbs><a href=https://wonkwh.github.io>Home</a> »  <a href=https://wonkwh.github.io/posts/>Posts</a> »  <a href=https://wonkwh.github.io/posts/refactoringappdelegate/>Refactoring Massive App Delegate</a></div><h1 class=post-title>Refactoring Massive App Delegate</h1><div class=post-meta><span title="2021-02-01 00:00:00 +0000">2021-02-01</span> · 1 min · cydave</div></header><div class=toc><details><summary title="(Alt + C)" accesskey=c><span class=details>Table of Contents</span></summary> <div class=inner><ul><li><a aria-label="Refactoring Massive App Delegate" href=#refactoring-massive-app-delegate>Refactoring Massive App Delegate</a> <ul><li><a aria-label="Mediator Design Pattern" href=#mediator-design-pattern>Mediator Design Pattern</a><li><a aria-label="AppLifecycle Mediator" href=#applifecycle-mediator>AppLifecycle Mediator</a><li><a aria-label="AppListener class 구현" href=#applistener-class-guhyeon>AppListener class 구현</a><li><a aria-label="add mediator to AppDelegate" href=#add-mediator-to-appdelegate>add mediator to AppDelegate</a></ul><li><a aria-label=Reference href=#reference>Reference</a></ul></div></details></div><div class=post-content><h2 id=refactoring-massive-app-delegate>Refactoring Massive App Delegate<a aria-hidden=true class=anchor hidden href=#refactoring-massive-app-delegate>#</a></h2><p>실제 production app 을 개발하다 보면 <code>AppDelegate</code> 클래스가 쉽게 비대해지고 파일수가 어마어마하게 늘어나는 경우가 비일비재하다. 이를 refactoring 하는 방법</p><span id=continue-reading></span><h3 id=mediator-design-pattern>Mediator Design Pattern<a aria-hidden=true class=anchor hidden href=#mediator-design-pattern>#</a></h3><p><a href=https://www.vadimbulavin.com/refactoring-massive-app-delegate/>refactoring-massive-app-delegate</a> 에 보면 다양한 디자인 패턴으로 appDelegate를 refactoring 하는 법이 나와있다 그중 mediator design pattern 으로 실제 활용한 예<h3 id=applifecycle-mediator>AppLifecycle Mediator<a aria-hidden=true class=anchor hidden href=#applifecycle-mediator>#</a></h3><ul><li>먼저 AppLifeCycle mediator 를 정의한다.<li>아래 소스는 <code>appDelegate.m</code> 이 objective-c 로 구현되어 있기에 <code>NSObject</code>를 상속받고 <code>objc</code> propertyObserver를 붙였다.</ul><pre class=language-swift data-lang=swift style=color:#c0c5ce;background-color:#2b303b><code class=language-swift data-lang=swift><span style=color:#b48ead>import </span><span>Foundation
+</span><span>
+</span><span style=color:#65737e>// MARK: - AppLifecycleListener
+</span><span style=color:#b48ead>protocol</span><span> AppLifecycleListener {
+</span><span>  </span><span style=color:#b48ead>func </span><span>onAppWillEnterForeground()
+</span><span>  func onAppDidEnterBackground()
+</span><span>  func onAppDidFinishLaunching()
+</span><span>}
+</span><span>
+</span><span style=color:#b48ead>extension</span><span> AppLifecycleListener {
+</span><span>  </span><span style=color:#b48ead>func </span><span>onAppWillEnterForeground() {}
+</span><span>  </span><span style=color:#b48ead>func </span><span>onAppDidEnterBackground() {}
+</span><span>}
+</span><span>
+</span><span style=color:#65737e>// MARK: - Mediator
+</span><span style=color:#b48ead>@objc
+</span><span style=color:#b48ead>class</span><span> AppLifecycleMediator: NSObject {
+</span><span>  </span><span style=color:#b48ead>private let</span><span> listeners: [AppLifecycleListener]
+</span><span>  
+</span><span>  </span><span style=color:#b48ead>init</span><span>(listeners: [AppLifecycleListener]) {
+</span><span>    </span><span style=color:#b48ead>self</span><span>.listeners = listeners
+</span><span>    </span><span style=color:#b48ead>super</span><span>.</span><span style=color:#b48ead>init</span><span>()
+</span><span>    subscribe()
+</span><span>  }
+</span><span>  
+</span><span>  </span><span style=color:#b48ead>deinit</span><span> {
+</span><span>    NotificationCenter.</span><span style=color:#b48ead>default</span><span>.removeObserver(</span><span style=color:#b48ead>self</span><span>)
+</span><span>  }
+</span><span>  
+</span><span>  </span><span style=color:#b48ead>private func </span><span>subscribe() {
+</span><span>    NotificationCenter.</span><span style=color:#b48ead>default</span><span>.addObserver(</span><span style=color:#b48ead>self</span><span>, selector: #selector(onAppWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: </span><span style=color:#d08770>nil</span><span>)
+</span><span>    NotificationCenter.</span><span style=color:#b48ead>default</span><span>.addObserver(</span><span style=color:#b48ead>self</span><span>, selector: #selector(onAppDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: </span><span style=color:#d08770>nil</span><span>)
+</span><span>    NotificationCenter.</span><span style=color:#b48ead>default</span><span>.addObserver(</span><span style=color:#b48ead>self</span><span>, selector: #selector(onAppDidFinishLaunching), name: UIApplication.didFinishLaunchingNotification, object: </span><span style=color:#d08770>nil</span><span>)
+</span><span>  }
+</span><span>  
+</span><span>  </span><span style=color:#b48ead>@objc private func </span><span>onAppWillEnterForeground() {
+</span><span>    listeners.forEach { $</span><span style=color:#d08770>0</span><span>.onAppWillEnterForeground() }
+</span><span>  }
+</span><span>  
+</span><span>  </span><span style=color:#b48ead>@objc private func </span><span>onAppDidEnterBackground() {
+</span><span>    listeners.forEach { $</span><span style=color:#d08770>0</span><span>.onAppDidEnterBackground() }
+</span><span>  }
+</span><span>  
+</span><span>  </span><span style=color:#b48ead>@objc private func </span><span>onAppDidFinishLaunching() {
+</span><span>    listeners.forEach { $</span><span style=color:#d08770>0</span><span>.onAppDidFinishLaunching() }
+</span><span>  }
+</span><span>}
+</span></code></pre><h3 id=applistener-class-guhyeon>AppListener class 구현<a aria-hidden=true class=anchor hidden href=#applistener-class-guhyeon>#</a></h3><ul><li>이제 <code>AppLifecycleListener</code> 를 상속하여 클래스를 구현한다.<li>appDelegate 에서 구현된 각각의 서비스 구현들을 여기에 Extract 하여 구현<li>예를 들면 기존에 AppDelegate에서 구현되어있던 location permission 관련 feature 들은 아래와 같이 <code>AppLocationListener</code> 구현한다.</ul><pre class=language-swift data-lang=swift style=color:#c0c5ce;background-color:#2b303b><code class=language-swift data-lang=swift><span style=color:#b48ead>import </span><span>Foundation
+</span><span style=color:#b48ead>import </span><span>CoreLocation
+</span><span style=color:#b48ead>import </span><span>LoggingKit
+</span><span>
+</span><span style=color:#b48ead>class</span><span> AppLocationListener: NSObject, AppLifecycleListener {
+</span><span> </span><span style=color:#b48ead>let</span><span> locationManager = CLLocationManager()
+</span><span> 
+</span><span> </span><span style=color:#b48ead>fileprivate func </span><span>permissionState(_ status: CLAuthorizationStatus) {
+</span><span>   LogService.shared.debug(</span><span style=color:#a3be8c>"LocationPermission: </span><span>\(status.rawValue)</span><span style=color:#a3be8c>"</span><span>, logCategory: \.debug)
+</span><span>   </span><span style=color:#b48ead>switch</span><span> status {
+</span><span>   </span><span style=color:#b48ead>case </span><span>.authorizedAlways, .authorizedWhenInUse:
+</span><span>     locationManager.startUpdatingLocation()
+</span><span>   </span><span style=color:#b48ead>case </span><span>.restricted, .notDetermined:
+</span><span>     locationManager.requestWhenInUseAuthorization()
+</span><span>   </span><span style=color:#b48ead>case </span><span>.denied:
+</span><span>     stopLocation()
+</span><span>   </span><span style=color:#b48ead>@unknown default</span><span>:
+</span><span>     print(</span><span style=color:#a3be8c>"GPS: Default"</span><span>)
+</span><span>   }
+</span><span> }
+</span><span> 
+</span><span> </span><span style=color:#b48ead>func </span><span>stopLocation() {
+</span><span>   locationManager.stopUpdatingHeading()
+</span><span>   locationManager.stopUpdatingLocation()
+</span><span>   locationManager.delegate = </span><span style=color:#d08770>nil
+</span><span> }
+</span><span> 
+</span><span> </span><span style=color:#b48ead>func </span><span>onAppDidFinishLaunching() {
+</span><span>   locationManager.delegate = </span><span style=color:#b48ead>self
+</span><span>   locationManager.desiredAccuracy = kCLLocationAccuracyBest
+</span><span>   </span><span style=color:#b48ead>let</span><span> status: CLAuthorizationStatus
+</span><span>   </span><span style=color:#b48ead>if</span><span> #available(iOS </span><span style=color:#d08770>14</span><span>.</span><span style=color:#d08770>0</span><span>, *) {
+</span><span>     status = locationManager.authorizationStatus
+</span><span>   } </span><span style=color:#b48ead>else</span><span> {
+</span><span>     status = CLLocationManager.authorizationStatus()
+</span><span>   }
+</span><span>   permissionState(status)
+</span><span> }
+</span><span>}
+</span><span>
+</span><span style=color:#b48ead>extension</span><span> AppLocationListener: CLLocationManagerDelegate {
+</span><span> </span><span style=color:#b48ead>func </span><span>locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+</span><span>   </span><span style=color:#b48ead>self</span><span>.permissionState(status)
+</span><span> }
+</span><span> 
+</span><span> </span><span style=color:#b48ead>func </span><span>locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+</span><span>   locationManager.stopUpdatingLocation()
+</span><span> }
+</span><span> 
+</span><span> </span><span style=color:#b48ead>func </span><span>locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+</span><span>   </span><span style=color:#b48ead>let</span><span> newLocation = locations[</span><span style=color:#d08770>0</span><span>]
+</span><span>   </span><span style=color:#b48ead>let</span><span> geocoder = CLGeocoder()
+</span><span>   geocoder.reverseGeocodeLocation(newLocation) { (playmarks, error) </span><span style=color:#b48ead>in
+</span><span>     </span><span style=color:#b48ead>if let</span><span> _ = error {
+</span><span>       </span><span style=color:#b48ead>self</span><span>.stopLocation()
+</span><span>       </span><span style=color:#b48ead>return
+</span><span>     }
+</span><span>     
+</span><span>     </span><span style=color:#b48ead>if let</span><span> city = playmarks?.first?.locality {
+</span><span>       cityDefault.saveLocationLng(</span><span style=color:#a3be8c>"</span><span>\(newLocation.coordinate.longitude)</span><span style=color:#a3be8c>"</span><span>)
+</span><span>       cityDefault.saveLocationLat(</span><span style=color:#a3be8c>"</span><span>\(newLocation.coordinate.latitude)</span><span style=color:#a3be8c>"</span><span>)
+</span><span>       cityDefault.saveLocationCity(city)
+</span><span>     }
+</span><span>   }
+</span><span>   stopLocation()
+</span><span> }
+</span><span>}
+</span><span>
+</span></code></pre><ul><li>그리고 <code>AppLifecycleMediator</code> 에 listener 에 추가</ul><pre class=language-swift data-lang=swift style=color:#c0c5ce;background-color:#2b303b><code class=language-swift data-lang=swift><span style=color:#b48ead>extension</span><span> AppLifecycleMediator {
+</span><span>  </span><span style=color:#b48ead>@objc
+</span><span>  </span><span style=color:#b48ead>static func </span><span>makeDefaultMediator() -> AppLifecycleMediator {
+</span><span>    </span><span style=color:#b48ead>let</span><span> locationListener = AppLocationListener()
+</span><span>    </span><span style=color:#b48ead>let</span><span> debugListener = AppDebugListener()
+</span><span>
+</span><span>    </span><span style=color:#b48ead>return</span><span> AppLifecycleMediator(listeners: [debugListener, locationListener])
+</span><span>  }
+</span><span>}
+</span><span>
+</span></code></pre><ul><li>3rdParty service 들, debug feature 등 listener 로 추가하여 refactoring 해주면 된다.</ul><h3 id=add-mediator-to-appdelegate>add mediator to AppDelegate<a aria-hidden=true class=anchor hidden href=#add-mediator-to-appdelegate>#</a></h3><ul><li>이제 mediator class 를 AppDelegate 에 등록한다.<li>다음 코드 한줄만 appDelegate 에 추가하면 된다.</ul><pre class=language-swift data-lang=swift style=color:#c0c5ce;background-color:#2b303b><code class=language-swift data-lang=swift><span style=color:#b48ead>@UIApplicationMain
+</span><span>
+</span><span style=color:#b48ead>class</span><span> AppDelegate: UIResponder, UIApplicationDelegate {
+</span><span>
+</span><span>   </span><span style=color:#b48ead>var</span><span> window: UIWindow?
+</span><span>
+</span><span>   </span><span style=color:#b48ead>let</span><span> mediator = AppLifecycleMediator.makeDefaultMediator() </span><span style=color:#65737e>// 여기에 추가
+</span><span>
+</span><span>   </span><span style=color:#b48ead>func </span><span>application(_ application: UIApplication,                                           didFinishLaunchingWithOptions launchOptions:                              [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+</span><span>
+</span><span>      </span><span style=color:#b48ead>return true
+</span><span>
+</span><span>   }
+</span><span>}
+</span></code></pre><ul><li>objective-c 구현에 붙인다면 조금 애매한데 <code>willFinishLaunchingWithOptions</code> 메소드에 다음과 같이 추가하였다.</ul><pre class=language-objc data-lang=objc style=color:#c0c5ce;background-color:#2b303b><code class=language-objc data-lang=objc><span>@interface AppDelegate ()&lt;CLLocationManagerDelegate, UNUserNotificationCenterDelegate, FIRMessagingDelegate, AppsFlyerLibDelegate>
+</span><span>{
+</span><span>  AppLifecycleMediator *_mediator; // 여기에 선언하고 
+</span><span>}
+</span><span>
+</span><span>
+</span><span>...
+</span><span>- (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+</span><span>  _mediator = [AppLifecycleMediator makeDefaultMediator]; // 구현추가.
+</span><span>  return YES;
+</span><span>}
+</span><span>
+</span></code></pre><h2 id=reference>Reference<a aria-hidden=true class=anchor hidden href=#reference>#</a></h2><ul><li><a href=https://www.vadimbulavin.com/refactoring-massive-app-delegate/>refactoring-massive-app-delegate</a><li><a href=https://andreaslydemann.com/architecting-an-analytics-service-for-ios-apps/>Architecting an Analytics Service for iOS Apps – Andreas Lüdemann (andreaslydemann.com)</a></ul></div><footer class=post-footer><ul class=post-tags><li><a href=https://wonkwh.github.io/tags/swift/>swift</a><li><a href=https://wonkwh.github.io/tags/design-pattern/>design_pattern</a><li><a href=https://wonkwh.github.io/tags/refactoring/>refactoring</a></ul><nav class=paginav><a class=prev href=https://wonkwh.github.io/posts/signinwithapple/> <span class=title>« Prev</span> <br> <span>Sign in with Apple</span> </a><a class=next href=https://wonkwh.github.io/posts/swininjecttutorial/> <span class=title>Next »</span> <br> <span>Swinject Tutorial for iOS</span> </a></nav></footer></article></main><footer class=footer><span>© 2025 <a href=https://wonkwh.github.io>cydave</a></span><span> Powered by <a rel="noopener noreferrer" href=https://www.getzola.org/ target=_blank>Zola</a> & <a href=https://github.com/cydave/zola-theme-papermod rel=noopener target=_blank>PaperMod</a> </span></footer><a aria-label="go to top" title="Go to Top (Alt + G)" accesskey=g class=top-link href=#top id=top-link> <svg viewbox="0 0 12 6" fill=currentColor xmlns=http://www.w3.org/2000/svg><path d="M12 6H0l6-6z"/></svg> </a><script>let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });</script><script>var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };</script><script>document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })</script><script>document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                var content = codeblock.textContent;
+                if(codeblock.firstChild.tagName == 'TABLE') {
+                    content = Array(...codeblock.firstChild.getElementsByTagName('span')).map((span) => { return span.textContent; }).join('');
+                }
+                navigator.clipboard.writeText(content);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            // td containing LineNos
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            // table containing LineNos and code
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            // code blocks not having highlight as parent class
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });</script>
