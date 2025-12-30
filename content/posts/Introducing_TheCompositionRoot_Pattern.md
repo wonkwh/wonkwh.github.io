@@ -12,7 +12,8 @@ tags = ["swift","uikit", "composition_root", "dependancy_injection", "protocol",
 
 ## Introduction to Dependency Injection
 
-- 2022년 초, 저는 Swift에서 의존성 주입에 대한 다양한 접근 방식을 탐색하다가 [Mark Seemann](https://blog.ploeh.dk/)이 [.NET의 의존성 주입](https://www.amazon.com/gp/product/1935182501)에서 소개한 Composition Root 패턴을 접하게 되었습니다. 그 이후로 여러 Swift 코드베이스에 Composition Root 패턴을 도입했고 매우 유용하다는 것을 알게 되었습니다.
+- 2022년 초, 저는 Swift에서 의존성 주입에 대한 다양한 접근 방식을 탐색하다가 [Mark Seemann](https://blog.ploeh.dk/)이 [.NET의 의존성 주입](https://www.amazon.com/gp/product/1935182501)에서 소개한 Composition Root 패턴을 접하게 되었습니다.
+- 그 이후로 여러 Swift 코드베이스에 Composition Root 패턴을 도입했고 매우 유용하다는 것을 알게 되었습니다.
 - 이 글에서는 Swift 코드베이스에 컴포지션 루트를 도입하고 iOS 프로젝트에서 사용하는 방법을 살펴보겠습니다. 먼저 의존성 주입에 대한 간략한 개요를 살펴보겠습니다.
 
 
