@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+      <!-- Enable responsiveness on mobile devices-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+      <title></title>
+
+      
+
+      
+          <link rel="stylesheet" href="https://wonkwh.github.io/site.css">
+      
+
+      
+      
+    </head>
+
+    <body class="hack dark main container">
+        
+
+<article itemscope itemtype="http://schema.org/BlogPosting">
+    <header>
+        <h1 itemprop="headline">inputAccessoryView SafeLayoutGuide fix</h1>
+        <span class="muted">
+    <svg style="margin-bottom:-3px" class="i-clock" viewBox="0 0 32 32"
+         width="16" height="16" fill="none" stroke="currentcolor"
+         stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
+        <circle cx="16" cy="16" r="14"/>
+        <path d="M16 8 L16 16 20 20"/>
+    </svg>
+    <span>1 minute read</span>
+    <svg style="margin-bottom: -3px" class="i-edit" viewBox="0 0 32 32"
+         width="16" height="16" fill="none" stroke="currentcolor"
+         stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
+        <path d="M30 7 L25 2 5 22 3 29 10 27 Z M21 6 L26 11 Z M5 22 L10 27 Z"/>
+    </svg>
+
+    Published: 2019-11-28
+</span>
+    </header>
+    <div itemprop="articleBody">
+      <p>keyboard 위에 추가 뷰를 만들려면 NotificationHandler로 직접 콘트롤해도 되지만 <code>inputAccessoryView</code> 를 override해서 view를 재정의해주면 간단하다 
+하지만 iphone x 이상 safelayout 을 인식하지 못하는 문제가 있다 이를 해결하기 위한 코드</p>
+<span id="continue-reading"></span><h3 id="inputaccessoryview-jaejeongyi">inputAccessoryView 재정의</h3>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#b48ead;">class</span><span> MessageInputDemoController: UIViewController {
+</span><span>    </span><span style="color:#b48ead;">lazy var</span><span> messageInputView: MessageInputContainerView = {
+</span><span>        </span><span style="color:#b48ead;">let</span><span> view = MessageInputContainerView()
+</span><span>        view.frame = .</span><span style="color:#b48ead;">init</span><span>(x: </span><span style="color:#d08770;">0</span><span>, y: </span><span style="color:#d08770;">0</span><span>, width: </span><span style="color:#b48ead;">self</span><span>.view.frame.width, height: </span><span style="color:#d08770;">103</span><span>.</span><span style="color:#d08770;">0</span><span>)
+</span><span>        </span><span style="color:#b48ead;">return</span><span> view
+</span><span>    }()
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">override func </span><span>viewDidLoad() {
+</span><span>        </span><span style="color:#b48ead;">super</span><span>.viewDidLoad()
+</span><span>        view.backgroundColor = Colors.background
+</span><span>    }
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">override var</span><span> inputAccessoryView: UIView? {
+</span><span>        </span><span style="color:#b48ead;">return</span><span> messageInputView
+</span><span>    }
+</span><span>
+</span><span>    </span><span style="color:#b48ead;">override var</span><span> canBecomeFirstResponder: Bool {
+</span><span>        </span><span style="color:#b48ead;">return true
+</span><span>    }
+</span><span>}
+</span></code></pre>
+<h3 id="safelayout-wie-olrigi-wihan-cuga-kodeu">SafeLayout 위에 올리기 위한 추가 코드</h3>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#b48ead;">public class</span><span> MessageInputContainerView: UIView {
+</span><span>    ....
+</span><span>    </span><span style="color:#b48ead;">public override func </span><span>didMoveToWindow() {
+</span><span>        </span><span style="color:#b48ead;">if let</span><span> window = </span><span style="color:#b48ead;">self</span><span>.window {
+</span><span>            </span><span style="color:#b48ead;">self</span><span>.bottomAnchor.constraint(lessThanOrEqualToSystemSpacingBelow: window.safeAreaLayoutGuide.bottomAnchor,
+</span><span>                                         multiplier: </span><span style="color:#d08770;">1</span><span>.</span><span style="color:#d08770;">0</span><span>).isActive = </span><span style="color:#b48ead;">true
+</span><span>        }
+</span><span>    }
+</span><span>}
+</span></code></pre>
+<ul>
+<li>위와 같이 <code>didMoteToWindow()</code>메소드에 추가 구현해주면 된다. </li>
+</ul>
+<h3 id="camjo">참조</h3>
+<ul>
+<li>https://ahbou.org/post/165762292157/iphone-x-inputaccessoryview-fix</li>
+</ul>
+
+    </div>
+
+    
+        <footer>
+            <hr>
+            <p>
+                
+                    Published by Kwanghyun Won
+                
+                
+                
+                    and tagged
+                    
+                        <a href="https://wonkwh.github.io/tags/swift/">swift</a>
+                        
+                            
+                                
+                                    ,
+                                
+                            
+                        
+                    
+                        <a href="https://wonkwh.github.io/tags/uikit/">uikit</a>
+                        
+                            
+                                
+                                    and
+                                
+                            
+                        
+                    
+                        <a href="https://wonkwh.github.io/tags/keyboard/">keyboard</a>
+                        
+                            
+                        
+                    
+                
+            </p>
+        </footer>
+    
+</article>
+
+
+    </body>
+
+</html>

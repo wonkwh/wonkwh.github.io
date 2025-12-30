@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+      <!-- Enable responsiveness on mobile devices-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+      <title></title>
+
+      
+
+      
+          <link rel="stylesheet" href="https://wonkwh.github.io/site.css">
+      
+
+      
+      
+    </head>
+
+    <body class="hack dark main container">
+        
+
+<article itemscope itemtype="http://schema.org/BlogPosting">
+    <header>
+        <h1 itemprop="headline">SwiftUI Custom View Modifiers</h1>
+        <span class="muted">
+    <svg style="margin-bottom:-3px" class="i-clock" viewBox="0 0 32 32"
+         width="16" height="16" fill="none" stroke="currentcolor"
+         stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
+        <circle cx="16" cy="16" r="14"/>
+        <path d="M16 8 L16 16 20 20"/>
+    </svg>
+    <span>2 minute read</span>
+    <svg style="margin-bottom: -3px" class="i-edit" viewBox="0 0 32 32"
+         width="16" height="16" fill="none" stroke="currentcolor"
+         stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
+        <path d="M30 7 L25 2 5 22 3 29 10 27 Z M21 6 L26 11 Z M5 22 L10 27 Z"/>
+    </svg>
+
+    Published: 2020-11-27
+</span>
+    </header>
+    <div itemprop="articleBody">
+      <p>SwiftUI에서 ViewModifier 를 이용하여 Custom View를 만드는 방법</p>
+<span id="continue-reading"></span><h2 id="swiftui-custom-view-modifiers">SwiftUI Custom View Modifiers</h2>
+<div >
+    <iframe
+        src="https://www.youtube.com/embed/7sosLx-wzBE"
+        webkitallowfullscreen
+        mozallowfullscreen
+        allowfullscreen>
+    </iframe>
+</div><h3 id="create-custom-button">Create Custom Button</h3>
+<ul>
+<li>아래와 같은 Custom button view를 생성하려면 </li>
+</ul>
+<img width="167" alt="viewModifier1" src="https://user-images.githubusercontent.com/911787/100363789-91f93280-3040-11eb-9390-1932129bd642.png">
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#b48ead;">struct</span><span> CustomButton: View {
+</span><span>    </span><span style="color:#b48ead;">var</span><span> body: some View {
+</span><span>        Button(action: {
+</span><span>            print(</span><span style="color:#a3be8c;">&quot;select button&quot;</span><span>)
+</span><span>        }, label: {
+</span><span>            Text(</span><span style="color:#a3be8c;">&quot;Continue&quot;</span><span>)
+</span><span>                .font(.system(size: </span><span style="color:#d08770;">16</span><span>))
+</span><span>                .foregroundColor(.white)
+</span><span>                .padding(.horizontal, </span><span style="color:#d08770;">14</span><span>)
+</span><span>                .padding(.vertical, </span><span style="color:#d08770;">10</span><span>)
+</span><span>                .background(Color.blue)
+</span><span>                .overlay(
+</span><span>                    RoundedRectangle(cornerRadius: </span><span style="color:#d08770;">3</span><span>)
+</span><span>                        .strokeBorder(style: StrokeStyle(lineWidth: </span><span style="color:#d08770;">1</span><span>))
+</span><span>                        .foregroundColor(Color(.sRGB, red: </span><span style="color:#d08770;">0</span><span>.</span><span style="color:#d08770;">1</span><span>, green: </span><span style="color:#d08770;">0</span><span>.</span><span style="color:#d08770;">1</span><span>, blue: </span><span style="color:#d08770;">0</span><span>.</span><span style="color:#d08770;">1</span><span>, opacity: </span><span style="color:#d08770;">1</span><span>))
+</span><span>                        .cornerRadius(</span><span style="color:#d08770;">4</span><span>)
+</span><span>                        .shadow(color: Color(.sRGB, red: </span><span style="color:#d08770;">0</span><span>, green: </span><span style="color:#d08770;">0</span><span>, blue: </span><span style="color:#d08770;">0</span><span>, opacity: </span><span style="color:#d08770;">0</span><span>.</span><span style="color:#d08770;">5</span><span>), radius: </span><span style="color:#d08770;">5</span><span>, x: </span><span style="color:#d08770;">0</span><span>, y: </span><span style="color:#d08770;">0</span><span>)
+</span><span>                )
+</span><span>        })
+</span><span>    }
+</span><span>}
+</span></code></pre>
+<h3 id="using-modifier">Using Modifier</h3>
+<ul>
+<li>위와 동일한 결과를 아래와 같이 <code>ViewModifier</code> 를 통해서 구현할 수 있다.</li>
+</ul>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#b48ead;">struct</span><span> CustomModifierButton: View {
+</span><span>    </span><span style="color:#b48ead;">var</span><span> body: some View {
+</span><span>        Button(action: {
+</span><span>            print(</span><span style="color:#a3be8c;">&quot;select button&quot;</span><span>)
+</span><span>        }, label: {
+</span><span>            Text(</span><span style="color:#a3be8c;">&quot;Cancel&quot;</span><span>)
+</span><span>                .modifier(ButtonModifier())
+</span><span>        })
+</span><span>    }
+</span><span>}
+</span><span>
+</span><span>
+</span><span style="color:#b48ead;">struct</span><span> ButtonModifier: ViewModifier {
+</span><span>    </span><span style="color:#b48ead;">func </span><span>body(content: Content) -&gt; some View {
+</span><span>        </span><span style="color:#b48ead;">return</span><span> content
+</span><span>            .font(.system(size: </span><span style="color:#d08770;">16</span><span>))
+</span><span>            .foregroundColor(.white)
+</span><span>            .padding(.horizontal, </span><span style="color:#d08770;">14</span><span>)
+</span><span>            .padding(.vertical, </span><span style="color:#d08770;">10</span><span>)
+</span><span>            .background(Color.green)
+</span><span>            .overlay(
+</span><span>                RoundedRectangle(cornerRadius: </span><span style="color:#d08770;">3</span><span>)
+</span><span>                    .strokeBorder(style: StrokeStyle(lineWidth: </span><span style="color:#d08770;">1</span><span>))
+</span><span>                    .foregroundColor(Color(.sRGB, red: </span><span style="color:#d08770;">0</span><span>.</span><span style="color:#d08770;">1</span><span>, green: </span><span style="color:#d08770;">0</span><span>.</span><span style="color:#d08770;">1</span><span>, blue: </span><span style="color:#d08770;">0</span><span>.</span><span style="color:#d08770;">1</span><span>, opacity: </span><span style="color:#d08770;">1</span><span>))
+</span><span>                    .cornerRadius(</span><span style="color:#d08770;">4</span><span>)
+</span><span>                    .shadow(color: Color(.sRGB, red: </span><span style="color:#d08770;">0</span><span>, green: </span><span style="color:#d08770;">0</span><span>, blue: </span><span style="color:#d08770;">0</span><span>, opacity: </span><span style="color:#d08770;">0</span><span>.</span><span style="color:#d08770;">5</span><span>), radius: </span><span style="color:#d08770;">5</span><span>, x: </span><span style="color:#d08770;">0</span><span>, y: </span><span style="color:#d08770;">0</span><span>)
+</span><span>            )
+</span><span>    }
+</span><span>}
+</span><span>
+</span></code></pre>
+<h3 id="using-modifier-added-state-parameter">Using Modifier added state parameter</h3>
+<img width="268" alt="viewModifier2" src="https://user-images.githubusercontent.com/911787/100363802-97567d00-3040-11eb-84df-62714bbb086f.png">
+<ul>
+<li>만약 각각 다른 background color를 가진 버튼에 style을 <code>ViewModifier</code> 로 구현하고 싶다면 </li>
+<li>아래와 같이 구현할수 있다.</li>
+</ul>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#b48ead;">struct</span><span> ButtonModifier: ViewModifier {
+</span><span>    </span><span style="color:#b48ead;">@State var</span><span> backgroundColor = Color.red
+</span><span>	...
+</span></code></pre>
+<ul>
+<li>추가로 fontSize같은 value도 <code>@State</code> 변수로 추가할 수 있다.</li>
+<li>전체 sample code</li>
+</ul>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#b48ead;">struct</span><span> ModifierStackView: View {
+</span><span>    </span><span style="color:#b48ead;">var</span><span> body: some View {
+</span><span>        HStack {
+</span><span>            CustomBlueButton()
+</span><span>            CustomRedButton()
+</span><span>            Button(action: {
+</span><span>                print(</span><span style="color:#a3be8c;">&quot;select button&quot;</span><span>)
+</span><span>            }, label: {
+</span><span>                Text(</span><span style="color:#a3be8c;">&quot;Cancel&quot;</span><span>)
+</span><span>                    .modifier(ButtonModifier(backgroundColor: .green))
+</span><span>            })
+</span><span>        }
+</span><span>    }
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">struct</span><span> CustomBlueButton: View {
+</span><span>    </span><span style="color:#b48ead;">var</span><span> body: some View {
+</span><span>        Button(action: {
+</span><span>            print(</span><span style="color:#a3be8c;">&quot;select button&quot;</span><span>)
+</span><span>        }, label: {
+</span><span>            Text(</span><span style="color:#a3be8c;">&quot;Continue&quot;</span><span>)
+</span><span>                .modifier(ButtonModifier(backgroundColor: .blue))
+</span><span>        })
+</span><span>    }
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">struct</span><span> CustomRedButton: View {
+</span><span>    </span><span style="color:#b48ead;">var</span><span> body: some View {
+</span><span>        Button(action: {
+</span><span>            print(</span><span style="color:#a3be8c;">&quot;select button&quot;</span><span>)
+</span><span>        }, label: {
+</span><span>            Text(</span><span style="color:#a3be8c;">&quot;Okay&quot;</span><span>)
+</span><span>                .modifier(ButtonModifier(backgroundColor: .red))
+</span><span>        })
+</span><span>    }
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">struct</span><span> ButtonModifier: ViewModifier {
+</span><span>    </span><span style="color:#b48ead;">@State var</span><span> backgroundColor = Color.red
+</span><span>    
+</span><span>    </span><span style="color:#b48ead;">func </span><span>body(content: Content) -&gt; some View {
+</span><span>        </span><span style="color:#b48ead;">return</span><span> content
+</span><span>            .font(.system(size: </span><span style="color:#d08770;">16</span><span>))
+</span><span>            .foregroundColor(.white)
+</span><span>            .padding(.horizontal, </span><span style="color:#d08770;">14</span><span>)
+</span><span>            .padding(.vertical, </span><span style="color:#d08770;">10</span><span>)
+</span><span>            .background(backgroundColor)
+</span><span>            .overlay(
+</span><span>                RoundedRectangle(cornerRadius: </span><span style="color:#d08770;">3</span><span>)
+</span><span>                    .strokeBorder(style: StrokeStyle(lineWidth: </span><span style="color:#d08770;">1</span><span>))
+</span><span>                    .foregroundColor(Color(.sRGB, red: </span><span style="color:#d08770;">0</span><span>.</span><span style="color:#d08770;">1</span><span>, green: </span><span style="color:#d08770;">0</span><span>.</span><span style="color:#d08770;">1</span><span>, blue: </span><span style="color:#d08770;">0</span><span>.</span><span style="color:#d08770;">1</span><span>, opacity: </span><span style="color:#d08770;">1</span><span>))
+</span><span>                    .cornerRadius(</span><span style="color:#d08770;">4</span><span>)
+</span><span>                    .shadow(color: Color(.sRGB, red: </span><span style="color:#d08770;">0</span><span>, green: </span><span style="color:#d08770;">0</span><span>, blue: </span><span style="color:#d08770;">0</span><span>, opacity: </span><span style="color:#d08770;">0</span><span>.</span><span style="color:#d08770;">5</span><span>), radius: </span><span style="color:#d08770;">5</span><span>, x: </span><span style="color:#d08770;">0</span><span>, y: </span><span style="color:#d08770;">0</span><span>)
+</span><span>            )
+</span><span>    }
+</span><span>}
+</span><span>
+</span></code></pre>
+
+    </div>
+
+    
+        <footer>
+            <hr>
+            <p>
+                
+                    Published by Kwanghyun Won
+                
+                
+                
+                    and tagged
+                    
+                        <a href="https://wonkwh.github.io/tags/swiftui/">swiftui</a>
+                        
+                            
+                                
+                                    and
+                                
+                            
+                        
+                    
+                        <a href="https://wonkwh.github.io/tags/swift/">swift</a>
+                        
+                            
+                        
+                    
+                
+            </p>
+        </footer>
+    
+</article>
+
+
+    </body>
+
+</html>

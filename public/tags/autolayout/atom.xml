@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title> - autolayout</title>
+    <link rel="self" type="application/atom+xml" href="https://wonkwh.github.io/tags/autolayout/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://wonkwh.github.io"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2020-02-27T00:00:00+00:00</updated>
+    <id>https://wonkwh.github.io/tags/autolayout/atom.xml</id>
+    <entry xml:lang="en">
+        <title>UICollectionView, full width cells, allow autolayout dynamic height</title>
+        <published>2020-02-27T00:00:00+00:00</published>
+        <updated>2020-02-27T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://wonkwh.github.io/uicollectionview-fullwidthcells-dynamic-height/"/>
+        <id>https://wonkwh.github.io/uicollectionview-fullwidthcells-dynamic-height/</id>
+        
+        <summary type="html">&lt;p&gt;CollectionView 를 이용해 tableview와 유사한 ListView를 사용하면서 tableview의 dynamic height와 같이 autolayout 기반의 dynamic height를 구현하는 코드&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+</feed>

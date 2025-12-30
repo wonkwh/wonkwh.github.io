@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+      <!-- Enable responsiveness on mobile devices-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+
+      <title></title>
+
+      
+
+      
+          <link rel="stylesheet" href="https://wonkwh.github.io/site.css">
+      
+
+      
+      
+    </head>
+
+    <body class="hack dark main container">
+        
+
+<article itemscope itemtype="http://schema.org/BlogPosting">
+    <header>
+        <h1 itemprop="headline">Fundamentals of type-driven code</h1>
+        <span class="muted">
+    <svg style="margin-bottom:-3px" class="i-clock" viewBox="0 0 32 32"
+         width="16" height="16" fill="none" stroke="currentcolor"
+         stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
+        <circle cx="16" cy="16" r="14"/>
+        <path d="M16 8 L16 16 20 20"/>
+    </svg>
+    <span>4 minute read</span>
+    <svg style="margin-bottom: -3px" class="i-edit" viewBox="0 0 32 32"
+         width="16" height="16" fill="none" stroke="currentcolor"
+         stroke-linecap="round" stroke-linejoin="round" stroke-width="6.25%">
+        <path d="M30 7 L25 2 5 22 3 29 10 27 Z M21 6 L26 11 Z M5 22 L10 27 Z"/>
+    </svg>
+
+    Published: 2024-10-25
+</span>
+    </header>
+    <div itemprop="articleBody">
+      <p>Type Driven Code 의 기본 원리</p>
+<span id="continue-reading"></span><h1 id="fundamentals-of-type-driven-code">Fundamentals of type-driven code</h1>
+<p>타입 주도 코드의 기본 원리</p>
+<ul>
+<li>원문  <a href="https://swiftology.io/articles/tydd-part-1-fundamentals">Part 1 Fundamentals of type-driven code</a></li>
+</ul>
+<h2 id="taib-judo-kodeuyi-gibon-weonri">타입 주도 코드의 기본 원리</h2>
+<ul>
+<li>타입 주도 코드에 대한 직관을 개발하려면 익숙한 것에서 시작해야 합니다.</li>
+<li>Swift 프로그래머로서 이 코드를 문제가 있다고 즉시 인식할 수 있을 것입니다.</li>
+</ul>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#b48ead;">func </span><span>main(number: Int?) {
+</span><span>  </span><span style="color:#b48ead;">if</span><span> number != </span><span style="color:#d08770;">nil</span><span> {
+</span><span>    print(</span><span style="color:#a3be8c;">&quot;double:&quot;</span><span>, </span><span style="color:#d08770;">2 </span><span>* number!) </span><span style="color:#65737e;">// 요기서 강제 언래핑
+</span><span>  } 
+</span><span>}
+</span></code></pre>
+<ul>
+<li>이 코드의 문제는 무엇일까요? 맞습니다, 여기서는 if let 옵셔널 언래핑 구문을 사용해야 합니다. 하지만 그 전에 이 코드를 면밀히 검토해 봅시다.</li>
+<li>이 코드가 <em>정확히</em> 왜 문제가 될까요? 옵셔널 값을 강제로 언래핑해야 했기 때문입니다. </li>
+<li>하지만 정말 그렇게 큰 문제일까요? </li>
+<li>이 구문은 Swift답지 않지만, 논리는 완벽히 타당하고 안전합니다. </li>
+<li>왜냐하면 <code>number</code>가 <code>nil</code>이 아님을 확인한 후에 접근하기 때문입니다. </li>
+<li>우리는 Objective-C에서도 오랫동안 비슷한 코드를 작성해 왔습니다!</li>
+<li>문제는 강제 언래핑 자체가 아니라, <code>nil</code> 체크 후에도 강제 언래핑을 해야 하는 <em>이유</em> 입니다. </li>
+<li>기본 문제를 더 명확히 하기 위해 지역성을 깨고 옵셔널 인자를 받는 외부 함수를 소개해 봅시다:</li>
+</ul>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#65737e;">// Main.swift
+</span><span style="color:#b48ead;">func </span><span>main(number: Int?) {
+</span><span>  </span><span style="color:#b48ead;">if</span><span> number != </span><span style="color:#d08770;">nil</span><span> {
+</span><span>    save(number)		 
+</span><span>  }
+</span><span>}
+</span></code></pre>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#65737e;">// Save.swift
+</span><span style="color:#b48ead;">func </span><span>save(_ number: Int?) {
+</span><span>  </span><span style="color:#65737e;">// ⚠️ We don&#39;t know 
+</span><span>  </span><span style="color:#65737e;">// if number is nil or not,
+</span><span>  </span><span style="color:#65737e;">// we must check ourselves!
+</span><span style="color:#b48ead;">if</span><span> number != </span><span style="color:#d08770;">nil</span><span> {
+</span><span>  UserDefaults.standard.</span><span style="color:#b48ead;">set</span><span>(
+</span><span>    number!, 
+</span><span>    foKey: </span><span style="color:#a3be8c;">&quot;num&quot;
+</span><span>  ) 
+</span><span>} </span><span style="color:#b48ead;">else</span><span> {
+</span><span>    print(</span><span style="color:#a3be8c;">&quot;Err: We don&#39;t want to store nils&quot;</span><span>)
+</span><span>  }
+</span><span>}
+</span></code></pre>
+<blockquote>
+<p><strong>통찰 💡:</strong> 이 코드의 근본적인 문제는 <em>정보 손실</em> 입니다. <code>number</code>가 <code>nil</code>이 아님을 확인하고 <code>main</code>의 <code>if</code> 문을 벗어나는 순간, 이 정보를 버리게 됩니다. 그리고 나중에 <code>save</code> 함수에서 다시 확인해야 합니다. 왜냐하면 <code>main</code>이 이미 수행한 확인에 대한 정보가 없기 때문입니다.</p>
+</blockquote>
+<ul>
+<li>우리는 <code>number</code>가 <code>nil</code>이 아님을 나타내는 정보를 유지하고 이를 앞으로 전달하고자 합니다. </li>
+<li>그래서 <code>number</code>를 언랩하여 선택적이지 않은 값을 다음 함수에 전달함으로써 반복적인 확인의 필요성을 없앱니다.</li>
+</ul>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#b48ead;">func </span><span>main(number: Int?) {
+</span><span>  </span><span style="color:#b48ead;">if let</span><span> number = number {
+</span><span>    save(number)
+</span><span>  }
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">func </span><span>save(_ num: Int) {
+</span><span>  UserDefaults.standard.</span><span style="color:#b48ead;">set</span><span>(number, forKey: </span><span style="color:#a3be8c;">&quot;num&quot;</span><span>) 
+</span><span>}
+</span></code></pre>
+<ul>
+<li>물론 이걸 보여드리는 건 선택적 언래핑(optional unwrapping ) 과 non-optional types을 상기시키기 위해서만은 아닙니다</li>
+<li>이 코드는 모든 Swift 프로그래머가 즉시 인식하고 수정할 수 있는 정보 손실의 예입니다.</li>
+<li>그러나 이는 우리가 <code>if let</code> 구문을 선택적 값에 사용하도록 조건화되었기 때문입니다. </li>
+<li>동시에, 많은 Swift 프로그래머들은 화려한 구문 지원이 없는 타입을 다룰 때 다른 정보 손실의 사례를 인식하지 못합니다.</li>
+<li>두 번째 예제를 고려해 봅시다.</li>
+</ul>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#b48ead;">func </span><span>main(numbers: [Int]) {
+</span><span>  </span><span style="color:#b48ead;">guard </span><span>!numbers.isEmpty </span><span style="color:#b48ead;">else</span><span> {
+</span><span>    print(</span><span style="color:#a3be8c;">&quot;No numbers, sad&quot;</span><span>)
+</span><span>    </span><span style="color:#b48ead;">return
+</span><span>  }
+</span><span>  print(</span><span style="color:#a3be8c;">&quot;Cool numbers:&quot;</span><span>, numbers)
+</span><span>}
+</span></code></pre>
+<ul>
+<li>이 코드는 전혀 문제가 없고 Swift답습니다. </li>
+<li>강제 언래핑 같은 의심스러운 것이 없으며, Swift 프로그래머의 머릿속에 경고를 울릴 만한 것도 없습니다. </li>
+<li>그러나 이 코드는 이전 것과 동일한 종류의 정보 손실을 가지고 있습니다. </li>
+<li>외부 함수의 도움으로 다시 이를 드러낼 수 있습니다</li>
+</ul>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#65737e;">// Main.swift
+</span><span style="color:#b48ead;">func </span><span>main(numbers: [Int]) {
+</span><span>  </span><span style="color:#b48ead;">if </span><span>!numbers.isEmpty {
+</span><span>    save(numbers)			 
+</span><span>  } </span><span style="color:#b48ead;">else</span><span> {
+</span><span>    print(</span><span style="color:#a3be8c;">&quot;No numbers, nothing to save...&quot;</span><span>)
+</span><span>  }
+</span><span>}
+</span></code></pre>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#65737e;">// Save.swift
+</span><span style="color:#b48ead;">func </span><span>save(_ numbers: [Int]) {
+</span><span>  </span><span style="color:#65737e;">// ⚠️ We don&#39;t know 
+</span><span>  </span><span style="color:#65737e;">// if numbers are empty or not,
+</span><span>  </span><span style="color:#65737e;">// and must check ourselves!
+</span><span>	</span><span style="color:#b48ead;">if </span><span>!numbers.isEmpty {
+</span><span>	  UserDefaults.standard.</span><span style="color:#b48ead;">set</span><span>(numbers, forKey: </span><span style="color:#a3be8c;">&quot;numbers&quot;</span><span>)
+</span><span>	} </span><span style="color:#b48ead;">else</span><span> {
+</span><span>	  print(</span><span style="color:#a3be8c;">&quot;No numbers, nothing to save...&quot;</span><span>)
+</span><span>	}
+</span><span>}
+</span></code></pre>
+<ul>
+<li>배열이 비어 있지 않다는 것을 쉽게 기억할 수 있게 해주는 멋진 내장 구문이 없기 때문에, </li>
+<li>프로그래머들이 이러한 불편함을 무시하고 저품질의 코드를 확산시키는 경우가 매우 흔합니다.</li>
+<li>이 예에서 정보 손실을 방지하기 위해, 배열의 첫 번째 요소를 명시적으로 캡처하여 비어 있지 않다는 증거로 삼고 다음 함수로 전달해야 합니다</li>
+</ul>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#b48ead;">func </span><span>main(numbers: [Int]) {
+</span><span>  </span><span style="color:#b48ead;">guard let</span><span> first = numbers.first </span><span style="color:#b48ead;">else</span><span> { 
+</span><span>    print(</span><span style="color:#a3be8c;">&quot;No numbers, skipping...&quot;</span><span>)
+</span><span>    </span><span style="color:#b48ead;">return
+</span><span>  }
+</span><span>  </span><span style="color:#b48ead;">let</span><span> remaining = Array(numbers.dropFirst()) 
+</span><span>    save(first, remaining)	 
+</span><span>  }
+</span><span>
+</span><span style="color:#b48ead;">func </span><span>save(
+</span><span>  _ first: Int,
+</span><span>_ remaining: [Int]
+</span><span>) {
+</span><span>  UserDefaults.standard.</span><span style="color:#b48ead;">set</span><span>(
+</span><span>    CollectionOfOne(first) + remaining, 
+</span><span>    forKey: </span><span style="color:#a3be8c;">&quot;numbers&quot;
+</span><span>  )
+</span><span>}
+</span></code></pre>
+<ul>
+<li>이제 isEmpty 검사를 반복할 필요가 없습니다.</li>
+<li>물론, 이렇게 모든 곳에서 배열을 구조 분해하고 재구성하는 것은 완전한 번거로움이기 때문에, </li>
+<li>우리는 이 과정을 <code>NonEmptyArray</code> 타입 내에 캡슐화할 수 있습니다:</li>
+</ul>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#b48ead;">struct</span><span> NonEmptyArray&lt;Element&gt; {
+</span><span>  </span><span style="color:#b48ead;">var</span><span> first: Element
+</span><span>  </span><span style="color:#b48ead;">var</span><span> remaining: [Element]
+</span><span>  
+</span><span>  </span><span style="color:#b48ead;">var</span><span> arrayValue: [Element] { 
+</span><span>    CollectionOfOne(first) + remaining
+</span><span>  }
+</span><span>  
+</span><span>  </span><span style="color:#b48ead;">init</span><span>?(_ arrayValue: [Element]) {
+</span><span>    </span><span style="color:#b48ead;">guard let</span><span> first = arrayValue.first </span><span style="color:#b48ead;">else</span><span> {
+</span><span>      </span><span style="color:#b48ead;">return </span><span style="color:#d08770;">nil
+</span><span>    }
+</span><span>    </span><span style="color:#b48ead;">self</span><span>.first = first
+</span><span>    remaining = Array(arrayValue.dropFirst())
+</span><span>  }
+</span><span>}
+</span></code></pre>
+<ul>
+<li>NonEmptyArray 타입은 내부 구조를 활용해 비어있지 않다는 <strong>증거</strong>를 타입에 담습니다.. </li>
+<li>이 기술에 대한 자세한 내용은 제 기사 '<a href="https://swiftology.io/articles/structural-typing/">Greater type safety with Structural Typing in Swift</a>.  에서 배울 수 있습니다.</li>
+<li>코드를 업데이트합시다:</li>
+</ul>
+<pre data-lang="swift" style="background-color:#2b303b;color:#c0c5ce;" class="language-swift "><code class="language-swift" data-lang="swift"><span style="color:#b48ead;">func </span><span>main(numbers: [Int]) {
+</span><span>  </span><span style="color:#b48ead;">guard let</span><span> nonEmptyNumbers = NonEmptyArray(numbers) </span><span style="color:#b48ead;">else</span><span> { 
+</span><span>  print(</span><span style="color:#a3be8c;">&quot;No numbers, skipping...&quot;</span><span>)
+</span><span>  </span><span style="color:#b48ead;">return
+</span><span>} 
+</span><span>  save(nonEmptyNumbers)	 
+</span><span>}
+</span><span>
+</span><span style="color:#b48ead;">func </span><span>save(_ numbers: NonEmptyArray&lt;Int&gt;) {
+</span><span>  UserDefaults.standard.</span><span style="color:#b48ead;">set</span><span>(
+</span><span>    numbers.arrayValue, 
+</span><span>    forKey: </span><span style="color:#a3be8c;">&quot;numbers&quot;
+</span><span>  )
+</span><span>}
+</span></code></pre>
+<blockquote>
+<p>통찰💡: 정보의 보존과 전파를 위해 타입을 사용하세요. 예를 들어, 검증의 증거와 도메인 특화 불변성을 포함합니다</p>
+</blockquote>
+<ul>
+<li>Haskell, PureScript, Elm과 같은 언어는 표준 라이브러리에서 <code>NonEmpty</code> 컬렉션 타입을 제공.</li>
+<li>이는 정말로 필수적이며, 이 시리즈를 다 읽고 나면 코드베이스 전반에서 비어 있지 않은 배열의 사용 사례를 발견하게 될 것입니다.</li>
+<li>Swift를 위해서는 Point-Free의 검증된 오픈 소스 라이브러리인 <a href="https://github.com/pointfreeco/swift-nonempty">swift-nonempty</a>.  를 추천합니다</li>
+</ul>
+
+    </div>
+
+    
+        <footer>
+            <hr>
+            <p>
+                
+                    Published by Kwanghyun Won
+                
+                
+                
+                    and tagged
+                    
+                        <a href="https://wonkwh.github.io/tags/swift/">swift</a>
+                        
+                            
+                                
+                                    ,
+                                
+                            
+                        
+                    
+                        <a href="https://wonkwh.github.io/tags/type/">type</a>
+                        
+                            
+                                
+                                    and
+                                
+                            
+                        
+                    
+                        <a href="https://wonkwh.github.io/tags/series/">series</a>
+                        
+                            
+                        
+                    
+                
+            </p>
+        </footer>
+    
+</article>
+
+
+    </body>
+
+</html>
